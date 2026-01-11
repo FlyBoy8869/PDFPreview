@@ -1,0 +1,3 @@
+0.1.3 - Updated about dialog to include instructions for deleting a favorite and opening a file 
+0.1.2 - Added ability to delete a favorite
+0.1.1 - Initial code
