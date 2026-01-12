@@ -1,7 +1,7 @@
 import inspect
 import io
 from pprint import pprint
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Any, cast
 
 from loguru import logger
 from PySide6.QtCore import QModelIndex
@@ -27,3 +27,14 @@ def log_qmodelindex(index: QModelIndex, dir_dump: bool = False) -> None:  # noqa
     pprint(dir(index), dump)
     if dir_dump:
         logger.debug(f"\ndir(index): {dump.getvalue()}")
+
+
+def detail_variable(var: Any) -> None:
+    current_frame: FrameType | None = inspect.currentframe()
+    f_code_obj = current_frame.f_back.f_code  # type: ignore  # noqa: PGH003
+    caller: str = f_code_obj.co_name  # type: ignore  # noqa: PGH003
+    line_no = f_code_obj.co_firstlineno
+    type_ = type(var)
+    logger.debug(
+        f"\n{caller=} at line {line_no}\nin file: {f_code_obj.co_filename}\n{type_=}\n",
+    )

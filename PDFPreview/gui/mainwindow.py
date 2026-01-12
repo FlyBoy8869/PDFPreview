@@ -26,7 +26,6 @@ if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
 TITLE = "PDFPreview"
-FAVORITES = "favorites.dat"
 EXTENTION_FILTERS: list[str] = [
     "*.pdf",
     "*.jpg",
@@ -40,6 +39,7 @@ EXTENTION_FILTERS: list[str] = [
 ]
 PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
 
+FAVORITES = Path(__file__).parent / "favorites.dat"
 ABOUT_UI_PATH = Path(__file__).parent / "ui_about.ui"
 
 ic.configureOutput(includeContext=True)
@@ -110,7 +110,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_title_bar_for_folder(new_index)
 
     def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
-        debug.log_qmodelindex(index.extra)
+        debug.detail_variable(index.extra)
         self.treeView.setRootIndex(index.extra)
         self.treeView.setCurrentIndex(index.extra)
         self.update_title_bar_for_folder(index.extra)
@@ -207,9 +207,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 )
 
     def load_favorites(self) -> None:
-        favorites = Path(__file__).parent / FAVORITES
+        # favorites = Path(__file__).parent / FAVORITES
         try:
-            with favorites.open("r", encoding="utf-8") as inputfile:
+            with FAVORITES.open("r", encoding="utf-8") as inputfile:
                 for line in inputfile:
                     display_role, extra = line.split("|")
                     # make sure to strip the "extra" or else the QFileSystemModel won't find the path due to the "\n"
