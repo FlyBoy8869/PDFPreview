@@ -85,7 +85,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
         self.treeView.currentIndexChangedAsString.connect(self.preview)
-        # self.treeView.clicked.connect(self.update_title_bar_on_single_click)
         self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
         self.treeView.installEventFilter(self)
 
@@ -207,7 +206,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 )
 
     def load_favorites(self) -> None:
-        # favorites = Path(__file__).parent / FAVORITES
         try:
             with FAVORITES.open("r", encoding="utf-8") as inputfile:
                 for line in inputfile:
