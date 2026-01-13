@@ -1,1 +1,1 @@
-D:\PDFPreview>pyinstaller --add-data PDFPreview\gui\ui_about.ui:PDFPreview\gui\ --onedir --windowed --noconfirm --name PDFViewer app.py
+pyinstaller --add-data PDFPreview\gui\ui_about.ui:PDFPreview\gui\ --onedir --windowed --noconfirm --name PDFViewer app.py
