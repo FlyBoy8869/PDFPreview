@@ -193,8 +193,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         loader = QUiLoader()
         about_file.open(QFile.OpenModeFlag.ReadOnly)
         self.about_window = loader.load(about_file)
-        if version_label := self.about_window.findChild(QLabel, "lbl_version"):
-            version_label.setText(f"version: {VERSION}")
+        if version_label := self.about_window.findChild(QLabel, "lbl_about"):
+            version_label.setTextFormat(Qt.TextFormat.RichText)
+            version_label.setText(f"<center><h2>PDFPreview</h2></center><center>version: {VERSION}</center><center>author: Charles Cognato</center>")
         about_file.close()
 
     def _save_favorites(self) -> None:
