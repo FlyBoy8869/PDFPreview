@@ -15,7 +15,7 @@ from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, Qt, QUrl
 from PySide6.QtGui import QCloseEvent, QDragEnterEvent, QDropEvent
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWebEngineCore import QWebEngineSettings
-from PySide6.QtWidgets import QFileSystemModel, QMainWindow
+from PySide6.QtWidgets import QFileSystemModel, QLabel, QMainWindow
 
 from PDFPreview import debug
 from PDFPreview.gui.customwidgets import MyCustomTreeView, MyListWidgetItem
@@ -25,6 +25,7 @@ from .ui_mainwindow import Ui_MainWindow
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
+VERSION = "0.1.4"
 TITLE = "PDFPreview"
 EXTENTION_FILTERS: list[str] = [
     "*.pdf",
@@ -139,7 +140,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
         self.HIDE_TOOLBAR = "#toolbar=0" if checked else ""
-        self.preview(self.model.filePath(self.treeView.currentIndex()), self.treeView.currentIndex())
+        self.preview(
+            self.model.filePath(self.treeView.currentIndex()),
+            self.treeView.currentIndex(),
+        )
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
         self._save_favorites()
@@ -189,6 +193,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         loader = QUiLoader()
         about_file.open(QFile.OpenModeFlag.ReadOnly)
         self.about_window = loader.load(about_file)
+        if version_label := self.about_window.findChild(QLabel, "lbl_version"):
+            version_label.setText(f"version: {VERSION}")
         about_file.close()
 
     def _save_favorites(self) -> None:
