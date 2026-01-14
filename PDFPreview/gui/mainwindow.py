@@ -37,6 +37,7 @@ EXTENTION_FILTERS: list[str] = [
     "*.json",
     "*.py",
     "*.md",
+    "*.ico",
 ]
 PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
 
