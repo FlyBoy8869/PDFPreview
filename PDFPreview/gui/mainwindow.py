@@ -90,7 +90,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.installEventFilter(self)
 
         self.pbBack.clicked.connect(self.handle_back_button_clicked)
-        self.ckb_hide_files.clicked.connect(self.handle_hide_files_clicked)
+        self.ckb_hide_files.clicked.connect(lambda checked: self.model.setNameFilterDisables(not checked))
 
         self.load_favorites()
 
@@ -115,9 +115,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setRootIndex(index.extra)
         self.treeView.setCurrentIndex(index.extra)
         self.update_title_bar_for_folder(index.extra)
-
-    def handle_hide_files_clicked(self, checked: bool) -> None:
-        self.model.setNameFilterDisables(not checked)
 
     def handle_treeview_double_click(self, index: QModelIndex) -> None:
         debug.log_qmodelindex(index, True)
