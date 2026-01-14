@@ -20,7 +20,7 @@
       <property name="orientation">
        <enum>Qt::Orientation::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0,2">
         <item>
          <widget class="QGroupBox" name="groupBox">
@@ -76,6 +76,13 @@
            <widget class="QPushButton" name="pbBack">
             <property name="text">
              <string>&lt; Back</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="ckb_hide_files">
+            <property name="text">
+             <string>Hide Files</string>
             </property>
            </widget>
           </item>
@@ -171,7 +178,7 @@
      <x>0</x>
      <y>0</y>
      <width>1188</width>
-     <height>34</height>
+     <height>33</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
