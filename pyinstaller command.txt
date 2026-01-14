@@ -1,5 +1,8 @@
 activate environment:
     .\pyvenvs\general-dev\Scripts\activate.bat
 
-compile app:
+compile app w/UPX:
+    pyinstaller --add-data PDFPreview\gui\ui_about.ui:PDFPreview\gui\ --upx-dir C:\Users\charles.cognato\upx-5.1.0-win64\upx-5.1.0-win64 --onedir --windowed --noconfirm --name PDFViewer app.py
+
+compile app wo/UPX:
     pyinstaller --add-data PDFPreview\gui\ui_about.ui:PDFPreview\gui\ --onedir --windowed --noconfirm --name PDFViewer app.py
