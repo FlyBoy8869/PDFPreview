@@ -25,7 +25,7 @@ from .ui_mainwindow import Ui_MainWindow
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
-VERSION = "0.1.4"
+VERSION = "0.1.5"
 TITLE = "PDFPreview"
 EXTENTION_FILTERS: list[str] = [
     "*.pdf",

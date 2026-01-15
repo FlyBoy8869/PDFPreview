@@ -54,7 +54,7 @@
               <bool>true</bool>
              </property>
              <property name="dragDropMode">
-              <enum>QAbstractItemView::DragDropMode::DropOnly</enum>
+              <enum>QAbstractItemView::DragDropMode::InternalMove</enum>
              </property>
              <property name="defaultDropAction">
               <enum>Qt::DropAction::MoveAction</enum>
@@ -63,7 +63,7 @@
               <bool>false</bool>
              </property>
              <property name="sortingEnabled">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
             </widget>
            </item>

@@ -72,10 +72,10 @@ class Ui_MainWindow(object):
         self.lw_favorites.setFont(font)
         self.lw_favorites.setAcceptDrops(True)
         self.lw_favorites.setDragEnabled(True)
-        self.lw_favorites.setDragDropMode(QAbstractItemView.DragDropMode.DropOnly)
+        self.lw_favorites.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
         self.lw_favorites.setDefaultDropAction(Qt.DropAction.MoveAction)
         self.lw_favorites.setAlternatingRowColors(False)
-        self.lw_favorites.setSortingEnabled(True)
+        self.lw_favorites.setSortingEnabled(False)
 
         self.verticalLayout.addWidget(self.lw_favorites)
 
