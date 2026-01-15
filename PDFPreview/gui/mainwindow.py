@@ -17,7 +17,6 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import QFileSystemModel, QLabel, QMainWindow
 
-from PDFPreview import debug
 from PDFPreview.gui.customwidgets import MyCustomTreeView, MyListWidgetItem
 
 from .ui_mainwindow import Ui_MainWindow
@@ -112,13 +111,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_title_bar_for_folder(new_index)
 
     def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
-        debug.detail_variable(index.extra)
         self.treeView.setRootIndex(index.extra)
         self.treeView.setCurrentIndex(index.extra)
         self.update_title_bar_for_folder(index.extra)
 
     def handle_treeview_double_click(self, index: QModelIndex) -> None:
-        debug.log_qmodelindex(index, True)
         if self.model.isDir(index):
             self.treeView.setRootIndex(index)
             self.update_title_bar_for_folder(index)
