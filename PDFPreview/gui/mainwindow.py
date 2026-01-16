@@ -24,7 +24,7 @@ from .ui_mainwindow import Ui_MainWindow
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
-VERSION = "0.1.5"
+VERSION = "0.1.6"
 TITLE = "PDFPreview"
 EXTENTION_FILTERS: list[str] = [
     "*.pdf",
@@ -91,7 +91,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.installEventFilter(self)
 
         self.pbBack.clicked.connect(self.handle_back_button_clicked)
-        self.ckb_hide_files.clicked.connect(lambda checked: self.model.setNameFilterDisables(not checked))
+        self.ckb_hide_files.clicked.connect(
+            lambda checked: self.model.setNameFilterDisables(not checked)
+        )
 
         self.load_favorites()
 
@@ -150,35 +152,32 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return super().closeEvent(event)
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
-        if isinstance(source, MyCustomTreeView):
-            if event.type() == QEvent.Type.KeyPress and cast("QKeyEvent", event).key() == Qt.Key.Key_Space:
-                self.open_file(self.treeView.currentIndex())
-                event.accept()
-                return event.isAccepted()
+        if isinstance(source, MyCustomTreeView) and (
+            event.type() == QEvent.Type.KeyPress
+            and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
+        ):
+            self.open_file(self.treeView.currentIndex())
+            event.accept()
 
         if source is self.browser:
             if event.type() == QEvent.Type.DragEnter:
                 print("drag enter event")
                 event.accept()
-                return event.isAccepted()
-
-            if event.type() == QEvent.Type.DragMove:
-                print("drag move event")
-                event.accept()
-                return event.isAccepted()
 
             if event.type() == QEvent.Type.Drop:
                 print("drop on browser...")
-                path = cast("QDropEvent", event).mimeData().text()
+                mime_text = cast("QDropEvent", event).mimeData().text()
+                path = Path(mime_text.replace(PATH_PREFIX, ""))
+                new_index = self.model.index(path.as_posix())
+                self.preview(path.as_posix(), new_index)
+                self.treeView.setCurrentIndex(new_index)
+                self.treeView.setRootIndex(self.model.index(path.parent.as_posix()))
                 print(f"{path=}")
                 event.accept()
-                return event.isAccepted()
 
         if source is self.lw_favorites:
             if event.type() == QEvent.Type.DragEnter:
-                # event = cast("QDragEnterEvent", event)
                 event.accept()
-                return event.isAccepted()
 
             if event.type() == QEvent.Type.Drop:
                 event = cast("QDropEvent", event)
@@ -191,7 +190,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.lw_favorites.addItem(item)
 
                 event.accept()
-                return event.isAccepted()
 
             if (
                 event.type() == QEvent.Type.KeyPress
@@ -200,7 +198,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 item = self.lw_favorites.currentItem()
                 self.lw_favorites.takeItem(self.lw_favorites.row(item))
                 event.accept()
-                return event.isAccepted()
 
         return super().eventFilter(source, event)
 
@@ -211,7 +208,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_window = loader.load(about_file)
         if version_label := self.about_window.findChild(QLabel, "lbl_about"):
             version_label.setTextFormat(Qt.TextFormat.RichText)
-            version_label.setText(f"<center><h2>PDFPreview</h2></center><center>version: {VERSION}</center><center>author: Charles Cognato</center>")
+            version_label.setText(
+                f"<center><h2>PDFPreview</h2></center><center>version: {VERSION}</center><center>author: Charles Cognato</center>"
+            )
         about_file.close()
 
     def _save_favorites(self) -> None:
