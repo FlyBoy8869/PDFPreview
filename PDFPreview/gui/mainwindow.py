@@ -69,6 +69,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QWebEngineSettings.WebAttribute.PdfViewerEnabled,
             True,
         )
+        self.browser.installEventFilter(self)
 
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setRootPath("")
@@ -155,6 +156,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 event.accept()
                 return event.isAccepted()
 
+        if source is self.browser:
             if event.type() == QEvent.Type.DragEnter:
                 print("drag enter event")
                 event.accept()
@@ -166,13 +168,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return event.isAccepted()
 
             if event.type() == QEvent.Type.Drop:
-                print("drop on treeview...")
+                print("drop on browser...")
+                path = cast("QDropEvent", event).mimeData().text()
+                print(f"{path=}")
                 event.accept()
                 return event.isAccepted()
 
         if source is self.lw_favorites:
             if event.type() == QEvent.Type.DragEnter:
-                event = cast("QDragEnterEvent", event)
+                # event = cast("QDragEnterEvent", event)
                 event.accept()
                 return event.isAccepted()
 

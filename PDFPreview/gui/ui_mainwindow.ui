@@ -125,7 +125,7 @@
            <enum>QAbstractItemView::DragDropMode::DragDrop</enum>
           </property>
           <property name="defaultDropAction">
-           <enum>Qt::DropAction::CopyAction</enum>
+           <enum>Qt::DropAction::ActionMask</enum>
           </property>
           <property name="alternatingRowColors">
            <bool>true</bool>
@@ -181,7 +181,7 @@
      <x>0</x>
      <y>0</y>
      <width>1188</width>
-     <height>34</height>
+     <height>33</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
