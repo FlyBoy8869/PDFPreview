@@ -149,13 +149,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return super().closeEvent(event)
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
-        if isinstance(source, MyCustomTreeView) and (
-            event.type() == QEvent.Type.KeyPress
-            and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
-        ):
-            self.open_file(self.treeView.currentIndex())
-            event.accept()
-            return event.isAccepted()
+        if isinstance(source, MyCustomTreeView):
+            if event.type() == QEvent.Type.KeyPress and cast("QKeyEvent", event).key() == Qt.Key.Key_Space:
+                self.open_file(self.treeView.currentIndex())
+                event.accept()
+                return event.isAccepted()
+
+            if event.type() == QEvent.Type.DragEnter:
+                print("drag enter event")
+                event.accept()
+                return event.isAccepted()
+
+            if event.type() == QEvent.Type.DragMove:
+                print("drag move event")
+                event.accept()
+                return event.isAccepted()
+
+            if event.type() == QEvent.Type.Drop:
+                print("drop on treeview...")
+                event.accept()
+                return event.isAccepted()
 
         if source is self.lw_favorites:
             if event.type() == QEvent.Type.DragEnter:
