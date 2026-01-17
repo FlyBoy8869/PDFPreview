@@ -17,11 +17,11 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWebEngineWidgets import QWebEngineView
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QGroupBox,
-    QHBoxLayout, QHeaderView, QListWidget, QListWidgetItem,
-    QMainWindow, QMenu, QMenuBar, QPushButton,
-    QSizePolicy, QSpacerItem, QSplitter, QStatusBar,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QGroupBox, QHBoxLayout,
+    QHeaderView, QListWidget, QListWidgetItem, QMainWindow,
+    QMenu, QMenuBar, QPushButton, QSizePolicy,
+    QSpacerItem, QSplitter, QStatusBar, QVBoxLayout,
+    QWidget)
 
 from .customwidgets import MyCustomTreeView
 
@@ -89,11 +89,6 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.pbBack)
 
-        self.ckb_hide_files = QCheckBox(self.layoutWidget)
-        self.ckb_hide_files.setObjectName(u"ckb_hide_files")
-
-        self.horizontalLayout.addWidget(self.ckb_hide_files)
-
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
@@ -144,7 +139,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1188, 33))
+        self.menubar.setGeometry(QRect(0, 0, 1188, 34))
         self.menuOptions = QMenu(self.menubar)
         self.menuOptions.setObjectName(u"menuOptions")
         self.menuHelp = QMenu(self.menubar)
@@ -172,7 +167,6 @@ class Ui_MainWindow(object):
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Favorites:", None))
         self.pbBack.setText(QCoreApplication.translate("MainWindow", u"< Back", None))
-        self.ckb_hide_files.setText(QCoreApplication.translate("MainWindow", u"Hide Files", None))
         self.menuOptions.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
     # retranslateUi

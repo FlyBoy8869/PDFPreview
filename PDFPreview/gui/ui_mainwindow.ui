@@ -80,13 +80,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="ckb_hide_files">
-            <property name="text">
-             <string>Hide Files</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>
@@ -181,7 +174,7 @@
      <x>0</x>
      <y>0</y>
      <width>1188</width>
-     <height>33</height>
+     <height>34</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">

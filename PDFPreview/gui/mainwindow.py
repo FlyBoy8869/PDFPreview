@@ -73,11 +73,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.currentIndexChangedAsString.connect(self.preview)
         self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
         self.treeView.installEventFilter(self)
+        self.treeView.setItemsExpandable(False)
+        self.treeView.setRootIsDecorated(False)
 
         self.pbBack.clicked.connect(self.handle_back_button_clicked)
-        self.ckb_hide_files.clicked.connect(
-            lambda checked: self.model.setNameFilterDisables(not checked)
-        )
 
         self.load_favorites()
 
