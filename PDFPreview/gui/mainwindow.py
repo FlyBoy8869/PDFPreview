@@ -10,9 +10,8 @@ import platform
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from icecream import ic
 from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, Qt, QUrl
-from PySide6.QtGui import QCloseEvent, QDragEnterEvent, QDropEvent
+from PySide6.QtGui import QCloseEvent, QDropEvent
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import QFileSystemModel, QLabel, QMainWindow
@@ -24,26 +23,13 @@ from .ui_mainwindow import Ui_MainWindow
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
-VERSION = "0.1.6"
+VERSION = "0.1.7"
 TITLE = "PDFPreview"
-EXTENTION_FILTERS: list[str] = [
-    "*.pdf",
-    "*.jpg",
-    "*.jpeg",
-    "*.gif",
-    "*.png",
-    "*.txt",
-    "*.json",
-    "*.py",
-    "*.md",
-    "*.ico",
-]
+
 PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
 
 FAVORITES = Path(__file__).parent / "favorites.dat"
 ABOUT_UI_PATH = Path(__file__).parent / "ui_about.ui"
-
-ic.configureOutput(includeContext=True)
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -73,8 +59,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setRootPath("")
-        self.model.setNameFilters(EXTENTION_FILTERS)
-        self.model.setNameFilterDisables(True)
 
         self.top_level_index = self.model.index(self.model.rootPath())
 
@@ -116,6 +100,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
         self.treeView.setRootIndex(index.extra)
         self.treeView.setCurrentIndex(index.extra)
+        self.treeView.collapseAll()
         self.update_title_bar_for_folder(index.extra)
 
     def handle_treeview_double_click(self, index: QModelIndex) -> None:
@@ -126,13 +111,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def open_file(self, index) -> None:
         """Open file in the default application."""
         file: str = self.model.filePath(index)
-        if f"*.{file.split('.')[-1]}".lower() in EXTENTION_FILTERS:
-            startfile(QUrl.fromLocalFile(file).url())
+        startfile(QUrl.fromLocalFile(file).url())
 
     def preview(self, path: str, index: QModelIndex) -> None:
-        if f"*.{path.split('.')[-1]}".lower() in EXTENTION_FILTERS:
-            self.setWindowTitle(f"PDFPreview - {path}")
-            self._update_title_bar_from_index(index)
+        self.setWindowTitle(f"PDFPreview - {path}")
+        self._update_title_bar_from_index(index)
+        if not self.model.isDir(index):
             self.browser.page().setUrl(
                 f"{QUrl.url(QUrl.fromLocalFile(f'{path}'))}{self.HIDE_TOOLBAR}",
             )
@@ -170,6 +154,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 path = Path(mime_text.replace(PATH_PREFIX, ""))
                 new_index = self.model.index(path.as_posix())
                 self.preview(path.as_posix(), new_index)
+                self.treeView.collapseAll()
                 self.treeView.setCurrentIndex(new_index)
                 self.treeView.setRootIndex(self.model.index(path.parent.as_posix()))
                 print(f"{path=}")
