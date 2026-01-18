@@ -16,7 +16,7 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import QFileSystemModel, QLabel, QMainWindow
 
-from PDFPreview.gui.customwidgets import MyCustomTreeView, MyListWidgetItem
+from PDFPreview.gui.customwidgets import MyListWidgetItem
 
 from .ui_mainwindow import Ui_MainWindow
 
@@ -135,20 +135,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return super().closeEvent(event)
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
-        if isinstance(source, MyCustomTreeView) and (
+        if source is self.treeView and (
             event.type() == QEvent.Type.KeyPress
             and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
         ):
             self.open_file(self.treeView.currentIndex())
             event.accept()
+            # this and the others below are vital to the proper handling of these events
+            return event.isAccepted()
 
         if source is self.browser:
             if event.type() == QEvent.Type.DragEnter:
-                print("drag enter event")
                 event.accept()
+                return event.isAccepted()
 
             if event.type() == QEvent.Type.Drop:
-                print("drop on browser...")
                 mime_text = cast("QDropEvent", event).mimeData().text()
                 path = Path(mime_text.replace(PATH_PREFIX, ""))
                 new_index = self.model.index(path.as_posix())
@@ -158,10 +159,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.treeView.setRootIndex(self.model.index(path.parent.as_posix()))
                 print(f"{path=}")
                 event.accept()
+                return event.isAccepted()
 
         if source is self.lw_favorites:
             if event.type() == QEvent.Type.DragEnter:
                 event.accept()
+                return event.isAccepted()
 
             if event.type() == QEvent.Type.Drop:
                 event = cast("QDropEvent", event)
@@ -174,6 +177,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.lw_favorites.addItem(item)
 
                 event.accept()
+                return event.isAccepted()
 
             if (
                 event.type() == QEvent.Type.KeyPress
@@ -182,6 +186,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 item = self.lw_favorites.currentItem()
                 self.lw_favorites.takeItem(self.lw_favorites.row(item))
                 event.accept()
+                return event.isAccepted()
 
         return super().eventFilter(source, event)
 
