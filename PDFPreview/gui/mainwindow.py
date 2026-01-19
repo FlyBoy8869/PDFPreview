@@ -17,6 +17,7 @@ from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import QFileSystemModel, QLabel, QMainWindow
 
 from PDFPreview.gui.customwidgets import MyListWidgetItem
+from PDFPreview.helpers import favorites
 
 from .ui_mainwindow import Ui_MainWindow
 
@@ -80,6 +81,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.load_favorites()
 
+    def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
+        self.save_favorites()
+        return super().closeEvent(event)
+
     def handle_back_button_clicked(self, _) -> None:
         current_index: QModelIndex = self.treeView.currentIndex()
         if current_index == self.top_level_index:
@@ -129,10 +134,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.model.filePath(self.treeView.currentIndex()),
             self.treeView.currentIndex(),
         )
-
-    def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
-        self._save_favorites()
-        return super().closeEvent(event)
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         if source is self.treeView and (
@@ -202,34 +203,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             )
         about_file.close()
 
-    def _save_favorites(self) -> None:
-        favorites = Path(__file__).parent / FAVORITES
-        favorites.touch()
-        with favorites.open(mode="w", encoding="utf-8") as of:
-            for index in range(self.lw_favorites.count()):
-                item: MyListWidgetItem = cast(
-                    "MyListWidgetItem",
-                    self.lw_favorites.item(index),
-                )
-                extra: QModelIndex = item.extra
-                of.write(
-                    f"{item.data(Qt.ItemDataRole.DisplayRole)}|{self.model.filePath(extra)}\n",
-                )
+    def save_favorites(self) -> None:
+        favorites.save_favorites(FAVORITES, self.model, self.lw_favorites)
 
     def load_favorites(self) -> None:
-        try:
-            with FAVORITES.open("r", encoding="utf-8") as inputfile:
-                for line in inputfile:
-                    display_role, extra = line.split("|")
-                    # make sure to strip the "extra" or else the QFileSystemModel won't find the path due to the "\n"
-                    item = MyListWidgetItem(
-                        display_role,
-                        extra=self.model.index(extra.strip()),
-                    )
-                    item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
-                    self.lw_favorites.addItem(item)
-        except FileNotFoundError:
-            pass
+        favorites.load_favorites(FAVORITES, self.model, self.lw_favorites)
 
     def update_title_bar_for_folder(self, index) -> None:
         if self.model.isDir(index):
