@@ -28,7 +28,7 @@ TITLE = "PDFPreview"
 
 PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
 
-FAVORITES = Path(__file__).parent / "favorites.dat"
+FAVORITES = Path(__file__).parent.parent.parent / "favorites.dat"
 ABOUT_UI_PATH = Path(__file__).parent / "ui_about.ui"
 
 
