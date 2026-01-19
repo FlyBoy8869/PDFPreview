@@ -4,3 +4,9 @@ ui_files:
 mac_clean:
 	rm -rf ./dist
 	rm -rf ./build
+
+build_no_upx:
+	pyinstaller --add-data PDFPreview\gui\ui_about.ui:PDFPreview\gui\ --onedir --windowed --noconfirm --name PDFViewer app.py
+
+build:
+	pyinstaller --add-data PDFPreview\gui\ui_about.ui:PDFPreview\gui\ --upx-dir C:\Users\charles.cognato\upx-5.1.0-win64\upx-5.1.0-win64 --onedir --windowed --noconfirm --name PDFViewer app.py
