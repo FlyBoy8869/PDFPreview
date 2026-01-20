@@ -59,9 +59,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             True,
         )
         self.browser.installEventFilter(self)
-        self.browser.page().setUrl(
-                f"{QUrl.url(QUrl.fromLocalFile(f'{SPLASH_PDF.as_posix()}'))}{self.HIDE_TOOLBAR}",
-            )
+        self.load_splash()
 
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setRootPath("")
@@ -208,6 +206,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 f"<center><h2>PDFPreview</h2></center><center>version: {VERSION}</center><center>author: Charles Cognato</center>"
             )
         about_file.close()
+
+    def load_splash(self) -> None:
+        self.browser.page().setUrl(
+            f"{QUrl.url(QUrl.fromLocalFile(f'{SPLASH_PDF.as_posix()}'))}{self.HIDE_TOOLBAR}",
+        )
 
     def save_favorites(self) -> None:
         favorites.save_favorites(FAVORITES, self.model, self.lw_favorites)
