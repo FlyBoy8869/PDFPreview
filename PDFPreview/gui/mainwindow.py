@@ -24,7 +24,7 @@ from .ui_mainwindow import Ui_MainWindow
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
-VERSION = "0.1.7-5"
+VERSION = "0.1.7-6"
 TITLE = "PDFPreview"
 
 PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
@@ -121,18 +121,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         startfile(QUrl.fromLocalFile(file).url())
 
     def preview(self, path: str, index: QModelIndex) -> None:
-        self.setWindowTitle(f"PDFPreview - {path}")
         self._update_title_bar_from_index(index)
         if not self.model.isDir(index):
-            self.browser.page().setUrl(
-                f"{QUrl.url(QUrl.fromLocalFile(f'{path}'))}{self.HIDE_TOOLBAR}",
-            )
+            url = QUrl.fromLocalFile(path)
+            url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
+            self.browser.page().setUrl(url)
 
     def show_about(self) -> None:
         self.about_window.show()
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
-        self.HIDE_TOOLBAR = "#toolbar=0" if checked else ""
+        self.HIDE_TOOLBAR = "toolbar=0" if checked else ""
         self.preview(
             self.model.filePath(self.treeView.currentIndex()),
             self.treeView.currentIndex(),
@@ -208,9 +207,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         about_file.close()
 
     def load_splash(self) -> None:
-        self.browser.page().setUrl(
-            f"{QUrl.url(QUrl.fromLocalFile(f'{SPLASH_PDF.as_posix()}'))}{self.HIDE_TOOLBAR}",
-        )
+        url = QUrl.fromLocalFile(f"{SPLASH_PDF.as_posix()}")
+        url.setFragment("toolbar=0&view=FitH")
+        self.browser.page().setUrl(url)
 
     def save_favorites(self) -> None:
         favorites.save_favorites(FAVORITES, self.model, self.lw_favorites)
