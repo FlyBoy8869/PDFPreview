@@ -1,6 +1,6 @@
 # PDFPreview
 
-A basic previewer intended for pdf files, but which has evolved to preview several other file types.
+A basic previewer intended for pdf files, but which has evolved to include several other file types.
 
 ## Features
 
@@ -25,4 +25,4 @@ A basic previewer intended for pdf files, but which has evolved to preview sever
     To instantly navigate to a location, drag and drop a file or folder from Windows File Explorer on the preview pane.
 
 #### Open Files:
-    To open a supported file in a system default application, press the spacebar while the file is selected.
+    Open a supported file in a system default application by pressing the spacebar while the file is selected.
