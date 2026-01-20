@@ -32,6 +32,8 @@ PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
 FAVORITES = Path(__file__).parent.parent.parent / "favorites.dat"
 ABOUT_UI_PATH = Path(__file__).parent / "ui_about.ui"
 
+SPLASH_PDF = Path(__file__).parent.parent.parent / "PDFPreview-Splash.pdf"
+
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -57,6 +59,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             True,
         )
         self.browser.installEventFilter(self)
+        self.browser.page().setUrl(
+                f"{QUrl.url(QUrl.fromLocalFile(f'{SPLASH_PDF.as_posix()}'))}{self.HIDE_TOOLBAR}",
+            )
 
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setRootPath("")
