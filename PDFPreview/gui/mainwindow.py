@@ -196,6 +196,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         loader = QUiLoader()
         about_file.open(QFile.OpenModeFlag.ReadOnly)
         self.about_window = loader.load(about_file)
+        self.about_window.setWindowTitle(TITLE)
         if version_label := self.about_window.findChild(QLabel, "lbl_about"):
             version_label.setTextFormat(Qt.TextFormat.RichText)
             version_label.setText(
