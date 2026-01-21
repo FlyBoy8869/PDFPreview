@@ -121,8 +121,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         startfile(QUrl.fromLocalFile(file).url())
 
     def preview(self, path: str, index: QModelIndex) -> None:
-        self.update_title_bar_from_index(index)
         if not self.model.isDir(index):
+            self.update_title_bar_from_index(index)
             url = QUrl.fromLocalFile(path)
             url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
             self.browser.page().setUrl(url)
