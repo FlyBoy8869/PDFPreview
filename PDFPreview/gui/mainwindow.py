@@ -8,13 +8,15 @@ except ImportError:
 
 import platform
 from pathlib import Path
+import time
 from typing import TYPE_CHECKING, cast
 
 from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, Qt, QUrl
-from PySide6.QtGui import QCloseEvent, QDropEvent
+from PySide6.QtGui import QCloseEvent, QDropEvent, QKeyEvent, QShortcut, QKeySequence
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import QFileSystemModel, QLabel, QMainWindow
+from icecream import ic
 
 from PDFPreview.gui.customwidgets import MyListWidgetItem
 from PDFPreview.helpers import favorites
@@ -40,7 +42,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle(TITLE)
-
+        self.help_shortcut = QShortcut(QKeySequence("Ctrl+h"), self)
+        self.help_shortcut.activated.connect(self.show_help)
+        
         # this string gets appended to the url to show or hide the pdf viewer toolbar
         self.HIDE_TOOLBAR = ""
 
@@ -87,7 +91,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
         self.save_favorites()
         return super().closeEvent(event)
-
+    
     def handle_back_button_clicked(self, _) -> None:
         current_index: QModelIndex = self.treeView.currentIndex()
         if current_index == self.top_level_index:
@@ -105,6 +109,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_title_bar_for_folder(new_index)
 
     def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
+        if not self.model.isDir(index.extra):
+            path = Path(self.model.filePath(index.extra))
+            self.preview(path.as_posix(), index.extra)
+            folder = path.parent
+            folder_index = self.model.index(folder.as_posix())
+            index.extra = folder_index
+
         self.treeView.setRootIndex(index.extra)
         self.treeView.setCurrentIndex(index.extra)
         self.treeView.collapseAll()
@@ -173,11 +184,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 event = cast("QDropEvent", event)
                 folder = event.mimeData().text()
                 folder = folder.replace(PATH_PREFIX, "")
-                if self.model.isDir(self.model.index(folder)):
-                    base = folder.split("/")[-1]
-                    item = MyListWidgetItem(base, extra=self.model.index(folder))
-                    item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
-                    self.lw_favorites.addItem(item)
+                # if self.model.isDir(self.model.index(folder)):
+                base = folder.split("/")[-1]
+                item = MyListWidgetItem(base, extra=self.model.index(folder))
+                item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
+                self.lw_favorites.addItem(item)
 
                 event.accept()
                 return event.isAccepted()
@@ -210,6 +221,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         url = QUrl.fromLocalFile(f"{SPLASH_PDF.as_posix()}")
         url.setFragment("toolbar=0&view=FitH")
         self.browser.page().setUrl(url)
+
+    def show_help(self) -> None:
+        self.load_splash()
 
     def save_favorites(self) -> None:
         favorites.save_favorites(FAVORITES, self.model, self.lw_favorites)
