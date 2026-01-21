@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
 VERSION = "0.1.7-6"
-TITLE = "PDFPreview"
+TITLE = "PDFViewer"
 
 PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
 
@@ -44,7 +44,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # this string gets appended to the url to show or hide the pdf viewer toolbar
         self.HIDE_TOOLBAR = ""
 
-        self._create_about_dialog()
+        self.create_about_dialog()
 
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
         self.actionAbout.triggered.connect(self.show_about)
@@ -121,7 +121,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         startfile(QUrl.fromLocalFile(file).url())
 
     def preview(self, path: str, index: QModelIndex) -> None:
-        self._update_title_bar_from_index(index)
+        self.update_title_bar_from_index(index)
         if not self.model.isDir(index):
             url = QUrl.fromLocalFile(path)
             url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
@@ -193,7 +193,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         return super().eventFilter(source, event)
 
-    def _create_about_dialog(self) -> None:
+    def create_about_dialog(self) -> None:
         about_file = QFile(ABOUT_UI_PATH)
         loader = QUiLoader()
         about_file.open(QFile.OpenModeFlag.ReadOnly)
@@ -202,7 +202,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if version_label := self.about_window.findChild(QLabel, "lbl_about"):
             version_label.setTextFormat(Qt.TextFormat.RichText)
             version_label.setText(
-                f"<center><h2>PDFPreview</h2></center><center>version: {VERSION}</center><center>author: Charles Cognato</center>"
+                f"<center><h2>{TITLE}</h2></center><center>version: {VERSION}</center><center>author: Charles Cognato</center>",
             )
         about_file.close()
 
@@ -219,7 +219,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def update_title_bar_for_folder(self, index) -> None:
         if self.model.isDir(index):
-            self._update_title_bar_from_index(index)
+            self.update_title_bar_from_index(index)
 
-    def _update_title_bar_from_index(self, index) -> None:
+    def update_title_bar_from_index(self, index) -> None:
         self.setWindowTitle(f"{TITLE} - {self.model.filePath(index)}")
