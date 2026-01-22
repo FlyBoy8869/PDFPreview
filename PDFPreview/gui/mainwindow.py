@@ -7,16 +7,16 @@ except ImportError:
     startfile: Callable[..., bool] = webbrowser.open_new_tab
 
 import platform
-from pathlib import Path
 import time
+from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
+from icecream import ic
 from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, Qt, QUrl
-from PySide6.QtGui import QCloseEvent, QDropEvent, QKeyEvent, QShortcut, QKeySequence
+from PySide6.QtGui import QCloseEvent, QDropEvent, QKeyEvent, QKeySequence, QShortcut
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import QFileSystemModel, QLabel, QMainWindow
-from icecream import ic
 
 from PDFPreview.gui.customwidgets import MyListWidgetItem
 from PDFPreview.helpers import favorites
@@ -43,11 +43,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle(TITLE)
-        self.help_shortcut = QShortcut(QKeySequence("Ctrl+h"), self)
+        self.help_shortcut = QShortcut(QKeySequence("h"), self)
         self.help_shortcut.activated.connect(self.show_help)
 
         self.help_save = None
-        
+
         # this string gets appended to the url to show or hide the pdf viewer toolbar
         self.HIDE_TOOLBAR = ""
 
@@ -94,7 +94,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
         self.save_favorites()
         return super().closeEvent(event)
-    
+
     def handle_back_button_clicked(self, _) -> None:
         current_index: QModelIndex = self.treeView.currentIndex()
         if current_index == self.top_level_index:
