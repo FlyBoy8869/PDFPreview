@@ -162,6 +162,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return event.isAccepted()
 
         if source is self.browser:
+            # handle the dropping of files and folder onto the preview pane
             if event.type() == QEvent.Type.DragEnter:
                 event.accept()
                 return event.isAccepted()
@@ -170,13 +171,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 mime_text = cast("QDropEvent", event).mimeData().text()
                 path = Path(mime_text.replace(PATH_PREFIX, ""))
                 new_index = self.model.index(path.as_posix())
-                self.preview(path.as_posix(), new_index)
+
                 self.treeView.collapseAll()
                 self.treeView.setCurrentIndex(new_index)
                 self.treeView.setRootIndex(self.model.index(path.parent.as_posix()))
+
                 if self.model.isDir(new_index):
-                    self.update_title_bar_from_index(self.model.index(path.parent.as_posix()))
-                print(f"{path=}")
+                    self.update_title_bar_from_index(
+                        self.model.index(path.parent.as_posix()),
+                    )
+
+                self.preview(path.as_posix(), new_index)
+
                 event.accept()
                 return event.isAccepted()
 
