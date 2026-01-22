@@ -34,7 +34,8 @@ PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
 FAVORITES = Path(__file__).parent.parent.parent / "favorites.dat"
 ABOUT_UI_PATH = Path(__file__).parent / "ui_about.ui"
 
-SPLASH_PDF = Path(__file__).parent.parent.parent / "PDFPreview-Splash.pdf"
+# SPLASH_PDF = Path(__file__).parent.parent.parent / "PDFPreview-Splash.pdf"
+SPLASH_PDF = Path(__file__).parent.parent.parent / "PDFViewerSplash.html"
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -44,6 +45,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowTitle(TITLE)
         self.help_shortcut = QShortcut(QKeySequence("Ctrl+h"), self)
         self.help_shortcut.activated.connect(self.show_help)
+
+        self.help_save = None
         
         # this string gets appended to the url to show or hide the pdf viewer toolbar
         self.HIDE_TOOLBAR = ""
@@ -223,7 +226,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.browser.page().setUrl(url)
 
     def show_help(self) -> None:
-        self.load_splash()
+        if self.help_save is None:
+            self.help_save = self.treeView.currentIndex()
+            self.load_splash()
+        else:
+            self.preview(self.model.filePath(self.help_save), self.help_save)
+            self.help_save = None
 
     def save_favorites(self) -> None:
         favorites.save_favorites(FAVORITES, self.model, self.lw_favorites)
