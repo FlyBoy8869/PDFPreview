@@ -195,6 +195,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return event.isAccepted()
 
         if source is self.lw_favorites:
+            # test change for a test commit
             if event.type() == QEvent.Type.DragEnter:
                 event.accept()
                 return event.isAccepted()
