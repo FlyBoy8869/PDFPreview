@@ -70,7 +70,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             True,
         )
         self.browser.installEventFilter(self)
-        self.load_splash()
 
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setRootPath("")
@@ -94,6 +93,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pbBack.clicked.connect(self.handle_back_button_clicked)
 
         self.load_favorites()
+
+        self.load_splash()
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
         self.save_favorites()
@@ -202,9 +203,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, "")
                 )
                 favorites_text = Path(path).name
-                item = MyListWidgetItem(
-                    favorites_text, extra=self.model.index(path)
-                )
+                item = MyListWidgetItem(favorites_text, extra=self.model.index(path))
                 item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
                 self.lw_favorites.addItem(item)
 
@@ -236,9 +235,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         about_file.close()
 
     def load_splash(self) -> None:
-        url = QUrl.fromLocalFile(f"{SPLASH_PDF.as_posix()}")
-        url.setFragment("toolbar=0&view=FitH")
-        self.browser.page().setUrl(url)
+        index = self.model.index(SPLASH_PDF.as_posix())
+        self.preview(index)
 
     def show_help(self) -> None:
         if self.help_save is None:
@@ -249,10 +247,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.help_save = None
 
     def save_favorites(self) -> None:
-        favorites.save_favorites(FAVORITES, self.model, self.lw_favorites)
+        favorites.save_favorites_from(
+            widget=self.lw_favorites,
+            to_file_path=FAVORITES,
+            using_model=self.model,
+        )
 
     def load_favorites(self) -> None:
-        favorites.load_favorites(FAVORITES, self.model, self.lw_favorites)
+        favorites.load_favorites_to(
+            widget=self.lw_favorites,
+            from_file_path=FAVORITES,
+            using_model=self.model,
+        )
 
     def update_title_bar_for_folder(self, index) -> None:
         if self.model.isDir(index):
