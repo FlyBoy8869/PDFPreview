@@ -39,7 +39,6 @@ PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
 FAVORITES = Path(__file__).parent.parent.parent / "favorites.dat"
 ABOUT_UI_PATH = Path(__file__).parent / "ui_about.ui"
 
-# SPLASH_PDF = Path(__file__).parent.parent.parent / "PDFPreview-Splash.pdf"
 SPLASH_PDF = Path(__file__).parent.parent.parent / "PDFViewerSplash.html"
 
 
