@@ -117,17 +117,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_title_bar_for_folder(new_index)
 
     def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
+        extra_copy = index.extra
         if not self.model.isDir(index.extra):
             path = Path(self.model.filePath(index.extra))
             self.preview(index.extra)
             folder = path.parent
             folder_index = self.model.index(folder.as_posix())
-            index.extra = folder_index
+            extra_copy = folder_index
 
-        self.treeView.setRootIndex(index.extra)
-        self.treeView.setCurrentIndex(index.extra)
+        self.treeView.setRootIndex(extra_copy)
+        self.treeView.setCurrentIndex(extra_copy)
         self.treeView.collapseAll()
-        self.update_title_bar_for_folder(index.extra)
+        self.update_title_bar_for_folder(extra_copy)
 
     def handle_treeview_double_click(self, index: QModelIndex) -> None:
         if self.model.isDir(index):
@@ -201,10 +202,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 path = (
                     cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, "")
                 )
-                favorites_list_text = Path(path).name
-                # if self.model.isDir(self.model.index(folder)):
+                favorites_text = Path(path).name
                 item = MyListWidgetItem(
-                    favorites_list_text, extra=self.model.index(path)
+                    favorites_text, extra=self.model.index(path)
                 )
                 item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
                 self.lw_favorites.addItem(item)
