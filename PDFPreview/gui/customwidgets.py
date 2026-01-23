@@ -3,7 +3,6 @@ from PySide6.QtWidgets import QListWidgetItem, QTreeView
 
 
 class MyCustomTreeView(QTreeView):
-    currentIndexChangedAsString = Signal(str, QModelIndex)  # noqa: N815
     currentIndexChanged = Signal(QModelIndex, QModelIndex)  # noqa: N815
 
     def __init__(self, *args, **kwargs):
@@ -15,7 +14,6 @@ class MyCustomTreeView(QTreeView):
         previous: QModelIndex | QPersistentModelIndex,
     ) -> None:
         f: str = self.model().filePath(current)  # type: ignore  # noqa: PGH003
-        self.currentIndexChangedAsString.emit(f, current)
         self.currentIndexChanged.emit(current, previous)
         return super().currentChanged(current, previous)
 

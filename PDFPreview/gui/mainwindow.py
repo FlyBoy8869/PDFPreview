@@ -86,7 +86,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setRootIndex(self.model.index(""))
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
-        self.treeView.currentIndexChangedAsString.connect(self.preview)
+        self.treeView.currentIndexChanged.connect(self.preview)
         self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
         self.treeView.installEventFilter(self)
         self.treeView.setItemsExpandable(False)
@@ -119,7 +119,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
         if not self.model.isDir(index.extra):
             path = Path(self.model.filePath(index.extra))
-            self.preview(path.as_posix(), index.extra)
+            self.preview(index.extra)
             folder = path.parent
             folder_index = self.model.index(folder.as_posix())
             index.extra = folder_index
@@ -139,22 +139,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         file: str = self.model.filePath(index)
         startfile(QUrl.fromLocalFile(file).url())
 
-    def preview(self, path: str, index: QModelIndex) -> None:
+    def preview(self, index: QModelIndex) -> None:
         if not self.model.isDir(index):
-            self.update_title_bar_from_index(index)
-            url = QUrl.fromLocalFile(path)
+            url = QUrl.fromLocalFile(self.model.filePath(index))
             url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
             self.browser.page().setUrl(url)
+
+            self.update_title_bar_from_index(index)
 
     def show_about(self) -> None:
         self.about_window.show()
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
         self.HIDE_TOOLBAR = "toolbar=0" if checked else ""
-        self.preview(
-            self.model.filePath(self.treeView.currentIndex()),
-            self.treeView.currentIndex(),
-        )
+        self.preview(self.treeView.currentIndex())
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         if source is self.treeView and (
@@ -189,24 +187,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         self.model.index(path.parent.as_posix()),
                     )
 
-                self.preview(path.as_posix(), new_index)
+                self.preview(new_index)
 
                 event.accept()
                 return event.isAccepted()
 
         if source is self.lw_favorites:
-            # test change for a test commit
             if event.type() == QEvent.Type.DragEnter:
                 event.accept()
                 return event.isAccepted()
 
             if event.type() == QEvent.Type.Drop:
-                event = cast("QDropEvent", event)
-                folder = event.mimeData().text()
-                folder = folder.replace(PATH_PREFIX, "")
+                path = (
+                    cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, "")
+                )
+                favorites_list_text = Path(path).name
                 # if self.model.isDir(self.model.index(folder)):
-                base = folder.split("/")[-1]
-                item = MyListWidgetItem(base, extra=self.model.index(folder))
+                item = MyListWidgetItem(
+                    favorites_list_text, extra=self.model.index(path)
+                )
                 item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
                 self.lw_favorites.addItem(item)
 
@@ -247,7 +246,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.help_save = self.treeView.currentIndex()
             self.load_splash()
         else:
-            self.preview(self.model.filePath(self.help_save), self.help_save)
+            self.preview(self.help_save)
             self.help_save = None
 
     def save_favorites(self) -> None:
