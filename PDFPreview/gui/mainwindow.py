@@ -31,7 +31,7 @@ from .ui_mainwindow import Ui_MainWindow
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
-VERSION = "0.1.13"
+VERSION = "0.2.1"
 TITLE = "PDFViewer"
 
 PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
