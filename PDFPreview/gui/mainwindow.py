@@ -1,11 +1,3 @@
-try:
-    from os import startfile  # type: ignore  # noqa: PGH003
-except ImportError:
-    import webbrowser
-    from collections.abc import Callable
-
-    startfile: Callable[..., bool] = webbrowser.open_new_tab
-
 import platform
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
@@ -24,7 +16,7 @@ from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import QFileSystemModel, QLabel, QMainWindow
 
 from PDFPreview.gui.customwidgets import MyListWidgetItem
-from PDFPreview.helpers import favorites
+from PDFPreview.helpers import favorites, fileoperations
 
 from .ui_mainwindow import Ui_MainWindow
 
@@ -84,7 +76,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setRootIndex(self.model.index(""))
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
-        self.treeView.currentIndexChanged.connect(self.preview)
+        self.treeView.currentIndexChanged.connect(self.view_file)
         self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
         self.treeView.installEventFilter(self)
         self.treeView.setItemsExpandable(False)
@@ -120,7 +112,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         extra_copy = index.extra
         if not self.model.isDir(index.extra):
             path = Path(self.model.filePath(index.extra))
-            self.preview(index.extra)
+            self.view_file(index.extra)
             folder = path.parent
             folder_index = self.model.index(folder.as_posix())
             extra_copy = folder_index
@@ -137,23 +129,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def open_file(self, index) -> None:
         """Open file in the default application."""
-        file: str = self.model.filePath(index)
-        startfile(QUrl.fromLocalFile(file).url())
+        fileoperations.open_file(self.model.filePath(index))
 
-    def preview(self, index: QModelIndex) -> None:
-        if not self.model.isDir(index):
-            url = QUrl.fromLocalFile(self.model.filePath(index))
-            url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
-            self.browser.page().setUrl(url)
+    def view_file(self, index: QModelIndex) -> None:
+        """Loads the file pointed to by index into the viewing pane."""
+        if self.model.isDir(index):
+            return
 
-            self.update_title_bar_from_index(index)
+        url = QUrl.fromLocalFile(self.model.filePath(index))
+        url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
+        self.browser.page().setUrl(url)
+
+        self.update_title_bar_from_index(index)
 
     def show_about(self) -> None:
         self.about_window.show()
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
         self.HIDE_TOOLBAR = "toolbar=0" if checked else ""
-        self.preview(self.treeView.currentIndex())
+        self.view_file(self.treeView.currentIndex())
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         if source is self.treeView and (
@@ -188,7 +182,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         self.model.index(path.parent.as_posix()),
                     )
 
-                self.preview(new_index)
+                self.view_file(new_index)
 
                 event.accept()
                 return event.isAccepted()
@@ -236,14 +230,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def load_splash(self) -> None:
         index = self.model.index(SPLASH_PDF.as_posix())
-        self.preview(index)
+        self.view_file(index)
 
     def show_help(self) -> None:
         if self.help_save is None:
             self.help_save = self.treeView.currentIndex()
             self.load_splash()
         else:
-            self.preview(self.help_save)
+            self.view_file(self.help_save)
             self.help_save = None
 
     def save_favorites(self) -> None:
