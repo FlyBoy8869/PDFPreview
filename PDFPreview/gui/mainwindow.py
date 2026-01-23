@@ -7,13 +7,18 @@ except ImportError:
     startfile: Callable[..., bool] = webbrowser.open_new_tab
 
 import platform
-import time
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from icecream import ic
 from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, Qt, QUrl
-from PySide6.QtGui import QCloseEvent, QDropEvent, QKeyEvent, QKeySequence, QShortcut
+from PySide6.QtGui import (
+    QCloseEvent,
+    QDragEnterEvent,
+    QDropEvent,
+    QKeyEvent,
+    QKeySequence,
+    QShortcut,
+)
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import QFileSystemModel, QLabel, QMainWindow
@@ -164,7 +169,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if source is self.browser:
             # handle the dropping of files and folder onto the preview pane
             if event.type() == QEvent.Type.DragEnter:
-                event.accept()
+                if cast("QDragEnterEvent", event).mimeData().hasUrls():
+                    event.accept()
+                else:
+                    event.ignore()
                 return event.isAccepted()
 
             if event.type() == QEvent.Type.Drop:
