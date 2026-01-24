@@ -4,14 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDFViewer</title>
+    <style type="text/css">
+        .header {
+            text-align: center; color: white; background-color: steelblue;
+            border-radius: 10px; padding-bottom: 1rem;
+        }
+        .title {
+            font-size: 3em; padding-top: 1rem; padding-bottom: 0rem;
+        }
+        .titledescription {
+            font-size: 1.3em; margin-top: .1rem;
+        }
+        .subheading {
+            text-indent: 1em; padding-top: 5px; padding-bottom: 10px;
+            background-color: lightsteelblue; border-radius: 5px;
+        }
+        .description {
+            text-indent: 20px; margin-top: 0px;
+        }
+    </style>
 </head>
 <body>
-    <div style="text-align: center; background-color: steelblue; border-radius: 10px; padding-bottom: 1rem;">
-        <p style="color: white; font-size: 3em; padding-top: 1rem; padding-bottom: 0rem;">PDFViewer</p>
-        <p style="margin-top: .1rem;">A basic pdf file viewer but which has evolved to include several other file types.</p>
+    <div class="header">
+        <p class="title">PDFViewer</p>
+        <p class="titledescription">Intended as a basic pdf file viewer but now able to view several other file types.</p>
     </div>
-    <div style="margin-left: 1.5rem;">
-        <h3 style="text-indent: 1rem; background-color: lightsteelblue;">Features:</h3>
+    <div style="margin-left: 1.5rem; margin-right: 1.5em;">
+        <h3 class="subheading">Features:</h3>
         <div>
             <ul>
                 <li>Create/Delete Favorites</li>
@@ -20,23 +39,25 @@
                 <li>Open supported files in system default applications</li>
             </ul>
         </div>
-    <div style="margin-top: 2rem;">
-        <h3 style="text-indent: 1rem; background-color: lightsteelblue;">Usage:</h3>
-        <div style="margin-left: 2rem;">
-            <h5 style="margin-bottom: 5px;">Create a Favorite:</h5>
-                <p style="text-indent: 20px; margin-top: 0px;">Create favorites by dropping files or folders from the file browser pane on to the favorites pane.</p>
+        <div style="margin-top: 2rem;">
+            <h3 class="subheading">Usage:</h3>
+            <div style="margin-left: 2rem;">
+                <h5 style="margin-bottom: 5px;">Create a Favorite:</h5>
+                <p class="description">Create favorites by dropping files or folders from the file browser pane on to the favorites pane.</p>
 
-            <h5 style="margin-bottom: 5px;">Delete a Favorite:</h5>
-            <p style="text-indent: 20px; margin-top: 0px;">Select the desired favorite and press delete.</p>
+                <h5 style="margin-bottom: 5px;">Delete a Favorite:</h5>
+                <p class="description">Select the desired favorite and press delete.</p>
 
-            <h5 style="margin-bottom: 5px;">Rearrange Favorites:</h5>
-            <p style="text-indent: 20px; margin-top: 0px;">Click on and drag a favorite and drop it wherever you'd like it to create any arrangement you'd prefer.</p>
+                <h5 style="margin-bottom: 5px;">Rearrange Favorites:</h5>
+                <p class="description">Click on and drag a favorite and drop it wherever you'd like it to create any arrangement you'd prefer.</p>
 
-            <h5 style="margin-bottom: 5px;">External Folder Navigation:</h5>
-                <p style="text-indent: 20px; margin-top: 0px;">To instantly navigate to a location, drag and drop a file or folder from Windows File Explorer on the preview pane.</p>
+                <h5 style="margin-bottom: 5px;">External Folder Navigation:</h5>
+                <p class="description">To instantly navigate to a location, drag and drop a file or folder from Windows File Explorer on to the preview pane.</p>
 
-            <h5 style="margin-bottom: 5px;">Open Files:</h5>
-                <p style="text-indent: 20px; margin-top: 0px;">Open a supported file in a system default application by pressing the spacebar while the file is selected.</p>
+                <h5 style="margin-bottom: 5px;">Open Files and Folders:</h5>
+                <p class="description">Open supported files in system default applications by pressing the spacebar while the file is selected.</p>
+                <p class="description">Open folders in Windows File Explorer by selecting the folder in the browser pane and pressing the spacebar.</p>
+            </div>
         </div>
     </div>
     <div style="margin-top: 2rem; font-size: .8em;">
