@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
 VERSION = "0.2.1"
-TITLE = f"PDFViewer [{VERSION}]"
+TITLE = "PDFViewer"
 
 PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
 
@@ -38,7 +38,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.setWindowTitle(TITLE)
+        self.setWindowTitle(f"{TITLE} [{VERSION}]")
         self.help_shortcut = QShortcut(QKeySequence("h"), self)
         self.help_shortcut.activated.connect(self.show_help)
 
@@ -259,4 +259,4 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_title_bar_from_index(index)
 
     def update_title_bar_from_index(self, index) -> None:
-        self.setWindowTitle(f"{TITLE} - {self.model.filePath(index)}")
+        self.setWindowTitle(f"{TITLE} [{VERSION}] - {self.model.filePath(index)}")
