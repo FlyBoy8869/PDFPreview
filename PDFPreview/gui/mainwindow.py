@@ -13,7 +13,14 @@ from PySide6.QtGui import (
 )
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWebEngineCore import QWebEngineSettings
-from PySide6.QtWidgets import QFileSystemModel, QLabel, QMainWindow
+from PySide6.QtWidgets import (
+    QFileSystemModel,
+    QInputDialog,
+    QLabel,
+    QMainWindow,
+    QMenu,
+    QMessageBox,
+)
 
 from PDFPreview.gui.customwidgets import MyListWidgetItem
 from PDFPreview.helpers import favorites, fileoperations
@@ -78,6 +85,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.treeView.header().hideSection(i)
         self.treeView.currentIndexChanged.connect(self.view_file)
         self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
+        self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.treeView.customContextMenuRequested.connect(
+            self.handle_treeview_context_menu_request
+        )
         self.treeView.installEventFilter(self)
         self.treeView.setItemsExpandable(False)
         self.treeView.setRootIsDecorated(False)
@@ -126,6 +137,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.model.isDir(index):
             self.treeView.setRootIndex(index)
             self.update_title_bar_for_folder(index)
+
+    def handle_treeview_context_menu_request(self, position) -> None:
+        index = self.treeView.indexAt(position)
+        if not index.isValid():
+            return
+
+        menu: QMenu = QMenu()
+
+        rename = menu.addAction("Rename")
+        delete = menu.addAction("Delete")
+
+        if self.model.isDir(index):
+            delete.setEnabled(False)
+
+        global_position = self.treeView.viewport().mapToGlobal(position)
+        action = menu.exec(global_position)
+
+        if action == rename:
+            if new_name := QInputDialog.getText(
+                self,
+                "Rename File",
+                "Enter a new name for this file.",
+            )[0]:
+                fileoperations.rename_file(self.model, index, new_name)
+        elif action == delete and (
+            QMessageBox.question(self, "Delete", "Are you sure?")
+            == QMessageBox.StandardButton.Yes
+        ):
+            fileoperations.delete_file(self.model, index)
 
     def open_file(self, index) -> None:
         """Open file in the default application."""
@@ -196,7 +236,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 path = (
                     cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, "")
                 )
-                favorites_text = Path(path).name
+                favorites_text = self.model.fileName(self.model.index(path))
                 item = MyListWidgetItem(favorites_text, extra=self.model.index(path))
                 item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
                 self.lw_favorites.addItem(item)
