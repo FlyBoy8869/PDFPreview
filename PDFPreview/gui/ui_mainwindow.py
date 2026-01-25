@@ -43,15 +43,13 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_3 = QVBoxLayout(self.centralwidget)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.splitter = QSplitter(self.centralwidget)
+        self.splitter_2 = QSplitter(self.centralwidget)
+        self.splitter_2.setObjectName(u"splitter_2")
+        self.splitter_2.setOrientation(Qt.Orientation.Horizontal)
+        self.splitter = QSplitter(self.splitter_2)
         self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Orientation.Horizontal)
-        self.layoutWidget = QWidget(self.splitter)
-        self.layoutWidget.setObjectName(u"layoutWidget")
-        self.verticalLayout_2 = QVBoxLayout(self.layoutWidget)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.groupBox = QGroupBox(self.layoutWidget)
+        self.splitter.setOrientation(Qt.Orientation.Vertical)
+        self.groupBox = QGroupBox(self.splitter)
         self.groupBox.setObjectName(u"groupBox")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -79,12 +77,15 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.lw_favorites)
 
-
-        self.verticalLayout_2.addWidget(self.groupBox)
-
+        self.splitter.addWidget(self.groupBox)
+        self.widget = QWidget(self.splitter)
+        self.widget.setObjectName(u"widget")
+        self.verticalLayout_2 = QVBoxLayout(self.widget)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pbBack = QPushButton(self.layoutWidget)
+        self.pbBack = QPushButton(self.widget)
         self.pbBack.setObjectName(u"pbBack")
 
         self.horizontalLayout.addWidget(self.pbBack)
@@ -96,7 +97,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout)
 
-        self.treeView = MyCustomTreeView(self.layoutWidget)
+        self.treeView = MyCustomTreeView(self.widget)
         self.treeView.setObjectName(u"treeView")
         sizePolicy2 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy2.setHorizontalStretch(1)
@@ -122,10 +123,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.treeView)
 
-        self.verticalLayout_2.setStretch(0, 1)
-        self.verticalLayout_2.setStretch(2, 2)
-        self.splitter.addWidget(self.layoutWidget)
-        self.browser = QWebEngineView(self.splitter)
+        self.splitter.addWidget(self.widget)
+        self.splitter_2.addWidget(self.splitter)
+        self.browser = QWebEngineView(self.splitter_2)
         self.browser.setObjectName(u"browser")
         sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy3.setHorizontalStretch(1)
@@ -134,14 +134,14 @@ class Ui_MainWindow(object):
         self.browser.setSizePolicy(sizePolicy3)
         self.browser.setStyleSheet(u"")
         self.browser.setUrl(QUrl(u"about:blank"))
-        self.splitter.addWidget(self.browser)
+        self.splitter_2.addWidget(self.browser)
 
-        self.verticalLayout_3.addWidget(self.splitter)
+        self.verticalLayout_3.addWidget(self.splitter_2)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1188, 34))
+        self.menubar.setGeometry(QRect(0, 0, 1188, 30))
         self.menuOptions = QMenu(self.menubar)
         self.menuOptions.setObjectName(u"menuOptions")
         self.menuHelp = QMenu(self.menubar)
