@@ -124,10 +124,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
         extra_copy: QModelIndex = index.extra
         if not self.model.isDir(index.extra):
-            path = Path(self.model.filePath(index.extra))
             self.view_file(index.extra)
-            folder = path.parent
-            folder_index: QModelIndex = self.model.index(folder.as_posix())
+            folder_index: QModelIndex = index.extra.parent()
             extra_copy = folder_index
 
         self.treeView.setRootIndex(extra_copy)
@@ -191,7 +189,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.HIDE_TOOLBAR = "toolbar=0" if checked else ""
         self.view_file(self.treeView.currentIndex())
 
-    def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
+    def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: C901, N802, PLR0911
         if source is self.treeView and (
             event.type() == QEvent.Type.KeyPress
             and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
