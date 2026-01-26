@@ -2,8 +2,9 @@ import platform
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, Qt, QUrl
+from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, QPoint, Qt, QUrl
 from PySide6.QtGui import (
+    QAction,
     QCloseEvent,
     QDragEnterEvent,
     QDropEvent,
@@ -20,6 +21,7 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QMenu,
     QMessageBox,
+    QWidget,
 )
 
 from PDFPreview.gui.customwidgets import MyListWidgetItem
@@ -35,10 +37,10 @@ TITLE = "PDFViewer"
 
 PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
 
-FAVORITES = Path(__file__).parent.parent.parent / "favorites.dat"
-ABOUT_UI_PATH = Path(__file__).parent / "ui_about.ui"
+FAVORITES: Path = Path(__file__).parent.parent.parent / "favorites.dat"
+ABOUT_UI_PATH: Path = Path(__file__).parent / "ui_about.ui"
 
-SPLASH_PDF = Path(__file__).parent.parent.parent / "PDFViewerSplash.html"
+SPLASH_PDF: Path = Path(__file__).parent.parent.parent / "PDFViewerSplash.html"
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -49,7 +51,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.help_shortcut = QShortcut(QKeySequence("h"), self)
         self.help_shortcut.activated.connect(self.show_help)
 
-        self.help_save = None
+        self.help_save: QModelIndex | None = None
 
         # this string gets appended to the url to show or hide the pdf viewer toolbar
         self.HIDE_TOOLBAR = ""
@@ -73,7 +75,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setRootPath("")
 
-        self.top_level_index = self.model.index(self.model.rootPath())
+        self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
         self.lw_favorites.installEventFilter(self)
         self.lw_favorites.itemClicked.connect(self.handle_favorite_clicked)
@@ -108,7 +110,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if current_index == self.top_level_index:
             return
 
-        new_index = (
+        new_index: QModelIndex = (
             current_index.parent()
             if self.model.isDir(current_index)
             else current_index.parent().parent()
@@ -120,12 +122,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_title_bar_for_folder(new_index)
 
     def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
-        extra_copy = index.extra
+        extra_copy: QModelIndex = index.extra
         if not self.model.isDir(index.extra):
             path = Path(self.model.filePath(index.extra))
             self.view_file(index.extra)
             folder = path.parent
-            folder_index = self.model.index(folder.as_posix())
+            folder_index: QModelIndex = self.model.index(folder.as_posix())
             extra_copy = folder_index
 
         self.treeView.setRootIndex(extra_copy)
@@ -139,20 +141,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_title_bar_for_folder(index)
 
     def handle_treeview_context_menu_request(self, position) -> None:
-        index = self.treeView.indexAt(position)
+        index: QModelIndex = self.treeView.indexAt(position)
         if not index.isValid():
             return
 
         menu: QMenu = QMenu()
 
-        rename = menu.addAction("Rename")
-        delete = menu.addAction("Delete")
+        rename: QAction = menu.addAction("Rename")
+        delete: QAction = menu.addAction("Delete")
 
         if self.model.isDir(index):
             delete.setEnabled(False)
 
-        global_position = self.treeView.viewport().mapToGlobal(position)
-        action = menu.exec(global_position)
+        global_position: QPoint = self.treeView.viewport().mapToGlobal(position)
+        action: QAction = menu.exec(global_position)
 
         if action == rename:
             if new_name := QInputDialog.getText(
@@ -176,7 +178,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.model.isDir(index):
             return
 
-        url = QUrl.fromLocalFile(self.model.filePath(index))
+        url: QUrl = QUrl.fromLocalFile(self.model.filePath(index))
         url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
         self.browser.page().setUrl(url)
 
@@ -209,9 +211,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return event.isAccepted()
 
             if event.type() == QEvent.Type.Drop:
-                mime_text = cast("QDropEvent", event).mimeData().text()
+                mime_text: str = cast("QDropEvent", event).mimeData().text()
                 path = Path(mime_text.replace(PATH_PREFIX, ""))
-                new_index = self.model.index(path.as_posix())
+                new_index: QModelIndex = self.model.index(path.as_posix())
 
                 self.treeView.collapseAll()
                 self.treeView.setCurrentIndex(new_index)
@@ -236,7 +238,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 path = (
                     cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, "")
                 )
-                favorites_text = self.model.fileName(self.model.index(path))
+                favorites_text: str = self.model.fileName(self.model.index(path))
                 item = MyListWidgetItem(favorites_text, extra=self.model.index(path))
                 item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
                 self.lw_favorites.addItem(item)
@@ -259,7 +261,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         about_file = QFile(ABOUT_UI_PATH)
         loader = QUiLoader()
         about_file.open(QFile.OpenModeFlag.ReadOnly)
-        self.about_window = loader.load(about_file)
+        self.about_window: QWidget = loader.load(about_file)
         self.about_window.setWindowTitle(TITLE)
         if version_label := self.about_window.findChild(QLabel, "lbl_about"):
             version_label.setTextFormat(Qt.TextFormat.RichText)
@@ -269,7 +271,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         about_file.close()
 
     def load_splash(self) -> None:
-        index = self.model.index(SPLASH_PDF.as_posix())
+        index: QModelIndex = self.model.index(SPLASH_PDF.as_posix())
         self.view_file(index)
 
     def show_help(self) -> None:
