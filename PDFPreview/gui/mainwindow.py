@@ -23,7 +23,6 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QWidget,
 )
-from icecream import ic
 
 from PDFPreview.gui.customwidgets import MyListWidgetItem
 from PDFPreview.helpers import favorites, fileoperations
@@ -33,7 +32,9 @@ from .ui_mainwindow import Ui_MainWindow
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
-VERSION = "0.3.2"
+from PDFPreview import __version__
+
+VERSION = __version__
 TITLE = "PDFViewer"
 
 PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
@@ -110,7 +111,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         current_index: QModelIndex = self.treeView.currentIndex()
         if not current_index.isValid():
             return
-        ic(current_index.data())
         if current_index == self.top_level_index:
             return
 
