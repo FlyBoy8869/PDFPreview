@@ -23,6 +23,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QWidget,
 )
+from icecream import ic
 
 from PDFPreview.gui.customwidgets import MyListWidgetItem
 from PDFPreview.helpers import favorites, fileoperations
@@ -89,11 +90,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(
-            self.handle_treeview_context_menu_request
+            self.handle_treeview_context_menu_request,
         )
-        self.treeView.installEventFilter(self)
         self.treeView.setItemsExpandable(False)
         self.treeView.setRootIsDecorated(False)
+        self.treeView.installEventFilter(self)
 
         self.pbBack.clicked.connect(self.handle_back_button_clicked)
 
@@ -107,6 +108,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_back_button_clicked(self, _) -> None:
         current_index: QModelIndex = self.treeView.currentIndex()
+        if not current_index.isValid():
+            return
+        ic(current_index.data())
         if current_index == self.top_level_index:
             return
 
@@ -202,7 +206,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if source is self.browser:
             # handle the dropping of files and folder onto the preview pane
             if event.type() == QEvent.Type.DragEnter:
-                if cast("QDragEnterEvent", event).mimeData().hasUrls():
+                event = cast("QDragEnterEvent", event)
+                if (
+                    event.proposedAction() == Qt.DropAction.CopyAction
+                    and event.mimeData().hasUrls()
+                ):
                     event.accept()
                 else:
                     event.ignore()
@@ -229,8 +237,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if source is self.lw_favorites:
             if event.type() == QEvent.Type.DragEnter:
-                event.accept()
-                return event.isAccepted()
+                event = cast("QDragEnterEvent", event)
+                if (
+                    event.proposedAction() == Qt.DropAction.CopyAction
+                    and event.mimeData().hasText()
+                ):
+                    event.acceptProposedAction()
+                    return event.isAccepted()
+                event.ignore()
 
             if event.type() == QEvent.Type.Drop:
                 path = (

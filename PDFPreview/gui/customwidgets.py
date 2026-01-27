@@ -13,7 +13,6 @@ class MyCustomTreeView(QTreeView):
         current: QModelIndex | QPersistentModelIndex,
         previous: QModelIndex | QPersistentModelIndex,
     ) -> None:
-        f: str = self.model().filePath(current)  # type: ignore  # noqa: PGH003
         self.currentIndexChanged.emit(current, previous)
         return super().currentChanged(current, previous)
 
