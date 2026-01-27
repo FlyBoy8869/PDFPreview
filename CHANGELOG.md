@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Splitter between the favorites pane and the file browser pane.
 
+## 0.3.1
+### Fixed
+- Git Tracker Issue #1 - Titlebar Update
+
 ## 0.2.1
 ### Fixed
 - favoriting file bug
