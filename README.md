@@ -14,7 +14,6 @@ A basic previewer intended for pdf files, but which has evolved to include sever
 
 #### Create a Favorite:
     Create favorites by dropping a folder from the file browser on to the favorites pane.
-    Note, only folders can be made favorites.
 
 #### Delete a Favorite:
     Select the desired favorite and press delete.
