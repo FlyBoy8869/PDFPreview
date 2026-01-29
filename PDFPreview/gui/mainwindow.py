@@ -35,14 +35,14 @@ if TYPE_CHECKING:
 from PDFPreview import __version__
 
 VERSION = __version__
-TITLE = "PDFViewer"
+TITLE = "FileViewer"
 
 PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
 
 FAVORITES: Path = Path(__file__).parent.parent.parent / "favorites.dat"
 ABOUT_UI_PATH: Path = Path(__file__).parent / "ui_about.ui"
 
-SPLASH_PDF: Path = Path(__file__).parent.parent.parent / "PDFViewerSplash.html"
+SPLASH_PDF: Path = Path(__file__).parent.parent.parent / "FileViewerSplash.html"
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
