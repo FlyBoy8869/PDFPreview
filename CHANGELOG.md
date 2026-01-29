@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.3
+### Changed
+- Rebrands the application
+
 ## 0.3.2
 ### Added
 - Splitter between the favorites pane and the file browser pane.

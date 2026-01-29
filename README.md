@@ -1,4 +1,4 @@
-# PDFPreview
+# FileViewer
 
 A basic previewer intended for pdf files, but which has evolved to include several other file types.
 
