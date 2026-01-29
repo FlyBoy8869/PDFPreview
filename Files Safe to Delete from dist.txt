@@ -86,3 +86,6 @@
 "C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Test.dll"
 "C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6TextToSpeech.dll"
 "C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6VirtualKeyboard.dll"
+"C:\Users\charles.cognato\PyApps\FileViewer-0.3.3\_internal\PySide6\Qt6Multimediax.dll"
+"C:\Users\charles.cognato\PyApps\FileViewer-0.3.3\_internal\PySide6\Qt6RemoteObjects.dll"
+"C:\Users\charles.cognato\PyApps\FileViewer-0.3.3\_internal\PySide6\Qt6RemoteObjectsQml.dll"
