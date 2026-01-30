@@ -78,7 +78,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setRootPath("")
-        self.model.directoryLoaded.connect(lambda _: print("finished loading directory"))
+        self.model.directoryLoaded.connect(
+            lambda _: print("finished loading directory")
+        )
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
@@ -166,7 +168,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self,
                 "Rename File",
                 "Enter a new name for this file.",
-                text=index.data()
+                text=index.data(),
             )[0]:
                 fileoperations.rename_file(self.model, index, new_name)
         elif action == delete and (
@@ -198,12 +200,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.view_file(self.treeView.currentIndex())
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: C901, N802, PLR0911
-        if source is self.about_window:
-            if event.type() == QEvent.Type.MouseButtonRelease or event.type() == QEvent.Type.KeyRelease:
-                self.about_window.close()
-                event.accept()
-                return event.isAccepted()
-                
+        if source is self.about_window and (
+            event.type() == QEvent.Type.MouseButtonRelease
+            or event.type() == QEvent.Type.KeyRelease
+        ):
+            self.about_window.close()
+            event.accept()
+            return event.isAccepted()
+
         if source is self.treeView and (
             event.type() == QEvent.Type.KeyPress
             and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
@@ -286,7 +290,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_window: QWidget = loader.load(about_file)
         about_file.close()
 
-        self.about_window.setWindowFlags(self.about_window.windowFlags() | Qt.WindowType.FramelessWindowHint)
+        self.about_window.setWindowFlags(
+            self.about_window.windowFlags() | Qt.WindowType.FramelessWindowHint
+        )
         self.about_window.setWindowTitle(TITLE)
         self.about_window.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.about_window.installEventFilter(self)
