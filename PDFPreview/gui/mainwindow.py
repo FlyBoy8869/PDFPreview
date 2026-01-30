@@ -283,7 +283,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if version_label := self.about_window.findChild(QLabel, "lbl_about"):
             version_label.setTextFormat(Qt.TextFormat.RichText)
             version_label.setText(
-                f"<center><h2>{TITLE}</h2></center><center>Version: {VERSION}</center><center>Author: Charles Cognato</center>",
+                f"<center><h1>{TITLE}</h1></center><center>Version: {VERSION}</center><center>Author: Charles Cognato</center>",
             )
         about_file.close()
 
