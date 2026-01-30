@@ -78,6 +78,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setRootPath("")
+        self.model.directoryLoaded.connect(lambda _: print("finished loading directory"))
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
@@ -197,6 +198,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.view_file(self.treeView.currentIndex())
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: C901, N802, PLR0911
+        if source is self.about_window:
+            if event.type() == QEvent.Type.MouseButtonRelease:
+                self.about_window.close()
+                
         if source is self.treeView and (
             event.type() == QEvent.Type.KeyPress
             and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
@@ -277,16 +282,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         loader = QUiLoader()
         about_file.open(QFile.OpenModeFlag.ReadOnly)
         self.about_window: QWidget = loader.load(about_file)
-        self.about_window.setWindowModality(Qt.WindowModality.ApplicationModal)
+        about_file.close()
+
         self.about_window.setWindowTitle(TITLE)
+        self.about_window.setWindowModality(Qt.WindowModality.ApplicationModal)
+        self.about_window.installEventFilter(self)
+
         if logo_label := self.about_window.findChild(QLabel, "lbl_logo"):
             logo_label.setPixmap(QPixmap(LOGO.as_posix()))
+
         if version_label := self.about_window.findChild(QLabel, "lbl_about"):
             version_label.setTextFormat(Qt.TextFormat.RichText)
             version_label.setText(
                 f"<center><h1>{TITLE}</h1></center><center>Version: {VERSION}</center><center>Author: Charles Cognato</center>",
             )
-        about_file.close()
 
     def load_splash(self) -> None:
         index: QModelIndex = self.model.index(SPLASH_PDF.as_posix())
