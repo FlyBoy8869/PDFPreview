@@ -165,6 +165,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self,
                 "Rename File",
                 "Enter a new name for this file.",
+                text=index.data()
             )[0]:
                 fileoperations.rename_file(self.model, index, new_name)
         elif action == delete and (
