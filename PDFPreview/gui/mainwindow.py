@@ -201,6 +201,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if source is self.about_window:
             if event.type() == QEvent.Type.MouseButtonRelease:
                 self.about_window.close()
+                event.accept()
+                return event.isAccepted()
                 
         if source is self.treeView and (
             event.type() == QEvent.Type.KeyPress
