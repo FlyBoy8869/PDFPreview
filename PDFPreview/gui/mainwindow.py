@@ -282,7 +282,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if version_label := self.about_window.findChild(QLabel, "lbl_about"):
             version_label.setTextFormat(Qt.TextFormat.RichText)
             version_label.setText(
-                f"<center><h2>{TITLE}</h2></center><center>version: {VERSION}</center><center>author: Charles Cognato</center>",
+                f"<center><h2>{TITLE}</h2></center><center>Version: {VERSION}</center><center>Author: Charles Cognato</center>",
             )
         about_file.close()
 
@@ -317,4 +317,4 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_title_bar_from_index(index)
 
     def update_title_bar_from_index(self, index) -> None:
-        self.setWindowTitle(f"{TITLE} [{VERSION}] - {self.model.filePath(index)}")
+        self.setWindowTitle(f"{TITLE} - {self.model.filePath(index)}")
