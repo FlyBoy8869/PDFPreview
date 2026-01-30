@@ -10,6 +10,7 @@ from PySide6.QtGui import (
     QDropEvent,
     QKeyEvent,
     QKeySequence,
+    QPixmap,
     QShortcut,
 )
 from PySide6.QtUiTools import QUiLoader
@@ -43,6 +44,7 @@ FAVORITES: Path = Path(__file__).parent.parent.parent / "favorites.dat"
 ABOUT_UI_PATH: Path = Path(__file__).parent / "ui_about.ui"
 
 SPLASH_PDF: Path = Path(__file__).parent.parent.parent / "FileViewerSplash.html"
+LOGO: Path = Path(__file__).parent / "logo.png"
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -275,6 +277,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         about_file.open(QFile.OpenModeFlag.ReadOnly)
         self.about_window: QWidget = loader.load(about_file)
         self.about_window.setWindowTitle(TITLE)
+        if logo_label := self.about_window.findChild(QLabel, "lbl_logo"):
+            logo_label.setPixmap(QPixmap(LOGO.as_posix()))
         if version_label := self.about_window.findChild(QLabel, "lbl_about"):
             version_label.setTextFormat(Qt.TextFormat.RichText)
             version_label.setText(
