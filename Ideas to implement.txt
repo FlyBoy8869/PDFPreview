@@ -1,0 +1,1 @@
+- show a busy indicator while the qfilesystemmodel is loading a folder

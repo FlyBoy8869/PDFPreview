@@ -277,6 +277,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         loader = QUiLoader()
         about_file.open(QFile.OpenModeFlag.ReadOnly)
         self.about_window: QWidget = loader.load(about_file)
+        self.about_window.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.about_window.setWindowTitle(TITLE)
         if logo_label := self.about_window.findChild(QLabel, "lbl_logo"):
             logo_label.setPixmap(QPixmap(LOGO.as_posix()))
