@@ -1,91 +1,91 @@
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6VirtualKeyboardQml.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6VirtualKeyboardSettings.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6WebEngineQuickDelegatesQml.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DAnimation.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DCore.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DExtras.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DInput.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DLogic.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DQuick.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DQuickAnimation.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DQuickExtras.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DQuickInput.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DQuickLogic.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DQuickRender.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DQuickScene2D.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DQuickScene3D.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt63DRender.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\opengl32sw.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Charts.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6ChartsQml.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Concurrent.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6DataVisualization.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6DataVisualizationQml.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Graphs.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6LabsAnimation.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6LabsFolderListModel.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6LabsPlatform.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6LabsQmlModels.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6LabsSettings.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6LabsSharedImage.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6LabsWavefrontMesh.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6MultimediaQuick.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Pdf.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6PdfQuick.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6PositioningQuick.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QmlXmlListModel.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3D.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3DAssetImport.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3DAssetUtils.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3DEffects.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3DHelpers.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3DHelpersImpl.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3DParticleEffects.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3DParticles.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3DRuntimeRender.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3DSpatialAudio.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3DUtils.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Quick3DXr.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2Basic.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2BasicStyleImpl.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2FluentWinUI3StyleImpl.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2Fusion.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2FusionStyleImpl.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2Imagine.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2ImagineStyleImpl.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2Impl.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2Material.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2MaterialStyleImpl.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2Universal.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2UniversalStyleImpl.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickControls2WindowsStyleImpl.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickDialogs2.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickDialogs2QuickImpl.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickDialogs2Utils.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickEffects.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickLayouts.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickParticles.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickShapes.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickTemplates2.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickTest.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickTimeline.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickTimelineBlendTrees.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickVectorImage.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6QuickVectorImageGenerator.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Scxml.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6ScxmlQml.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Sensors.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6SensorsQuick.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6SerialPort.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6ShaderTools.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6SpatialAudio.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Sql.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6StateMachine.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6StateMachineQml.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6Test.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6TextToSpeech.dll"
-"C:\Users\charles.cognato\PyApps\PDFViewer-0.2.1\Files OK to delete\Qt6VirtualKeyboard.dll"
-"C:\Users\charles.cognato\PyApps\FileViewer-0.3.3\_internal\PySide6\Qt6Multimediax.dll"
-"C:\Users\charles.cognato\PyApps\FileViewer-0.3.3\_internal\PySide6\Qt6RemoteObjects.dll"
-"C:\Users\charles.cognato\PyApps\FileViewer-0.3.3\_internal\PySide6\Qt6RemoteObjectsQml.dll"
+Qt6VirtualKeyboardQml.dll
+Qt6VirtualKeyboardSettings.dll
+Qt6WebEngineQuickDelegatesQml.dll
+Qt63DAnimation.dll
+Qt63DCore.dll
+Qt63DExtras.dll
+Qt63DInput.dll
+Qt63DLogic.dll
+Qt63DQuick.dll
+Qt63DQuickAnimation.dll
+Qt63DQuickExtras.dll
+Qt63DQuickInput.dll
+Qt63DQuickLogic.dll
+Qt63DQuickRender.dll
+Qt63DQuickScene2D.dll
+Qt63DQuickScene3D.dll
+Qt63DRender.dll
+opengl32sw.dll
+Qt6Charts.dll
+Qt6ChartsQml.dll
+Qt6Concurrent.dll
+Qt6DataVisualization.dll
+Qt6DataVisualizationQml.dll
+Qt6Graphs.dll
+Qt6LabsAnimation.dll
+Qt6LabsFolderListModel.dll
+Qt6LabsPlatform.dll
+Qt6LabsQmlModels.dll
+Qt6LabsSettings.dll
+Qt6LabsSharedImage.dll
+Qt6LabsWavefrontMesh.dll
+Qt6MultimediaQuick.dll
+Qt6Pdf.dll
+Qt6PdfQuick.dll
+Qt6PositioningQuick.dll
+Qt6QmlXmlListModel.dll
+Qt6Quick3D.dll
+Qt6Quick3DAssetImport.dll
+Qt6Quick3DAssetUtils.dll
+Qt6Quick3DEffects.dll
+Qt6Quick3DHelpers.dll
+Qt6Quick3DHelpersImpl.dll
+Qt6Quick3DParticleEffects.dll
+Qt6Quick3DParticles.dll
+Qt6Quick3DRuntimeRender.dll
+Qt6Quick3DSpatialAudio.dll
+Qt6Quick3DUtils.dll
+Qt6Quick3DXr.dll
+Qt6QuickControls2.dll
+Qt6QuickControls2Basic.dll
+Qt6QuickControls2BasicStyleImpl.dll
+Qt6QuickControls2FluentWinUI3StyleImpl.dll
+Qt6QuickControls2Fusion.dll
+Qt6QuickControls2FusionStyleImpl.dll
+Qt6QuickControls2Imagine.dll
+Qt6QuickControls2ImagineStyleImpl.dll
+Qt6QuickControls2Impl.dll
+Qt6QuickControls2Material.dll
+Qt6QuickControls2MaterialStyleImpl.dll
+Qt6QuickControls2Universal.dll
+Qt6QuickControls2UniversalStyleImpl.dll
+Qt6QuickControls2WindowsStyleImpl.dll
+Qt6QuickDialogs2.dll
+Qt6QuickDialogs2QuickImpl.dll
+Qt6QuickDialogs2Utils.dll
+Qt6QuickEffects.dll
+Qt6QuickLayouts.dll
+Qt6QuickParticles.dll
+Qt6QuickShapes.dll
+Qt6QuickTemplates2.dll
+Qt6QuickTest.dll
+Qt6QuickTimeline.dll
+Qt6QuickTimelineBlendTrees.dll
+Qt6QuickVectorImage.dll
+Qt6QuickVectorImageGenerator.dll
+Qt6Scxml.dll
+Qt6ScxmlQml.dll
+Qt6Sensors.dll
+Qt6SensorsQuick.dll
+Qt6SerialPort.dll
+Qt6ShaderTools.dll
+Qt6SpatialAudio.dll
+Qt6Sql.dll
+Qt6StateMachine.dll
+Qt6StateMachineQml.dll
+Qt6Test.dll
+Qt6TextToSpeech.dll
+Qt6VirtualKeyboard.dll
+Qt6Multimediax.dll
+Qt6RemoteObjects.dll
+Qt6RemoteObjectsQml.dll
