@@ -286,6 +286,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_window: QWidget = loader.load(about_file)
         about_file.close()
 
+        self.about_window.setWindowFlags(self.about_window.windowFlags() | Qt.WindowType.FramelessWindowHint)
         self.about_window.setWindowTitle(TITLE)
         self.about_window.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.about_window.installEventFilter(self)
