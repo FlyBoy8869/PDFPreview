@@ -89,3 +89,7 @@ Qt6VirtualKeyboard.dll
 Qt6Multimediax.dll
 Qt6RemoteObjects.dll
 Qt6RemoteObjectsQml.dll
+Qt6QmlNetwork.dll
+Qt6WebChannelQuick.dll
+Qt6WebEngineQuick.dll
+Qt6WebViewQuick.dll
