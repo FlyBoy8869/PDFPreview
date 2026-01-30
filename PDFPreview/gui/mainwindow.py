@@ -199,7 +199,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: C901, N802, PLR0911
         if source is self.about_window:
-            if event.type() == QEvent.Type.MouseButtonRelease:
+            if event.type() == QEvent.Type.MouseButtonRelease or event.type() == QEvent.Type.KeyRelease:
                 self.about_window.close()
                 event.accept()
                 return event.isAccepted()
