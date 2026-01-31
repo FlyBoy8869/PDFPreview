@@ -190,6 +190,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.update_title_bar_from_index(index)
 
     def show_about(self) -> None:
+        x = self.x()
+        y = self.y()
+        self.about_window.move(QPoint(x + ((self.width() - self.about_window.width()) // 2), y + ((self.height() - self.about_window.height()) // 2)))
         self.about_window.show()
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
