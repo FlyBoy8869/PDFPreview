@@ -1,7 +1,15 @@
-# copydocs/__init__.py
+# PDFPreview/__init__.py
 
-from __version__ import __version__
+from __version__ import VERSION  # noqa: F401
 
-from .main import main
+from .constants import (  # noqa: F401
+    ABOUT_UI_PATH,
+    FAVORITES,
+    LOGO,
+    PATH_PREFIX,
+    SPLASH_FILE,
+    TITLE,
+)
+from .main import main  # noqa: F401
 
-__all__ = ["__version__", "main"]
+# __all__ = ["main"]

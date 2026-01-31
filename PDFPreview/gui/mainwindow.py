@@ -1,4 +1,3 @@
-import platform
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, cast
 
@@ -33,19 +32,14 @@ from .ui_mainwindow import Ui_MainWindow
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
-from PDFPreview import __version__
-
-VERSION: str = __version__
-TITLE = "FileViewer"
-
-FAVORITES: Path = Path(__file__).parent.parent.parent / "favorites.dat"
-ABOUT_UI_PATH: Path = Path(__file__).parent / "ui_about.ui"
-
-SPLASH_PDF: Path = Path(__file__).parent.parent.parent / "FileViewerSplash.html"
-LOGO: Path = Path(__file__).parent / "logo.png"
-
-PATH_PREFIX: Literal["file://", "file:///"] = (
-    "file://" if "macOS" in platform.platform() else "file:///"
+from PDFPreview import (
+    ABOUT_UI_PATH,
+    FAVORITES,
+    LOGO,
+    PATH_PREFIX,
+    SPLASH_FILE,
+    TITLE,
+    VERSION,
 )
 
 
@@ -279,7 +273,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             )
 
     def load_splash(self) -> None:
-        index: QModelIndex = self.model.index(SPLASH_PDF.as_posix())
+        index: QModelIndex = self.model.index(SPLASH_FILE.as_posix())
         self.view_file(index)
 
     def show_help(self) -> None:
