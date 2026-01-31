@@ -26,7 +26,7 @@ from PySide6.QtWidgets import (
 )
 
 from PDFPreview.gui.customwidgets import MyListWidgetItem
-from PDFPreview.helpers import favorites, fileoperations
+from PDFPreview.helpers import favorites, fileoperations, eventfilters
 
 from .ui_mainwindow import Ui_MainWindow
 
@@ -201,14 +201,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.view_file(self.treeView.currentIndex())
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: C901, N802, PLR0911
-        if source is self.about_window and (
-            event.type() == QEvent.Type.MouseButtonRelease
-            or event.type() == QEvent.Type.KeyRelease
-        ):
-            self.about_window.close()
-            event.accept()
-            return event.isAccepted()
-
         if source is self.treeView and (
             event.type() == QEvent.Type.KeyPress
             and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
@@ -296,7 +288,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
         self.about_window.setWindowTitle(TITLE)
         self.about_window.setWindowModality(Qt.WindowModality.ApplicationModal)
-        self.about_window.installEventFilter(self)
+        self.about_window_filter = eventfilters.AboutDialogFilter(self.about_window)
+        self.about_window.installEventFilter(self.about_window_filter)
 
         if logo_label := self.about_window.findChild(QLabel, "lbl_logo"):
             logo_label.setPixmap(QPixmap(LOGO.as_posix()))
