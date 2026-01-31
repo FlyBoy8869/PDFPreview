@@ -41,8 +41,8 @@ class Ui_MainWindow(object):
         self.actionAbout.setObjectName(u"actionAbout")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout_3 = QVBoxLayout(self.centralwidget)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.horizontalLayout_2 = QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.splitter_2 = QSplitter(self.centralwidget)
         self.splitter_2.setObjectName(u"splitter_2")
         self.splitter_2.setOrientation(Qt.Orientation.Horizontal)
@@ -58,6 +58,7 @@ class Ui_MainWindow(object):
         self.groupBox.setSizePolicy(sizePolicy)
         self.verticalLayout = QVBoxLayout(self.groupBox)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(5, 5, 5, 5)
         self.lw_favorites = QListWidget(self.groupBox)
         self.lw_favorites.setObjectName(u"lw_favorites")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
@@ -80,9 +81,9 @@ class Ui_MainWindow(object):
         self.splitter.addWidget(self.groupBox)
         self.widget = QWidget(self.splitter)
         self.widget.setObjectName(u"widget")
-        self.verticalLayout_2 = QVBoxLayout(self.widget)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_3 = QVBoxLayout(self.widget)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.pbBack = QPushButton(self.widget)
@@ -95,9 +96,15 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.verticalLayout_3.addLayout(self.horizontalLayout)
 
-        self.treeView = MyCustomTreeView(self.widget)
+        self.gb_file_browser = QGroupBox(self.widget)
+        self.gb_file_browser.setObjectName(u"gb_file_browser")
+        self.gb_file_browser.setStyleSheet(u"")
+        self.verticalLayout_2 = QVBoxLayout(self.gb_file_browser)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setContentsMargins(5, 5, 5, 5)
+        self.treeView = MyCustomTreeView(self.gb_file_browser)
         self.treeView.setObjectName(u"treeView")
         sizePolicy2 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy2.setHorizontalStretch(1)
@@ -123,6 +130,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.treeView)
 
+
+        self.verticalLayout_3.addWidget(self.gb_file_browser)
+
         self.splitter.addWidget(self.widget)
         self.splitter_2.addWidget(self.splitter)
         self.browser = QWebEngineView(self.splitter_2)
@@ -136,12 +146,12 @@ class Ui_MainWindow(object):
         self.browser.setUrl(QUrl(u"about:blank"))
         self.splitter_2.addWidget(self.browser)
 
-        self.verticalLayout_3.addWidget(self.splitter_2)
+        self.horizontalLayout_2.addWidget(self.splitter_2)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1188, 30))
+        self.menubar.setGeometry(QRect(0, 0, 1188, 34))
         self.menuOptions = QMenu(self.menubar)
         self.menuOptions.setObjectName(u"menuOptions")
         self.menuHelp = QMenu(self.menubar)
@@ -169,6 +179,7 @@ class Ui_MainWindow(object):
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Favorites:", None))
         self.pbBack.setText(QCoreApplication.translate("MainWindow", u"< Back", None))
+        self.gb_file_browser.setTitle("")
         self.menuOptions.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
     # retranslateUi

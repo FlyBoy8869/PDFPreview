@@ -78,9 +78,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setRootPath("")
-        self.model.directoryLoaded.connect(
-            lambda _: print("finished loading directory")
-        )
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
@@ -291,7 +288,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         about_file.close()
 
         self.about_window.setWindowFlags(
-            self.about_window.windowFlags() | Qt.WindowType.FramelessWindowHint
+            self.about_window.windowFlags() | Qt.WindowType.FramelessWindowHint,
         )
         self.about_window.setWindowTitle(TITLE)
         self.about_window.setWindowModality(Qt.WindowModality.ApplicationModal)
