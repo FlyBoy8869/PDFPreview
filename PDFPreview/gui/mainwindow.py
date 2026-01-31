@@ -190,10 +190,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.update_title_bar_from_index(index)
 
     def show_about(self) -> None:
-        x = self.x()
-        y = self.y()
-        self.about_window.move(QPoint(x + ((self.width() - self.about_window.width()) // 2), y + ((self.height() - self.about_window.height()) // 2)))
+        self.about_window.move(self.center_window(self, self.about_window))
         self.about_window.show()
+
+    def center_window(self, parent, sibling) -> QPoint:
+        return QPoint(parent.x() + ((parent.width() - sibling.width()) // 2), parent.y() + ((parent.height() - sibling.height()) // 2))
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
         self.HIDE_TOOLBAR = "toolbar=0" if checked else ""
