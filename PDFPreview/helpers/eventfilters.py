@@ -1,10 +1,18 @@
 import platform
-from typing import cast
-from PySide6.QtCore import QObject, QEvent, Qt
+from typing import TYPE_CHECKING, Literal, cast
+
+from PySide6.QtCore import QEvent, QObject, Qt
+from PySide6.QtWidgets import QFileSystemModel, QListWidget
 
 from PDFPreview.gui.customwidgets import MyListWidgetItem
 
-PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
+if TYPE_CHECKING:
+    from PySide6.QtGui import QDragEnterEvent, QDropEvent, QKeyEvent
+    from PySide6.QtWidgets import QListWidgetItem
+
+PATH_PREFIX: Literal["file://", "file:///"] = (
+    "file://" if "macOS" in platform.platform() else "file:///"
+)
 
 
 class AboutDialogFilter(QObject):
@@ -12,7 +20,7 @@ class AboutDialogFilter(QObject):
         self.source = source
         super().__init__()
 
-    def eventFilter(self, source: QObject, event: QEvent) -> bool:
+    def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         if source is self.source and (
             event.type() == QEvent.Type.MouseButtonRelease
             or event.type() == QEvent.Type.KeyRelease
@@ -20,29 +28,30 @@ class AboutDialogFilter(QObject):
             self.source.close()
             event.accept()
             return event.isAccepted()
-        
+
         return False
 
 
 class FavoritesListFilter(QObject):
-    def __init__(self, source, model):
+    def __init__(self, source: QListWidget, model: QFileSystemModel):
         super().__init__()
-        self.source = source
-        self.model = model
+        self.source: QListWidget = source
+        self.model: QFileSystemModel = model
 
-    def eventFilter(self, source: QObject, event: QEvent) -> bool:
+    def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
+        source = cast("QListWidget", source)
         if event.type() == QEvent.Type.DragEnter:
-                    event = cast("QDragEnterEvent", event)
-                    if (
-                        event.proposedAction() == Qt.DropAction.CopyAction
-                        and event.mimeData().hasText()
-                    ):
-                        event.acceptProposedAction()
-                        return event.isAccepted()
-                    event.ignore()
+            event = cast("QDragEnterEvent", event)
+            if (
+                event.proposedAction() == Qt.DropAction.CopyAction
+                and event.mimeData().hasText()
+            ):
+                event.acceptProposedAction()
+                return event.isAccepted()
+            event.ignore()
 
         if event.type() == QEvent.Type.Drop:
-            path = (
+            path: str = (
                 cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, "")
             )
             favorites_text: str = self.model.fileName(self.model.index(path))
@@ -57,9 +66,9 @@ class FavoritesListFilter(QObject):
             event.type() == QEvent.Type.KeyPress
             and cast("QKeyEvent", event).key() == Qt.Key.Key_Delete
         ):
-            item = source.currentItem()
+            item: QListWidgetItem = source.currentItem()
             source.takeItem(source.row(item))
             event.accept()
             return event.isAccepted()
-        
+
         return super().eventFilter(source, event)

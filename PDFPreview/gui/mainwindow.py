@@ -1,6 +1,6 @@
 import platform
 from pathlib import Path
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Literal, cast
 
 from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, QPoint, Qt, QUrl
 from PySide6.QtGui import (
@@ -26,7 +26,7 @@ from PySide6.QtWidgets import (
 )
 
 from PDFPreview.gui.customwidgets import MyListWidgetItem
-from PDFPreview.helpers import favorites, fileoperations, eventfilters
+from PDFPreview.helpers import eventfilters, favorites, fileoperations
 
 from .ui_mainwindow import Ui_MainWindow
 
@@ -35,7 +35,7 @@ if TYPE_CHECKING:
 
 from PDFPreview import __version__
 
-VERSION = __version__
+VERSION: str = __version__
 TITLE = "FileViewer"
 
 FAVORITES: Path = Path(__file__).parent.parent.parent / "favorites.dat"
@@ -43,6 +43,10 @@ ABOUT_UI_PATH: Path = Path(__file__).parent / "ui_about.ui"
 
 SPLASH_PDF: Path = Path(__file__).parent.parent.parent / "FileViewerSplash.html"
 LOGO: Path = Path(__file__).parent / "logo.png"
+
+PATH_PREFIX: Literal["file://", "file:///"] = (
+    "file://" if "macOS" in platform.platform() else "file:///"
+)
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -79,7 +83,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
-        self.lw_favorites_eventfilter = eventfilters.FavoritesListFilter(self.lw_favorites, self.model)
+        self.lw_favorites_eventfilter: eventfilters.FavoritesListFilter = (
+            eventfilters.FavoritesListFilter(self.lw_favorites, self.model)
+        )
         self.lw_favorites.installEventFilter(self.lw_favorites_eventfilter)
         self.lw_favorites.itemClicked.connect(self.handle_favorite_clicked)
 
@@ -193,13 +199,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_window.show()
 
     def center_window(self, parent, sibling) -> QPoint:
-        return QPoint(parent.x() + ((parent.width() - sibling.width()) // 2), parent.y() + ((parent.height() - sibling.height()) // 2))
+        return QPoint(
+            parent.x() + ((parent.width() - sibling.width()) // 2),
+            parent.y() + ((parent.height() - sibling.height()) // 2),
+        )
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
-        self.HIDE_TOOLBAR = "toolbar=0" if checked else ""
+        self.HIDE_TOOLBAR: Literal["toolbar=0", ""] = "toolbar=0" if checked else ""
         self.view_file(self.treeView.currentIndex())
 
-    def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: C901, N802, PLR0911
+    def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         if source is self.treeView and (
             event.type() == QEvent.Type.KeyPress
             and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
@@ -255,7 +264,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
         self.about_window.setWindowTitle(TITLE)
         self.about_window.setWindowModality(Qt.WindowModality.ApplicationModal)
-        self.about_window_filter = eventfilters.AboutDialogFilter(self.about_window)
+        self.about_window_filter: eventfilters.AboutDialogFilter = (
+            eventfilters.AboutDialogFilter(self.about_window)
+        )
         self.about_window.installEventFilter(self.about_window_filter)
 
         if logo_label := self.about_window.findChild(QLabel, "lbl_logo"):
