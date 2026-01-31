@@ -38,8 +38,6 @@ from PDFPreview import __version__
 VERSION = __version__
 TITLE = "FileViewer"
 
-PATH_PREFIX = "file://" if "macOS" in platform.platform() else "file:///"
-
 FAVORITES: Path = Path(__file__).parent.parent.parent / "favorites.dat"
 ABOUT_UI_PATH: Path = Path(__file__).parent / "ui_about.ui"
 
@@ -81,7 +79,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
-        self.lw_favorites.installEventFilter(self)
+        self.lw_favorites_eventfilter = eventfilters.FavoritesListFilter(self.lw_favorites, self.model)
+        self.lw_favorites.installEventFilter(self.lw_favorites_eventfilter)
         self.lw_favorites.itemClicked.connect(self.handle_favorite_clicked)
 
         self.treeView.setModel(self.model)
@@ -239,38 +238,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                 self.view_file(new_index)
 
-                event.accept()
-                return event.isAccepted()
-
-        if source is self.lw_favorites:
-            if event.type() == QEvent.Type.DragEnter:
-                event = cast("QDragEnterEvent", event)
-                if (
-                    event.proposedAction() == Qt.DropAction.CopyAction
-                    and event.mimeData().hasText()
-                ):
-                    event.acceptProposedAction()
-                    return event.isAccepted()
-                event.ignore()
-
-            if event.type() == QEvent.Type.Drop:
-                path = (
-                    cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, "")
-                )
-                favorites_text: str = self.model.fileName(self.model.index(path))
-                item = MyListWidgetItem(favorites_text, extra=self.model.index(path))
-                item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
-                self.lw_favorites.addItem(item)
-
-                event.accept()
-                return event.isAccepted()
-
-            if (
-                event.type() == QEvent.Type.KeyPress
-                and cast("QKeyEvent", event).key() == Qt.Key.Key_Delete
-            ):
-                item = self.lw_favorites.currentItem()
-                self.lw_favorites.takeItem(self.lw_favorites.row(item))
                 event.accept()
                 return event.isAccepted()
 
