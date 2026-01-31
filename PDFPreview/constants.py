@@ -13,7 +13,6 @@ ABOUT_UI_PATH: Path = Path(__file__).parent / "gui/ui_about.ui"
 
 SPLASH_FILE: Path = FILES / "FileViewerSplash.html"
 LOGO: Path = IMAGES / "logo.png"
-print(f"{LOGO=}")
 
 PATH_PREFIX: Literal["file://", "file:///"] = (
     "file://" if "macOS" in platform.platform() else "file:///"
