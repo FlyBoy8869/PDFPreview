@@ -250,9 +250,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def create_about_dialog(self) -> None:
         p = QPalette()
-        r, g, b, a = cast("tuple", p.color(QPalette.ColorRole.Window).toRgb().toTuple())
-        color = f"rgba({r},{g},{b},{a})"
-        dialog_stylesheet = (
+        color: str = p.color(QPalette.ColorRole.Window).name(QColor.NameFormat.HexArgb)
+        dialog_stylesheet: str = (
             f"QWidget {{background-color: {color}; border-radius: 20px;}}"
         )
 
