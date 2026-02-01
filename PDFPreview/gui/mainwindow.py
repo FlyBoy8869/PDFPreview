@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, Tuple, cast
 
-from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, QPoint, Qt, QUrl
+from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, QPoint, QSize, Qt, QUrl
 from PySide6.QtGui import (
     QAction,
     QCloseEvent,
@@ -252,7 +252,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         p = QPalette()
         r, g, b, a = cast("tuple", p.color(QPalette.ColorRole.Window).toRgb().toTuple())
         color = f"rgba({r},{g},{b},{a})"
-        dialog_stylesheet = f"QWidget {{background-color: {color}; border-radius: 20px;}}"
+        dialog_stylesheet = (
+            f"QWidget {{background-color: {color}; border-radius: 20px;}}"
+        )
 
         about_file = QFile(ABOUT_UI_PATH)
         loader = QUiLoader()
