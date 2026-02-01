@@ -13,6 +13,13 @@
   <property name="windowTitle">
    <string>About</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QGroupBox {
+	border-width: 2px;
+	border-style: solid;
+	border-color: lightblue;
+}</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <property name="leftMargin">
     <number>5</number>
