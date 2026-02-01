@@ -1,14 +1,16 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, cast
+from typing import TYPE_CHECKING, Literal, Tuple, cast
 
 from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, QPoint, Qt, QUrl
 from PySide6.QtGui import (
     QAction,
     QCloseEvent,
+    QColor,
     QDragEnterEvent,
     QDropEvent,
     QKeyEvent,
     QKeySequence,
+    QPalette,
     QPixmap,
     QShortcut,
 )
@@ -247,6 +249,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return super().eventFilter(source, event)
 
     def create_about_dialog(self) -> None:
+        p = QPalette()
+        r, g, b, a = cast("tuple", p.color(QPalette.ColorRole.Window).toRgb().toTuple())
+        color = f"rgba({r},{g},{b},{a})"
+        dialog_stylesheet = f"QWidget {{background-color: {color}; border-radius: 20px;}}"
+
         about_file = QFile(ABOUT_UI_PATH)
         loader = QUiLoader()
         about_file.open(QFile.OpenModeFlag.ReadOnly)
@@ -256,6 +263,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_window.setWindowFlags(
             self.about_window.windowFlags() | Qt.WindowType.FramelessWindowHint,
         )
+        self.about_window.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.about_window.setStyleSheet(dialog_stylesheet)
         self.about_window.setWindowTitle(TITLE)
         self.about_window.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.about_window_filter: eventfilters.AboutDialogFilter = (
