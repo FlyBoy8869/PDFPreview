@@ -1,31 +1,26 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, Tuple, cast
+from typing import TYPE_CHECKING, Literal, cast
 
-from PySide6.QtCore import QEvent, QFile, QModelIndex, QObject, QPoint, QSize, Qt, QUrl
+from PySide6.QtCore import QEvent, QModelIndex, QObject, QPoint, Qt, QUrl
 from PySide6.QtGui import (
     QAction,
     QCloseEvent,
-    QColor,
     QDragEnterEvent,
     QDropEvent,
     QKeyEvent,
     QKeySequence,
-    QPalette,
-    QPixmap,
     QShortcut,
 )
-from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import (
     QFileSystemModel,
     QInputDialog,
-    QLabel,
     QMainWindow,
     QMenu,
     QMessageBox,
-    QWidget,
 )
 
+from PDFPreview.gui import about
 from PDFPreview.gui.customwidgets import MyListWidgetItem
 from PDFPreview.helpers import eventfilters, favorites, fileoperations
 
@@ -35,9 +30,7 @@ if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
 from PDFPreview import (
-    ABOUT_UI_PATH,
     FAVORITES,
-    LOGO,
     PATH_PREFIX,
     SPLASH_FILE,
     TITLE,
@@ -58,7 +51,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # this string gets appended to the url to show or hide the pdf viewer toolbar
         self.HIDE_TOOLBAR = ""
 
-        self.create_about_dialog()
+        self.about_window = about.create_about_dialog()
+        self.about_event_filter = eventfilters.AboutDialogFilter(self.about_window)
+        self.about_window.installEventFilter(self.about_event_filter)
 
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
         self.actionAbout.triggered.connect(self.show_about)
@@ -247,41 +242,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return event.isAccepted()
 
         return super().eventFilter(source, event)
-
-    def create_about_dialog(self) -> None:
-        p = QPalette()
-        color: str = p.color(QPalette.ColorRole.Window).name(QColor.NameFormat.HexArgb)
-        dialog_stylesheet: str = (
-            f"QWidget {{background-color: {color}; border-radius: 20px;}}"
-        )
-
-        about_file = QFile(ABOUT_UI_PATH)
-        loader = QUiLoader()
-        about_file.open(QFile.OpenModeFlag.ReadOnly)
-        self.about_window: QWidget = loader.load(about_file)
-        about_file.close()
-
-        self.about_window.setWindowFlags(
-            self.about_window.windowFlags() | Qt.WindowType.FramelessWindowHint,
-        )
-        self.about_window.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.about_window.setStyleSheet(dialog_stylesheet)
-        self.about_window.setWindowTitle(TITLE)
-        self.about_window.setWindowModality(Qt.WindowModality.ApplicationModal)
-        self.about_window_filter: eventfilters.AboutDialogFilter = (
-            eventfilters.AboutDialogFilter(self.about_window)
-        )
-        self.about_window.installEventFilter(self.about_window_filter)
-
-        if logo_label := self.about_window.findChild(QLabel, "lbl_logo"):
-            logo_label.setPixmap(QPixmap(LOGO.as_posix()))
-
-        if version_label := self.about_window.findChild(QLabel, "lbl_about"):
-            version_label.setTextFormat(Qt.TextFormat.RichText)
-            version_label.setText(
-                f"<center><h1>{TITLE}</h1></center><center>Version: {VERSION}</center><center>Author: Charles Cognato</center>"
-                "<center>Email: charlescognato@gmail.com</center>",
-            )
 
     def load_splash(self) -> None:
         index: QModelIndex = self.model.index(SPLASH_FILE.as_posix())
