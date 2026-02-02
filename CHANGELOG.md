@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.1
+### Fixed
+- Fixed Email line in About dialog being cut in half.
+
 ## 0.4.0
 ### Changed
 - Populates file rename dialog entry with the existing name of the file or folder.
