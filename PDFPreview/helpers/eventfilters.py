@@ -8,7 +8,7 @@ from PDFPreview.gui.customwidgets import MyListWidgetItem
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QDragEnterEvent, QDropEvent, QKeyEvent
-    from PySide6.QtWidgets import QListWidgetItem
+    from PySide6.QtWidgets import QDialog, QListWidgetItem
 
 PATH_PREFIX: Literal["file://", "file:///"] = (
     "file://" if "macOS" in platform.platform() else "file:///"
@@ -21,7 +21,8 @@ class AboutDialogFilter(QObject):
         super().__init__()
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
-        if source and (
+        source = cast("QDialog", source)
+        if (
             event.type() == QEvent.Type.MouseButtonRelease
             or event.type() == QEvent.Type.KeyRelease
         ):
