@@ -160,7 +160,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if new_name := QInputDialog.getText(
                 self,
                 "Rename File",
-                "Enter a new name for this file.",
+                "Enter a new name for this file:",
                 text=index.data(),
             )[0]:
                 fileoperations.rename_file(self.model, index, new_name)
