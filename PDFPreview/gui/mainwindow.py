@@ -71,7 +71,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.browser.installEventFilter(self)
 
         self.model: QFileSystemModel = QFileSystemModel()
-        self.model.setRootPath("")
+        self.model.setRootPath("/")
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
@@ -83,7 +83,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.treeView.setModel(self.model)
         self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
-        self.treeView.setRootIndex(self.model.index(""))
+        self.treeView.setRootIndex(self.model.index("/"))
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
         self.treeView.currentIndexChanged.connect(self.view_file)
@@ -108,6 +108,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_back_button_clicked(self, _) -> None:
         current_index: QModelIndex = self.treeView.currentIndex()
+        if current_index.parent().data() == self.top_level_index.data():
+            self.update_title_bar_from_index(current_index.parent())
+            self.treeView.setCurrentIndex(self.top_level_index)
+            self.treeView.setRootIndex(self.top_level_index)
+            self.treeView.collapseAll()
+            return
+
+        print(f"{self.top_level_index.data() =}")
+        print(f"{current_index.data() =}")
+
         if not current_index.isValid():
             return
         if current_index == self.top_level_index:
