@@ -240,11 +240,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                 self.treeView.collapseAll()
                 self.treeView.setCurrentIndex(new_index)
-                self.treeView.setRootIndex(self.model.index(path.parent.as_posix()))
+                if self.model.isDir(new_index):
+                    self.treeView.setRootIndex(self.model.index(path.as_posix()))
+                else:
+                    self.treeView.setRootIndex(self.model.index(path.parent.as_posix()))
 
                 if self.model.isDir(new_index):
                     self.update_title_bar_from_index(
-                        self.model.index(path.parent.as_posix()),
+                        self.model.index(path.as_posix()),
                     )
 
                 self.view_file(new_index)
