@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.2
+### Fixed
+- Fixes titlebar updating
+- Fixes rootpath issue on Windows
+
 ## 0.4.1
 ### Fixed
 - Fixed Email line in About dialog being cut in half.
