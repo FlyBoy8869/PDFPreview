@@ -286,4 +286,5 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_title_bar_from_index(index)
 
     def update_title_bar_from_index(self, index) -> None:
-        self.setWindowTitle(f"{TITLE} - {self.model.filePath(index)}")
+        separator = " - " if index.data() else ""
+        self.setWindowTitle(f"{TITLE}{separator}{self.model.filePath(index)}")
