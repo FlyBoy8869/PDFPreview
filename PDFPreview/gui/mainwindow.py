@@ -33,7 +33,6 @@ if TYPE_CHECKING:
 from PDFPreview import (
     FAVORITES,
     PATH_PREFIX,
-    ROOTPATH,
     SPLASH_FILE,
     TITLE,
     VERSION,
@@ -73,7 +72,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.browser.installEventFilter(self)
 
         self.model: QFileSystemModel = QFileSystemModel()
-        self.model.setRootPath(ROOTPATH)
+        self.model.setRootPath("")
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
@@ -85,7 +84,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.treeView.setModel(self.model)
         self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
-        self.treeView.setRootIndex(self.model.index(ROOTPATH))
+        self.treeView.setRootIndex(self.model.index(""))
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
         self.treeView.currentIndexChanged.connect(self.view_file)

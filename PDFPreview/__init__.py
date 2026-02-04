@@ -7,7 +7,6 @@ from .constants import (  # noqa: F401
     FAVORITES,
     LOGO,
     PATH_PREFIX,
-    ROOTPATH,
     SPLASH_FILE,
     TITLE,
 )

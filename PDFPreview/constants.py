@@ -17,5 +17,3 @@ LOGO: Path = IMAGES / "logo.png"
 PATH_PREFIX: Literal["file://", "file:///"] = (
     "file://" if "macOS" in platform.platform() else "file:///"
 )
-
-ROOTPATH: str = "/" if "macOS" in platform.platform() else "C:\\"
