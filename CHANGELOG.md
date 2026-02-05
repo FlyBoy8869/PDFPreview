@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.0
+### Added
+- A button to go all the wqy back to the root directory
+
 ## 0.4.3
 ### Fix
 - Fixes a sorting issue introduced in 0.4.2
