@@ -1,8 +1,7 @@
-from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, cast
 
-from PySide6.QtCore import QEvent, QModelIndex, QObject, QPoint, Qt, QUrl
+from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, QPoint, Qt, QUrl
 from PySide6.QtGui import (
     QAction,
     QCloseEvent,
@@ -30,13 +29,7 @@ from .ui_mainwindow import Ui_MainWindow
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
-from PDFPreview import (
-    FAVORITES,
-    PATH_PREFIX,
-    SPLASH_FILE,
-    TITLE,
-    VERSION,
-)
+from PDFPreview import FAVORITES, PATH_PREFIX, SPLASH_FILE, TITLE, VERSION
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -72,6 +65,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.browser.installEventFilter(self)
 
         self.model: QFileSystemModel = QFileSystemModel()
+        self.model.setFilter(
+            QDir.Filter.AllDirs | QDir.Filter.AllEntries | QDir.Filter.Drives | QDir.Filter.Hidden | QDir.Filter.NoDotAndDotDot,
+        )
         self.model.setRootPath("")
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
@@ -98,6 +94,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.installEventFilter(self)
 
         self.pbBack.clicked.connect(self.handle_back_button_clicked)
+        self.pb_root.clicked.connect(self.handle_root_button_clicked)
 
         self.load_favorites()
 
@@ -131,6 +128,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.collapseAll()
         if new_index.data() != self.model.rootPath():
             self.update_title_bar_for_folder(new_index)
+
+    def handle_root_button_clicked(self, _) -> None:
+        self.treeView.setRootIndex(self.top_level_index)
+        self.treeView.setCurrentIndex(self.top_level_index)
+        self.update_title_bar_from_index(self.top_level_index)
 
     def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
         extra_copy: QModelIndex = index.extra

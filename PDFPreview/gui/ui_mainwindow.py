@@ -79,17 +79,22 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.lw_favorites)
 
         self.splitter.addWidget(self.groupBox)
-        self.widget = QWidget(self.splitter)
-        self.widget.setObjectName(u"widget")
-        self.verticalLayout_3 = QVBoxLayout(self.widget)
+        self.layoutWidget = QWidget(self.splitter)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.verticalLayout_3 = QVBoxLayout(self.layoutWidget)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pbBack = QPushButton(self.widget)
+        self.pbBack = QPushButton(self.layoutWidget)
         self.pbBack.setObjectName(u"pbBack")
 
         self.horizontalLayout.addWidget(self.pbBack)
+
+        self.pb_root = QPushButton(self.layoutWidget)
+        self.pb_root.setObjectName(u"pb_root")
+
+        self.horizontalLayout.addWidget(self.pb_root)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -98,7 +103,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addLayout(self.horizontalLayout)
 
-        self.gb_file_browser = QGroupBox(self.widget)
+        self.gb_file_browser = QGroupBox(self.layoutWidget)
         self.gb_file_browser.setObjectName(u"gb_file_browser")
         self.gb_file_browser.setStyleSheet(u"")
         self.verticalLayout_2 = QVBoxLayout(self.gb_file_browser)
@@ -133,7 +138,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.gb_file_browser)
 
-        self.splitter.addWidget(self.widget)
+        self.splitter.addWidget(self.layoutWidget)
         self.splitter_2.addWidget(self.splitter)
         self.browser = QWebEngineView(self.splitter_2)
         self.browser.setObjectName(u"browser")
@@ -151,7 +156,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1188, 34))
+        self.menubar.setGeometry(QRect(0, 0, 1188, 30))
         self.menuOptions = QMenu(self.menubar)
         self.menuOptions.setObjectName(u"menuOptions")
         self.menuHelp = QMenu(self.menubar)
@@ -179,6 +184,7 @@ class Ui_MainWindow(object):
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Favorites:", None))
         self.pbBack.setText(QCoreApplication.translate("MainWindow", u"< Back", None))
+        self.pb_root.setText(QCoreApplication.translate("MainWindow", u"Root", None))
         self.gb_file_browser.setTitle("")
         self.menuOptions.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
