@@ -4,6 +4,7 @@ from __version__ import VERSION  # noqa: F401
 
 from .constants import (  # noqa: F401
     ABOUT_UI_PATH,
+    ADOBE_ACROBAT_PATH,
     FAVORITES,
     LOGO,
     PATH_PREFIX,

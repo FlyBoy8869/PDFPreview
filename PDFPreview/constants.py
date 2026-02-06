@@ -2,6 +2,8 @@ import platform
 from pathlib import Path
 from typing import Literal
 
+ADOBE_ACROBAT_PATH = "C:\\Program Files\\Adobe\\Acrobat DC\\Acrobat\\Acrobat.exe"
+
 RESOURCES = Path(__file__).parent.parent / "Resources"
 FILES = RESOURCES / "Files"
 IMAGES = RESOURCES / "Images"

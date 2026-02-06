@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.7.0
+### Added
+- Context menu Open with Acrobat
+
 ## 0.6.0
 ### Added
 - Menu option to show / hide hidden files

@@ -10,10 +10,17 @@ from pathvalidate import ValidationError, validate_filename
 from PySide6.QtCore import QModelIndex, Qt, QUrl
 from PySide6.QtWidgets import QFileSystemModel
 
+from PDFPreview import ADOBE_ACROBAT_PATH
+
 
 def open_file(path: str) -> None:
     """Open file in the default application."""
     startfile(QUrl.fromLocalFile(path).url())
+
+
+def open_with_acrobat(path: str) -> None:
+    import subprocess
+    subprocess.Popen([ADOBE_ACROBAT_PATH, "/n", path])
 
 
 def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> bool:

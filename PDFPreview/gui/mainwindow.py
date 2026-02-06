@@ -175,11 +175,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         menu: QMenu = QMenu()
 
+        acrobat: QAction = menu.addAction("Open with Acrobat")
         rename: QAction = menu.addAction("Rename")
         delete: QAction = menu.addAction("Delete")
 
         if self.model.isDir(index):
-            delete.setEnabled(False)
+            menu.removeAction(acrobat)
+            menu.removeAction(delete)
 
         global_position: QPoint = self.treeView.viewport().mapToGlobal(position)
         action: QAction = menu.exec(global_position)
@@ -197,6 +199,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             == QMessageBox.StandardButton.Yes
         ):
             fileoperations.delete_file(self.model, index)
+        elif action == acrobat:
+            fileoperations.open_with_acrobat(self.model.filePath(index))
 
     def open_file(self, index) -> None:
         """Open file in the default application."""
