@@ -31,6 +31,15 @@ if TYPE_CHECKING:
 
 from PDFPreview import FAVORITES, PATH_PREFIX, SPLASH_FILE, TITLE, VERSION
 
+file_filters = {
+    True: QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot,
+    False: QDir.Filter.AllDirs
+    | QDir.Filter.AllEntries
+    | QDir.Filter.Drives
+    | QDir.Filter.Hidden
+    | QDir.Filter.NoDotAndDotDot,
+}
+
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -51,6 +60,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_window.installEventFilter(self.about_event_filter)
 
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
+        self.action_hide_files.toggled.connect(self.handle_action_hide_files)
         self.actionAbout.triggered.connect(self.show_about)
 
         # must have in order for PDF viewing to work
@@ -66,7 +76,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setFilter(
-            QDir.Filter.AllDirs | QDir.Filter.AllEntries | QDir.Filter.Drives | QDir.Filter.Hidden | QDir.Filter.NoDotAndDotDot,
+            QDir.Filter.AllDirs
+            | QDir.Filter.AllEntries
+            | QDir.Filter.Drives
+            | QDir.Filter.Hidden
+            | QDir.Filter.NoDotAndDotDot,
         )
         self.model.setRootPath("")
 
@@ -133,6 +147,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setRootIndex(self.top_level_index)
         self.treeView.setCurrentIndex(self.top_level_index)
         self.update_title_bar_from_index(self.top_level_index)
+
+    def handle_action_hide_files(self, checked: bool) -> None:  # noqa: FBT001
+        filters = file_filters[checked]
+        self.model.setFilter(filters)
 
     def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
         extra_copy: QModelIndex = index.extra

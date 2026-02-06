@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.6.0
+### Added
+- Menu option to show / hide hidden files
+
 ## 0.5.0
 ### Added
 - A button to go all the wqy back to the root directory
