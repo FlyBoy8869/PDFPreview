@@ -149,8 +149,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.update_title_bar_from_index(self.top_level_index)
 
     def handle_action_hide_files(self, checked: bool) -> None:  # noqa: FBT001
-        filters = file_filters[checked]
-        self.model.setFilter(filters)
+        self.model.setFilter(file_filters[checked])
 
     def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
         extra_copy: QModelIndex = index.extra
