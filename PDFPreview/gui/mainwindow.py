@@ -22,7 +22,7 @@ from PySide6.QtWidgets import (
 
 from PDFPreview.gui import dialogs
 from PDFPreview.gui.customwidgets import MyListWidgetItem
-from PDFPreview.helpers import eventfilters, favorites, fileoperations
+from PDFPreview.helpers import eventfilters, favorites, fileoperations, gui
 
 from .ui_mainwindow import Ui_MainWindow
 
@@ -202,10 +202,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif action == acrobat:
             fileoperations.open_with_acrobat(self.model.filePath(index))
 
-    def open_file(self, index) -> None:
-        """Open file in the default application."""
-        fileoperations.open_file(self.model.filePath(index))
-
     def view_file(self, index: QModelIndex) -> None:
         """Loads the file pointed to by index into the viewing pane."""
         if self.model.isDir(index):
@@ -218,14 +214,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.update_title_bar_from_index(index)
 
     def show_about(self) -> None:
-        self.about_window.move(self.center_window(self, self.about_window))
-        self.about_window.show()
-
-    def center_window(self, parent, sibling) -> QPoint:
-        return QPoint(
-            parent.x() + ((parent.width() - sibling.width()) // 2),
-            parent.y() + ((parent.height() - sibling.height()) // 2),
+        self.about_window.move(
+            gui.center_window_on_parent(parent=self, child=self.about_window),
         )
+        self.about_window.show()
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
         self.HIDE_TOOLBAR: Literal["toolbar=0", ""] = "toolbar=0" if checked else ""
@@ -236,7 +228,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             event.type() == QEvent.Type.KeyPress
             and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
         ):
-            self.open_file(self.treeView.currentIndex())
+            fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
             event.accept()
             # this and the others below are vital to the proper handling of these events
             return event.isAccepted()
