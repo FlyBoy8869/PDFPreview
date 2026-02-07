@@ -19,9 +19,14 @@ def open_file(path: str) -> None:
 
 
 def open_with_acrobat(path: str) -> None:
+    """Open file in Adobe Acrobat. Falls back to system default application if not available."""
     import subprocess
-    subprocess.Popen([ADOBE_ACROBAT_PATH, "/n", path])
 
+    try:
+        subprocess.Popen([ADOBE_ACROBAT_PATH, "/n", path])  # noqa: S603
+    except FileNotFoundError:
+        # fall back to system default application
+        open_file(path)
 
 def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> bool:
     if not index.isValid():
