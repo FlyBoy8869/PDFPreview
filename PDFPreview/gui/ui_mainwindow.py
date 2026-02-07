@@ -42,6 +42,7 @@ class Ui_MainWindow(object):
         self.action_hide_files = QAction(MainWindow)
         self.action_hide_files.setObjectName(u"action_hide_files")
         self.action_hide_files.setCheckable(True)
+        self.action_hide_files.setChecked(True)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.horizontalLayout_2 = QHBoxLayout(self.centralwidget)
