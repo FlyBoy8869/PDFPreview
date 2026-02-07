@@ -75,13 +75,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.browser.installEventFilter(self)
 
         self.model: QFileSystemModel = QFileSystemModel()
-        self.model.setFilter(
-            QDir.Filter.AllDirs
-            | QDir.Filter.AllEntries
-            | QDir.Filter.Drives
-            | QDir.Filter.Hidden
-            | QDir.Filter.NoDotAndDotDot,
-        )
+
+        self.model.setFilter(file_filters[self.action_hide_files.isChecked()])
         self.model.setRootPath("")
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
