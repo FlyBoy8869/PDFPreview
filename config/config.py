@@ -22,7 +22,7 @@ LOGO: Path = IMAGES / "logo.png"
 
 with (FILES / "config.toml").open(
     mode="rb",
-) as inputfile:
-    config = tomllib.load(inputfile)
+) as config_file:
+    config = tomllib.load(config_file)
 
 ADOBE_ACROBAT_PATH = config["paths"]["acrobat"]
