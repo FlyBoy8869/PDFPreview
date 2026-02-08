@@ -1,0 +1,3 @@
+@echo Removing unneeded distribution files...
+@IF EXIST "a\folder" ( RMDIR /S /Q "a\folder")
+@IF EXIST "b\folder" ( RMDIR /S /Q "b\folder")
