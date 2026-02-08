@@ -126,14 +126,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_title_bar_from_index(current_index.parent())
             return
 
-        if not current_index.isValid():
-            ic("does this code ever run?")
-            return
-
-        if current_index == self.top_level_index:
-            ic("does this code ever run?")
-            return
-
         new_index: QModelIndex = (
             current_index.parent()
             if self.model.isDir(current_index)
