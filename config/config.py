@@ -1,0 +1,30 @@
+import platform
+from pathlib import Path
+from typing import Literal
+
+import tomllib
+
+TITLE = "FileViewer"
+
+ROOT = Path(__file__).resolve().parent.parent
+RESOURCES = ROOT / "Resources"
+
+FILES = RESOURCES / "Files"
+FAVORITES: Path = FILES / "favorites.dat"
+SPLASH_FILE: Path = FILES / "FileViewerSplash.html"
+
+IMAGES = RESOURCES / "Images"
+LOGO: Path = IMAGES / "logo.png"
+
+with (FILES / "config.toml").open(
+    mode="rb",
+) as inputfile:
+    config = tomllib.load(inputfile)
+
+ADOBE_ACROBAT_PATH = config["paths"]["acrobat"]
+
+ABOUT_UI_PATH: Path = ROOT / "PDFPreview/gui/ui_about.ui"
+
+PATH_PREFIX: Literal["file://", "file:///"] = (
+    "file://" if "macOS" in platform.platform() else "file:///"
+)
