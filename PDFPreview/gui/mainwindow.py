@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
+from icecream import ic
 from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, QPoint, Qt, QUrl
 from PySide6.QtGui import (
     QAction,
@@ -119,15 +120,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_back_button_clicked(self, _) -> None:
         current_index: QModelIndex = self.treeView.currentIndex()
         if current_index.parent().data() == self.top_level_index.data():
-            self.update_title_bar_from_index(current_index.parent())
+            self.treeView.collapseAll()
             self.treeView.setCurrentIndex(self.top_level_index)
             self.treeView.setRootIndex(self.top_level_index)
-            self.treeView.collapseAll()
+            self.update_title_bar_from_index(current_index.parent())
             return
 
         if not current_index.isValid():
+            ic("does this code ever run?")
             return
+
         if current_index == self.top_level_index:
+            ic("does this code ever run?")
             return
 
         new_index: QModelIndex = (
@@ -249,7 +253,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # handle drops on the preview pane
             if event.type() == QEvent.Type.Drop:
                 path = Path(
-                    cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, ""),
+                    cast("QDropEvent", event)
+                    .mimeData()
+                    .text()
+                    .replace(PATH_PREFIX, ""),
                 )
                 new_index: QModelIndex = self.model.index(path.as_posix())
 
