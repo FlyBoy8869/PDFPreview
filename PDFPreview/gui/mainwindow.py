@@ -39,6 +39,10 @@ file_filters = {
     | QDir.Filter.Hidden
     | QDir.Filter.NoDotAndDotDot,
 }
+pdf_toolbar = {
+    True: "toolbar=0",
+    False: "",
+}
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -75,7 +79,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.browser.installEventFilter(self)
 
         self.model: QFileSystemModel = QFileSystemModel()
-
         self.model.setFilter(file_filters[self.action_hide_files.isChecked()])
         self.model.setRootPath("")
 
@@ -204,7 +207,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         url: QUrl = QUrl.fromLocalFile(self.model.filePath(index))
         url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
-        self.browser.page().setUrl(url)
+        self.browser.setUrl(url)
 
         self.update_title_bar_from_index(index)
 
@@ -215,7 +218,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_window.show()
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
-        self.HIDE_TOOLBAR: Literal["toolbar=0", ""] = "toolbar=0" if checked else ""
+        self.HIDE_TOOLBAR = pdf_toolbar[checked]
         self.view_file(self.treeView.currentIndex())
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
@@ -223,6 +226,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             event.type() == QEvent.Type.KeyPress
             and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
         ):
+            # open selected file when the spacebar is pressed
             fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
             event.accept()
             # this and the others below are vital to the proper handling of these events
@@ -242,23 +246,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return event.isAccepted()
 
             if event.type() == QEvent.Type.Drop:
-                mime_text: str = cast("QDropEvent", event).mimeData().text()
-                path = Path(mime_text.replace(PATH_PREFIX, ""))
+                # mime_text: str = cast("QDropEvent", event).mimeData().text()
+                # path = Path(mime_text.replace(PATH_PREFIX, ""))
+                path = Path(cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, ""))
                 new_index: QModelIndex = self.model.index(path.as_posix())
 
                 self.treeView.collapseAll()
                 self.treeView.setCurrentIndex(new_index)
-                if self.model.isDir(new_index):
-                    self.treeView.setRootIndex(self.model.index(path.as_posix()))
-                else:
-                    self.treeView.setRootIndex(self.model.index(path.parent.as_posix()))
 
                 if self.model.isDir(new_index):
+                    self.treeView.setRootIndex(self.model.index(path.as_posix()))
                     self.update_title_bar_from_index(
                         self.model.index(path.as_posix()),
                     )
-
-                self.view_file(new_index)
+                else:
+                    self.treeView.setRootIndex(self.model.index(path.parent.as_posix()))
+                    self.view_file(new_index)
 
                 event.accept()
                 return event.isAccepted()
