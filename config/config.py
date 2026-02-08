@@ -6,6 +6,10 @@ import tomllib
 
 TITLE = "FileViewer"
 
+PATH_PREFIX: Literal["file://", "file:///"] = (
+    "file://" if "macOS" in platform.platform() else "file:///"
+)
+
 ROOT = Path(__file__).resolve().parent.parent
 RESOURCES = ROOT / "Resources"
 
@@ -22,9 +26,3 @@ with (FILES / "config.toml").open(
     config = tomllib.load(inputfile)
 
 ADOBE_ACROBAT_PATH = config["paths"]["acrobat"]
-
-ABOUT_UI_PATH: Path = ROOT / "PDFPreview/gui/ui_about.ui"
-
-PATH_PREFIX: Literal["file://", "file:///"] = (
-    "file://" if "macOS" in platform.platform() else "file:///"
-)

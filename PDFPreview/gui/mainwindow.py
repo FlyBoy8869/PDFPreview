@@ -20,8 +20,8 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
-from PDFPreview.gui import dialogs
 from PDFPreview.gui.customwidgets import MyListWidgetItem
+from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import eventfilters, favorites, fileoperations, gui
 
 from .ui_mainwindow import Ui_MainWindow
@@ -55,7 +55,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # this string gets appended to the url to show or hide the pdf viewer toolbar
         self.HIDE_TOOLBAR = ""
 
-        self.about_window = dialogs.create_about_dialog()
+        self.about_window = about.create_about_dialog()
         self.about_event_filter = eventfilters.AboutDialogFilter(self.about_window)
         self.about_window.installEventFilter(self.about_event_filter)
 
