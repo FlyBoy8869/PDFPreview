@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, cast
+from typing import TYPE_CHECKING, cast
 
 from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, QPoint, Qt, QUrl
 from PySide6.QtGui import (
@@ -229,13 +229,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # open selected file when the spacebar is pressed
             fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
             event.accept()
-            # this and the others below are vital to the proper handling of these events
             return event.isAccepted()
 
         if source is self.browser:
-            # handle the dropping of files and folder onto the preview pane
             if event.type() == QEvent.Type.DragEnter:
                 event = cast("QDragEnterEvent", event)
+
+                # allow drops if they have urls attached
                 if (
                     event.proposedAction() == Qt.DropAction.CopyAction
                     and event.mimeData().hasUrls()
@@ -243,10 +243,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     event.accept()
                 else:
                     event.ignore()
+
                 return event.isAccepted()
 
+            # handle drops on the preview pane
             if event.type() == QEvent.Type.Drop:
-                path = Path(cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, ""))
+                path = Path(
+                    cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, ""),
+                )
                 new_index: QModelIndex = self.model.index(path.as_posix())
 
                 self.treeView.collapseAll()
