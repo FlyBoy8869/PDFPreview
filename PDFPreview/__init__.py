@@ -2,7 +2,6 @@
 
 from __version__ import VERSION  # noqa: F401
 from config.config import (  # noqa: F401
-    ABOUT_UI_PATH,
     ADOBE_ACROBAT_PATH,
     FAVORITES,
     LOGO,
