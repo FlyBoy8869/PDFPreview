@@ -131,9 +131,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if self.model.isDir(current_index)
             else current_index.parent().parent()
         )
+
         self.treeView.setCurrentIndex(new_index)
         self.treeView.setRootIndex(new_index)
         self.treeView.collapseAll()
+        
         if new_index.data() != self.model.rootPath():
             self.update_title_bar_for_folder(new_index)
 
