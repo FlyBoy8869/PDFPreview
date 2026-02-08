@@ -2,7 +2,13 @@ import platform
 from pathlib import Path
 from typing import Literal
 
-ADOBE_ACROBAT_PATH = "C:\\Program Files\\Adobe\\Acrobat DC\\Acrobat\\Acrobat.exe"
+import tomllib
+
+with (Path(__file__).parent.parent / "config.toml").open(mode="rb") as inputfile:
+    config = tomllib.load(inputfile)
+
+
+ADOBE_ACROBAT_PATH = config["paths"]["acrobat"]
 
 RESOURCES = Path(__file__).parent.parent / "Resources"
 FILES = RESOURCES / "Files"

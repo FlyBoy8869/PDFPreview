@@ -1,8 +1,7 @@
 # PDFPreview/__init__.py
 
 from __version__ import VERSION  # noqa: F401
-
-from .constants import (  # noqa: F401
+from PDFPreview.config import (  # noqa: F401
     ABOUT_UI_PATH,
     ADOBE_ACROBAT_PATH,
     FAVORITES,
@@ -11,6 +10,5 @@ from .constants import (  # noqa: F401
     SPLASH_FILE,
     TITLE,
 )
-from .main import main  # noqa: F401
 
-# __all__ = ["main"]
+from .main import main  # noqa: F401
