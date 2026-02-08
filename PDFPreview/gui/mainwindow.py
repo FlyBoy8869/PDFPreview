@@ -246,8 +246,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return event.isAccepted()
 
             if event.type() == QEvent.Type.Drop:
-                # mime_text: str = cast("QDropEvent", event).mimeData().text()
-                # path = Path(mime_text.replace(PATH_PREFIX, ""))
                 path = Path(cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, ""))
                 new_index: QModelIndex = self.model.index(path.as_posix())
 
