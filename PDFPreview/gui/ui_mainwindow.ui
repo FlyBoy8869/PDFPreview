@@ -137,7 +137,7 @@
              <number>5</number>
             </property>
             <item>
-             <widget class="MyCustomTreeView" name="treeView">
+             <widget class="VTreeView" name="treeView">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                 <horstretch>1</horstretch>
@@ -288,9 +288,9 @@
    <header location="global">QtWebEngineWidgets/QWebEngineView</header>
   </customwidget>
   <customwidget>
-   <class>MyCustomTreeView</class>
+   <class>VTreeView</class>
    <extends>QTreeView</extends>
-   <header>.customwidgets</header>
+   <header>.widgets.treeview</header>
   </customwidget>
  </customwidgets>
  <resources/>

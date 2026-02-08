@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Literal, cast
 from PySide6.QtCore import QEvent, QObject, Qt
 from PySide6.QtWidgets import QFileSystemModel, QListWidget
 
-from PDFPreview.gui.customwidgets import MyListWidgetItem
+from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QDragEnterEvent, QDropEvent, QKeyEvent
@@ -56,7 +56,7 @@ class FavoritesListFilter(QObject):
                 cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, "")
             )
             favorites_text: str = self.model.fileName(self.model.index(path))
-            item = MyListWidgetItem(favorites_text, extra=self.model.index(path))
+            item = VListWidgetItem(favorites_text, extra=self.model.index(path))
             item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
             source.addItem(item)
 

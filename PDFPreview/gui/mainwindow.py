@@ -20,8 +20,8 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
-from PDFPreview.gui.customwidgets import MyListWidgetItem
 from PDFPreview.gui.dialogs import about
+from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 from PDFPreview.helpers import eventfilters, favorites, fileoperations, gui
 
 from .ui_mainwindow import Ui_MainWindow
@@ -146,7 +146,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_action_hide_files(self, checked: bool) -> None:  # noqa: FBT001
         self.model.setFilter(file_filters[checked])
 
-    def handle_favorite_clicked(self, index: MyListWidgetItem) -> None:
+    def handle_favorite_clicked(self, index: VListWidgetItem) -> None:
         extra_copy: QModelIndex = index.extra
         if not self.model.isDir(index.extra):
             self.view_file(index.extra)

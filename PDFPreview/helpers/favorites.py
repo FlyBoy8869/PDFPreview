@@ -4,7 +4,7 @@ from typing import cast
 from PySide6.QtCore import QModelIndex, Qt
 from PySide6.QtWidgets import QFileSystemModel, QListWidget
 
-from PDFPreview.gui.customwidgets import MyListWidgetItem
+from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 
 
 def load_favorites_to(
@@ -18,7 +18,7 @@ def load_favorites_to(
             for line in inputfile:
                 display_role, extra = line.split("|")
                 # make sure to strip the "extra" or else the QFileSystemModel won't find the path due to the "\n"
-                item = MyListWidgetItem(
+                item = VListWidgetItem(
                     display_role,
                     extra=using_model.index(extra.strip()),
                 )
@@ -37,8 +37,8 @@ def save_favorites_from(
     to_file_path.touch()
     with to_file_path.open(mode="w", encoding="utf-8") as save_file:
         for row in range(widget.count()):
-            item: MyListWidgetItem = cast(
-                "MyListWidgetItem",
+            item: VListWidgetItem = cast(
+                "VListWidgetItem",
                 widget.item(row),
             )
             extra: QModelIndex = item.extra
