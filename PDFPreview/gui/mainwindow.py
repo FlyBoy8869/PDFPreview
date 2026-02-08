@@ -40,7 +40,7 @@ file_filters: dict[bool, QDir.Filter] = {
     | QDir.Filter.Hidden
     | QDir.Filter.NoDotAndDotDot,
 }
-pdf_toolbar = {
+pdf_toolbar: dict[bool, str] = {
     True: "toolbar=0",
     False: "",
 }
