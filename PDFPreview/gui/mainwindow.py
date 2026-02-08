@@ -32,7 +32,7 @@ if TYPE_CHECKING:
 
 from PDFPreview import FAVORITES, PATH_PREFIX, SPLASH_FILE, TITLE, VERSION
 
-file_filters = {
+file_filters: dict[bool, QDir.Filter] = {
     True: QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot,
     False: QDir.Filter.AllDirs
     | QDir.Filter.AllEntries
