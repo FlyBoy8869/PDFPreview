@@ -248,8 +248,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if event.type() == QEvent.Type.Drop:
                 path = Path(
                     cast("QDropEvent", event)
-                    .mimeData()
+                    .mimeData()  
                     .text()
+                    .replace("%23", "#")  # dirty workaround
                     .replace(PATH_PREFIX, ""),
                 )
                 new_index: QModelIndex = self.model.index(path.as_posix())
@@ -258,6 +259,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.treeView.setCurrentIndex(new_index)
 
                 if self.model.isDir(new_index):
+                    ic("is a dir")
                     self.treeView.setRootIndex(self.model.index(path.as_posix()))
                     self.update_title_bar_from_index(
                         self.model.index(path.as_posix()),
