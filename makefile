@@ -19,7 +19,7 @@ win_clean:
 	@IF EXIST "build" ( RMDIR /S /Q "build" )
 
 build_no_upx:
-	pyinstaller --add-data PDFPreview\gui\dialogs\ui_about.ui:PDFPreview\gui\dialogs\ --add-data Resources:.\Resources --onedir --windowed --noconfirm --name FileViewer app.py
+	pyinstaller --add-data PDFPreview\gui\dialogs\ui_about.ui:PDFPreview\gui\dialogs\ --add-data Resources:.\Resources --add-data .\CHANGELOG.md:. --onedir --windowed --noconfirm --name FileViewer app.py
 
 build:
-	pyinstaller --add-data PDFPreview\gui\dialogs\ui_about.ui:PDFPreview\gui\dialogs\ --add-data Resources:.\Resources --upx-dir C:\Users\charles.cognato\upx-5.1.0-win64\upx-5.1.0-win64 --onedir --windowed --noconfirm --name FileViewer app.py
+	pyinstaller --add-data PDFPreview\gui\dialogs\ui_about.ui:PDFPreview\gui\dialogs\ --add-data Resources:.\Resources --add-data .\CHANGELOG.md:. --upx-dir C:\Users\charles.cognato\upx-5.1.0-win64\upx-5.1.0-win64 --onedir --windowed --noconfirm --name FileViewer app.py
