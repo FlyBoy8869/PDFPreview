@@ -5,7 +5,7 @@ a = Analysis(
     ['app.py'],
     pathex=[],
     binaries=[],
-    datas=[('PDFPreview\\gui\\ui_about.ui', 'PDFPreview\\gui\\'), ('Resources', '.\\Resources')],
+    datas=[('PDFPreview\\gui\\dialogs\\ui_about.ui', 'PDFPreview\\gui\\'), ('Resources', '.\\Resources')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

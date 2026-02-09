@@ -93,3 +93,9 @@ Qt6QmlNetwork.dll
 Qt6WebChannelQuick.dll
 Qt6WebEngineQuick.dll
 Qt6WebViewQuick.dll
+resources\qtwebengine_devtools_resources.debug.pak
+resources\qtwebengine_devtools_resources.pak
+resources\qtwebengine_resources.debug.pak
+resources\qtwebengine_resources_100p.debug.pak
+resources\qtwebengine_resources_200p.debug.pak
+resources\v8_context_snapshot.debug.bin
