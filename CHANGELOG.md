@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.7.1
+### Fix
+- Fixes a bug with the makefile pyinstaller target
+
 ## 0.7.0
 ### Added
 - Context menu Open with Acrobat
