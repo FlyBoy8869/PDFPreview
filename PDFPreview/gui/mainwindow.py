@@ -248,7 +248,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if event.type() == QEvent.Type.Drop:
                 path = Path(
                     cast("QDropEvent", event)
-                    .mimeData()  
+                    .mimeData()
                     .text()
                     .replace("%23", "#")  # dirty workaround
                     .replace(PATH_PREFIX, ""),
