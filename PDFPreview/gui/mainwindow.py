@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from icecream import ic
 from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, QPoint, Qt, QUrl
 from PySide6.QtGui import (
     QAction,
@@ -172,11 +171,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         menu: QMenu = QMenu()
 
         acrobat: QAction = menu.addAction("Open with Acrobat")
+        explorer: QAction = menu.addAction("Open File Location")
         rename: QAction = menu.addAction("Rename")
         delete: QAction = menu.addAction("Delete")
 
         if self.model.isDir(index):
             menu.removeAction(acrobat)
+            menu.removeAction(explorer)
             menu.removeAction(delete)
 
         global_position: QPoint = self.treeView.viewport().mapToGlobal(position)
@@ -197,6 +198,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             fileoperations.delete_file(self.model, index)
         elif action == acrobat:
             fileoperations.open_with_acrobat(self.model.filePath(index))
+        elif action == explorer:
+            fileoperations.open_file_location(self.model.filePath(index))
 
     def view_file(self, index: QModelIndex) -> None:
         """Loads the file pointed to by index into the viewing pane."""
@@ -259,7 +262,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.treeView.setCurrentIndex(new_index)
 
                 if self.model.isDir(new_index):
-                    ic("is a dir")
                     self.treeView.setRootIndex(self.model.index(path.as_posix()))
                     self.update_title_bar_from_index(
                         self.model.index(path.as_posix()),

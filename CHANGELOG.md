@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.8.0
+### Added
+- Adds context menu option to open a file's location in Windows Explorer
+
 ## 0.7.2
 ### Fix
 - Fixes a bug which prevented setting the file browser root path if that path had %XX sequences.

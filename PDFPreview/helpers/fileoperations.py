@@ -1,3 +1,6 @@
+import subprocess
+from pathlib import Path
+
 try:
     from os import startfile  # type: ignore  # noqa: PGH003
 except ImportError:
@@ -20,13 +23,24 @@ def open_file(path: str) -> None:
 
 def open_with_acrobat(path: str) -> None:
     """Open file in Adobe Acrobat. Falls back to system default application if not available."""
-    import subprocess
 
     try:
         subprocess.Popen([ADOBE_ACROBAT_PATH, "/n", path])  # noqa: S603
     except FileNotFoundError:
         # fall back to system default application
         open_file(path)
+
+
+def open_file_location(path: str) -> None:
+    try:
+        p = Path(path)
+        print(f"{p =}")
+        subprocess.Popen(f'explorer {p.parent.as_posix().replace("/", "\\")}')
+        # subprocess.Popen("explorer C:\\Users\\charles.cognato\\tmp\\MY_CECIL\\Pics")
+        print(f"{Path(path).resolve().parent.as_posix() =}")
+    except FileNotFoundError:
+        pass
+
 
 def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> bool:
     if not index.isValid():
