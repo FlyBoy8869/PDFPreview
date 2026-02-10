@@ -35,7 +35,7 @@ def open_file_location(path: str) -> None:
     try:
         p = Path(path)
         print(f"{p =}")
-        subprocess.Popen(f'explorer {p.parent.as_posix().replace("/", "\\")}')
+        subprocess.Popen(f'explorer /select,{p.as_posix().replace("/", "\\")}')
         # subprocess.Popen("explorer C:\\Users\\charles.cognato\\tmp\\MY_CECIL\\Pics")
         print(f"{Path(path).resolve().parent.as_posix() =}")
     except FileNotFoundError:
