@@ -169,9 +169,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
 
         menu: QMenu = QMenu()
+        open_with: QMenu = QMenu("Open with...", menu)
+        menu.addMenu(open_with)
 
-        acrobat: QAction = menu.addAction("Open with Acrobat")
-        explorer: QAction = menu.addAction("Open File Location")
+        acrobat: QAction = open_with.addAction("Open with Acrobat")
+        explorer: QAction = open_with.addAction("Open File Location")
         rename: QAction = menu.addAction("Rename")
         delete: QAction = menu.addAction("Delete")
 
