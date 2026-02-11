@@ -178,8 +178,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         delete: QAction = menu.addAction("Delete")
 
         if self.model.isDir(index):
-            menu.removeAction(acrobat)
-            menu.removeAction(explorer)
+            open_with.removeAction(acrobat)
             menu.removeAction(delete)
 
         global_position: QPoint = self.treeView.viewport().mapToGlobal(position)
