@@ -110,6 +110,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.load_favorites()
 
+        self.context_menu_actions = self._create_context_menu_dispatch_table()
+
         self.load_splash()
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
@@ -173,9 +175,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         menu.addMenu(open_with)
 
         acrobat: QAction = open_with.addAction("Acrobat")
+        acrobat.setObjectName("acrobat")
         explorer: QAction = open_with.addAction("Windows Explorer")
+        explorer.setObjectName("explorer")
         rename: QAction = menu.addAction("Rename")
+        rename.setObjectName("rename")
         delete: QAction = menu.addAction("Delete")
+        delete.setObjectName("delete")
 
         if self.model.isDir(index):
             open_with.removeAction(acrobat)
@@ -184,28 +190,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         global_position: QPoint = self.treeView.viewport().mapToGlobal(position)
         action: QAction = menu.exec(global_position)
 
-        if action == rename:
-            if new_name := QInputDialog.getText(
-                self,
-                "Rename File",
-                "Enter a new name for this file:",
-                text=index.data(),
-            )[0]:
-                fileoperations.rename_file(self.model, index, new_name)
-        elif action == delete and (
-            QMessageBox.question(self, "Delete", "Are you sure?")
-            == QMessageBox.StandardButton.Yes
-        ):
-            fileoperations.delete_file(self.model, index)
-        elif action == acrobat:
-            path = Path(self.model.filePath(index))
-            if path.suffix.lower() == ".pdf":
-                # sneaky behavior; open a non-pdf in a hopefully appropriate system program
-                fileoperations.open_with_acrobat(self.model.filePath(index))
-            else:
-                fileoperations.open_file(path.as_posix())
-        elif action == explorer:
-            fileoperations.open_file_location(self.model.filePath(index))
+        self.context_menu_actions[action.objectName()](index)
 
     def view_file(self, index: QModelIndex) -> None:
         """Loads the file pointed to by index into the viewing pane."""
@@ -314,3 +299,37 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def update_title_bar_from_index(self, index) -> None:
         separator = " - " if index.data() else ""
         self.setWindowTitle(f"{TITLE}{separator}{self.model.filePath(index)}")
+
+    # Context Menu Actions
+
+    def _create_context_menu_dispatch_table(self) -> dict:
+        return {
+            "acrobat": self._do_acrobat_action,
+            "explorer": self._do_explorer_action,
+            "rename": self._do_rename_action,
+            "delete": self._do_delete_action,
+        }
+
+    def _do_acrobat_action(self, index: QModelIndex) -> None:
+        path = Path(self.model.filePath(index))
+        if path.suffix.lower() == ".pdf":
+            # sneaky behavior; open a non-pdf in a hopefully appropriate system program
+            fileoperations.open_with_acrobat(self.model.filePath(index))
+        else:
+            fileoperations.open_file(path.as_posix())
+
+    def _do_delete_action(self, index: QModelIndex) -> None:
+        if QMessageBox.question(self, "Delete", "Are you sure?") == QMessageBox.StandardButton.Yes:
+            fileoperations.delete_file(self.model, index)
+
+    def _do_explorer_action(self, index: QModelIndex) -> None:
+        fileoperations.open_file_location(self.model.filePath(index))
+
+    def _do_rename_action(self, index: QModelIndex) -> None:
+        if new_name := QInputDialog.getText(
+            self,
+            "Rename File",
+            "Enter a new name for this file:",
+            text=index.data(),
+        )[0]:
+            fileoperations.rename_file(self.model, index, new_name)
