@@ -187,10 +187,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             open_with.removeAction(acrobat)
             menu.removeAction(delete)
 
-        global_position: QPoint = self.treeView.viewport().mapToGlobal(position)
-        action: QAction = menu.exec(global_position)
-
-        self.context_menu_actions[action.objectName()](index)
+        if action := menu.exec(self.treeView.viewport().mapToGlobal(position)):
+            self.context_menu_actions[action.objectName()](index)
 
     def view_file(self, index: QModelIndex) -> None:
         """Loads the file pointed to by index into the viewing pane."""
