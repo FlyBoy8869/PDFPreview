@@ -192,6 +192,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def view_file(self, index: QModelIndex) -> None:
         """Loads the file pointed to by index into the viewing pane."""
+        # do not load directories into the viewer i.e., navigable elements
         if self.model.isDir(index):
             return
 
@@ -317,7 +318,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             fileoperations.open_file(path.as_posix())
 
     def _do_delete_action(self, index: QModelIndex) -> None:
-        if QMessageBox.question(self, "Delete", "Are you sure?") == QMessageBox.StandardButton.Yes:
+        if (
+            QMessageBox.question(self, "Delete", "Are you sure?")
+            == QMessageBox.StandardButton.Yes
+        ):
             fileoperations.delete_file(self.model, index)
 
     def _do_explorer_action(self, index: QModelIndex) -> None:
