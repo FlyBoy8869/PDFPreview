@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, QPoint, Qt, QUrl
+from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl
 from PySide6.QtGui import (
     QAction,
     QCloseEvent,
