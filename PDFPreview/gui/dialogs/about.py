@@ -5,7 +5,7 @@ from PySide6.QtGui import QColor, QPalette, QPixmap
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QLabel, QWidget
 
-from PDFPreview import LOGO, TITLE, VERSION
+from config.config import LOGO, TITLE, VERSION
 
 ABOUT_UI_PATH = Path(__file__).resolve().parent / "ui_about.ui"
 

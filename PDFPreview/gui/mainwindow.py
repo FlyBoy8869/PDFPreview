@@ -29,7 +29,7 @@ from .ui_mainwindow import Ui_MainWindow
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
-from PDFPreview import FAVORITES, PATH_PREFIX, SPLASH_FILE, TITLE, VERSION
+from config.config import FAVORITES, PATH_PREFIX, SPLASH_FILE, TITLE, VERSION
 
 file_filters: dict[bool, QDir.Filter] = {
     True: QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot,

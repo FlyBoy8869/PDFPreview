@@ -4,6 +4,8 @@ from typing import Literal
 
 import tomllib
 
+from __version__ import VERSION  # noqa: F401
+
 TITLE = "FileViewer"
 
 PATH_PREFIX: Literal["file://", "file:///"] = (

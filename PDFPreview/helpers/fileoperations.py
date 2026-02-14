@@ -13,7 +13,7 @@ from pathvalidate import ValidationError, validate_filename
 from PySide6.QtCore import QModelIndex, Qt, QUrl
 from PySide6.QtWidgets import QFileSystemModel
 
-from PDFPreview import ADOBE_ACROBAT_PATH
+from config.config import ADOBE_ACROBAT_PATH
 
 
 def open_file(path: str) -> None:
@@ -23,7 +23,6 @@ def open_file(path: str) -> None:
 
 def open_with_acrobat(path: str) -> None:
     """Open file in Adobe Acrobat. Falls back to system default application if not available."""
-
     try:
         subprocess.Popen([ADOBE_ACROBAT_PATH, "/n", path])  # noqa: S603
     except FileNotFoundError:
