@@ -32,8 +32,7 @@ def open_with_acrobat(path: str) -> None:
 
 def open_file_location(path: str) -> None:
     try:
-        p = Path(path)
-        subprocess.Popen(f'explorer /select,{p.as_posix().replace("/", "\\")}')
+        subprocess.Popen(f'explorer.exe /select,"{path.replace("/", "\\")}"')
     except FileNotFoundError:
         pass
 
