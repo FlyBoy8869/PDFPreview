@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (
     QMenu,
     QMessageBox,
 )
-from icecream import ic
 
 from PDFPreview.gui.dialogs import about
 from PDFPreview.gui.widgets.listwidget import VListWidgetItem
@@ -44,8 +43,6 @@ pdf_toolbar: dict[bool, str] = {
     True: "toolbar=0",
     False: "",
 }
-
-ic.configureOutput(includeContext=True)
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -328,7 +325,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             fileoperations.delete_file(self.model, index)
 
     def _do_explorer_action(self, index: QModelIndex) -> None:
-        ic(self.model.filePath(index))
         fileoperations.open_file_location(self.model.filePath(index))
 
     def _do_rename_action(self, index: QModelIndex) -> None:
