@@ -21,13 +21,14 @@ from PySide6.QtWidgets import (
 )
 
 from PDFPreview.gui.dialogs import about
-from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 from PDFPreview.helpers import eventfilters, favorites, fileoperations, gui
 
 from .ui_mainwindow import Ui_MainWindow
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
+
+    from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 
 from config.config import FAVORITES, PATH_PREFIX, SPLASH_FILE, TITLE, VERSION
 
