@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.8.1
+### Fix
+- Fixes a bug which caused opening a location in Windows Explorer to fail
+
 ## 0.8.0
 ### Added
 - Adds context menu option to open a file's location in Windows Explorer
