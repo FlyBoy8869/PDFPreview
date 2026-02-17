@@ -282,16 +282,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def save_favorites(self) -> None:
         favorites.save_favorites_from(
-            widget=self.lw_favorites,
-            to_file_path=FAVORITES,
-            using_model=self.model,
+            source=self.lw_favorites,
+            file_path=FAVORITES,
+            model=self.model,
         )
 
     def load_favorites(self) -> None:
         favorites.load_favorites_to(
-            widget=self.lw_favorites,
-            from_file_path=FAVORITES,
-            using_model=self.model,
+            dest=self.lw_favorites,
+            file_path=FAVORITES,
+            model=self.model,
         )
 
     def update_title_bar_for_folder(self, index) -> None:

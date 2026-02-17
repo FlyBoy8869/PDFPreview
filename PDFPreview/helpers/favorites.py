@@ -9,39 +9,39 @@ from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 
 def load_favorites_to(
     *,
-    widget: QListWidget,
-    from_file_path: Path,
-    using_model: QFileSystemModel,
+    dest: QListWidget,
+    file_path: Path,
+    model: QFileSystemModel,
 ) -> None:
     try:
-        with from_file_path.open("r", encoding="utf-8") as inputfile:
+        with file_path.open("r", encoding="utf-8") as inputfile:
             for line in inputfile:
-                display_role, extra = line.split("|")
+                favorite_text, path = line.split("|")
                 # make sure to strip the "extra" or else the QFileSystemModel won't find the path due to the "\n"
                 item = VListWidgetItem(
-                    display_role,
-                    extra=using_model.index(extra.strip()),
+                    favorite_text,
+                    extra=model.index(path.strip()),
                 )
                 item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
-                widget.addItem(item)
+                dest.addItem(item)
     except FileNotFoundError:
         pass
 
 
 def save_favorites_from(
     *,
-    widget: QListWidget,
-    to_file_path: Path,
-    using_model: QFileSystemModel,
+    source: QListWidget,
+    file_path: Path,
+    model: QFileSystemModel,
 ) -> None:
-    to_file_path.touch()
-    with to_file_path.open(mode="w", encoding="utf-8") as save_file:
-        for row in range(widget.count()):
+    file_path.touch()
+    with file_path.open(mode="w", encoding="utf-8") as save_file:
+        for row in range(source.count()):
             item: VListWidgetItem = cast(
                 "VListWidgetItem",
-                widget.item(row),
+                source.item(row),
             )
             extra: QModelIndex = item.extra
             save_file.write(
-                f"{item.data(Qt.ItemDataRole.DisplayRole)}|{using_model.filePath(extra)}\n",
+                f"{item.data(Qt.ItemDataRole.DisplayRole)}|{model.filePath(extra)}\n",
             )
