@@ -1,5 +1,4 @@
 import subprocess
-from pathlib import Path
 
 try:
     from os import startfile  # type: ignore  # noqa: PGH003
