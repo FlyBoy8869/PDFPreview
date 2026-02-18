@@ -1,10 +1,13 @@
-from pathlib import Path
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 from PySide6.QtCore import QModelIndex, Qt
-from PySide6.QtWidgets import QFileSystemModel, QListWidget
 
 from PDFPreview.gui.widgets.listwidget import VListWidgetItem
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from PySide6.QtWidgets import QFileSystemModel, QListWidget
 
 
 def load_favorites_to(
