@@ -3,6 +3,6 @@ dist
 .venv
 __pycache__/
 .idea/*
-!.idea/dictionaries/project.xml
+!.idea/dictionaries/
 debug.log
 favorites.dat
