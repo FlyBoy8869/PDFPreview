@@ -32,6 +32,7 @@ if TYPE_CHECKING:
 
 from config.config import FAVORITES, PATH_PREFIX, SPLASH_FILE, TITLE, VERSION
 
+# noinspection PyTypeChecker
 file_filters: dict[bool, QDir.Filter] = {
     True: QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot,
     False: QDir.Filter.AllDirs
@@ -57,7 +58,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.help_save: QModelIndex | None = None
 
-        # this string gets appended to the url to show or hide the pdf viewer toolbar
+        # this string gets appended to the url to show or hide the PDF viewer toolbar
         self.HIDE_TOOLBAR = ""
 
         self.about_window = about.create_about_dialog()
