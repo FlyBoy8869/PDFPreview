@@ -6,3 +6,4 @@ __pycache__/
 !.idea/dictionaries/
 debug.log
 favorites.dat
+bookmarks.json
