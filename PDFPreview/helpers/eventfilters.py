@@ -22,7 +22,6 @@ class AboutDialogFilter(QObject):
         super().__init__()
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
-        source = cast("QDialog", source)
         if (
                 event.type() == QEvent.Type.MouseButtonRelease
                 or event.type() == QEvent.Type.KeyRelease
