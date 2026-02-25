@@ -1,6 +1,6 @@
 # FileViewer
 
-A basic previewer intended for pdf files, but which has evolved to include several other file types.
+A basic previewer intended for PDF files, but which has evolved to include several other file types.
 
 ## Features
 

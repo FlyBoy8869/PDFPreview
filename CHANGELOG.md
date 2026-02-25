@@ -99,7 +99,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- favoriting file bug
+- ¡favoriting file bug
 
 ## 0.2.0
 
