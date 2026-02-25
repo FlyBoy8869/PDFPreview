@@ -93,6 +93,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.lw_bookmarks.installEventFilter(self.lw_bookmarks_eventfilter)
         self.lw_bookmarks.itemClicked.connect(self.handle_favorite_clicked)
         self.lw_bookmarks.model().rowsMoved.connect(self.update_bookmarks)
+        self.lw_bookmarks.model().dataChanged.connect(self.update_bookmarks)
 
         self.treeView.setModel(self.model)
         self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
