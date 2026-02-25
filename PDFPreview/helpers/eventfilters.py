@@ -9,7 +9,7 @@ from PDFPreview.services.bookmark_service import register_bookmark, delete_bookm
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QDragEnterEvent, QKeyEvent
-    from PySide6.QtWidgets import QDialog, QListWidgetItem
+    from PySide6.QtWidgets import QListWidgetItem
 
 PATH_PREFIX: Literal["file://", "file:///"] = (
     "file://" if "macOS" in platform.platform() else "file:///"
