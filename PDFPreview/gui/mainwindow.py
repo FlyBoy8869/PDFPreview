@@ -32,6 +32,8 @@ if TYPE_CHECKING:
 
 from config.config import FAVORITES, PATH_PREFIX, SPLASH_FILE, TITLE, VERSION
 
+from PDFPreview.services.bookmark_service import register_bookmark
+
 # noinspection PyTypeChecker
 file_filters: dict[bool, QDir.Filter] = {
     True: QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot,
