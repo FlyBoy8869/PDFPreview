@@ -8,7 +8,7 @@ from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 from PDFPreview.services.bookmark_service import register_bookmark, delete_bookmark
 
 if TYPE_CHECKING:
-    from PySide6.QtGui import QDragEnterEvent, QDropEvent, QKeyEvent
+    from PySide6.QtGui import QDragEnterEvent, QKeyEvent
     from PySide6.QtWidgets import QDialog, QListWidgetItem
 
 PATH_PREFIX: Literal["file://", "file:///"] = (
@@ -53,9 +53,7 @@ class BookmarkListEventFilter(QObject):
             event.ignore()
 
         if event.type() == QEvent.Type.Drop:
-            path: str = (
-                cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, "")
-            )
+            path: str = event.mimeData().text().replace(PATH_PREFIX, "")
             favorites_text: str = self.model.fileName(self.model.index(path))
             item = VListWidgetItem(favorites_text, extra=self.model.index(path))
             item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
