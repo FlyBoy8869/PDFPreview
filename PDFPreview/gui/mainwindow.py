@@ -21,7 +21,8 @@ from PySide6.QtWidgets import (
 )
 
 from PDFPreview.gui.dialogs import about
-from PDFPreview.helpers import eventfilters, favorites, fileoperations, gui
+from PDFPreview.helpers import eventfilters, bookmarks, fileoperations, gui
+from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
 
 from .ui_mainwindow import Ui_MainWindow
 
@@ -30,18 +31,16 @@ if TYPE_CHECKING:
 
     from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 
-from config.config import FAVORITES, PATH_PREFIX, SPLASH_FILE, TITLE, VERSION
-
-from PDFPreview.services.bookmark_service import register_bookmark
+from config.config import PATH_PREFIX, SPLASH_FILE, TITLE, VERSION
 
 # noinspection PyTypeChecker
 file_filters: dict[bool, QDir.Filter] = {
     True: QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot,
     False: QDir.Filter.AllDirs
-    | QDir.Filter.AllEntries
-    | QDir.Filter.Drives
-    | QDir.Filter.Hidden
-    | QDir.Filter.NoDotAndDotDot,
+           | QDir.Filter.AllEntries
+           | QDir.Filter.Drives
+           | QDir.Filter.Hidden
+           | QDir.Filter.NoDotAndDotDot,
 }
 pdf_toolbar: dict[bool, str] = {
     True: "toolbar=0",
@@ -88,11 +87,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
-        self.lw_favorites_eventfilter: eventfilters.FavoritesListFilter = (
-            eventfilters.FavoritesListFilter(self.lw_favorites, self.model)
+        self.lw_bookmarks_eventfilter: eventfilters.BookmarkListEventFilter = (
+            eventfilters.BookmarkListEventFilter(self.lw_bookmarks, self.model)
         )
-        self.lw_favorites.installEventFilter(self.lw_favorites_eventfilter)
-        self.lw_favorites.itemClicked.connect(self.handle_favorite_clicked)
+        self.lw_bookmarks.installEventFilter(self.lw_bookmarks_eventfilter)
+        self.lw_bookmarks.itemClicked.connect(self.handle_favorite_clicked)
+        self.lw_bookmarks.model().rowsMoved.connect(self.update_bookmarks)
 
         self.treeView.setModel(self.model)
         self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
@@ -119,7 +119,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.load_splash()
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
-        self.save_favorites()
         return super().closeEvent(event)
 
     def handle_back_button_clicked(self, _) -> None:
@@ -218,8 +217,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         if source is self.treeView and (
-            event.type() == QEvent.Type.KeyPress
-            and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
+                event.type() == QEvent.Type.KeyPress
+                and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
         ):
             # open selected file when the spacebar is pressed
             fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
@@ -232,8 +231,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                 # allow drops if they have urls attached
                 if (
-                    event.proposedAction() == Qt.DropAction.CopyAction
-                    and event.mimeData().hasUrls()
+                        event.proposedAction() == Qt.DropAction.CopyAction
+                        and event.mimeData().hasUrls()
                 ):
                     event.accept()
                 else:
@@ -281,19 +280,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.view_file(self.help_save)
             self.help_save = None
 
-    def save_favorites(self) -> None:
-        favorites.save_favorites_from(
-            source=self.lw_favorites,
-            file_path=FAVORITES,
-            model=self.model,
-        )
-
     def load_favorites(self) -> None:
-        favorites.load_favorites_to(
-            dest=self.lw_favorites,
-            file_path=FAVORITES,
-            model=self.model,
-        )
+        bookmarks.load_bookmarks(load_bookmarks(), self.lw_bookmarks, self.model)
 
     def update_title_bar_for_folder(self, index) -> None:
         if self.model.isDir(index):
@@ -302,6 +290,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def update_title_bar_from_index(self, index) -> None:
         separator = " - " if index.data() else ""
         self.setWindowTitle(f"{TITLE}{separator}{self.model.filePath(index)}")
+
+    def update_bookmarks(self) -> None:
+        lw = self.lw_bookmarks
+        bookmarks_ = []
+        for row in range(lw.count()):
+            bookmarks_.append((lw.item(row).text(), self.model.filePath(lw.item(row).extra), row))
+
+        update_bookmark_order(bookmarks_)
 
     # Context Menu Actions
 
@@ -323,8 +319,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_delete_action(self, index: QModelIndex) -> None:
         if (
-            QMessageBox.question(self, "Delete", "Are you sure?")
-            == QMessageBox.StandardButton.Yes
+                QMessageBox.question(self, "Delete", "Are you sure?")
+                == QMessageBox.StandardButton.Yes
         ):
             fileoperations.delete_file(self.model, index)
 
@@ -333,9 +329,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_rename_action(self, index: QModelIndex) -> None:
         if new_name := QInputDialog.getText(
-            self,
-            "Rename File",
-            "Enter a new name for this file:",
-            text=index.data(),
+                self,
+                "Rename File",
+                "Enter a new name for this file:",
+                text=index.data(),
         )[0]:
             fileoperations.rename_file(self.model, index, new_name)

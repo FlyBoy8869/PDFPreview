@@ -4,26 +4,30 @@ A basic previewer intended for pdf files, but which has evolved to include sever
 
 ## Features
 
-* Create/Delete favorites
+* Create/Delete bookmarks
 * Folder navigation
 * External folder navigation via drag & drop
 * Open supported files in system default applications
 
-
 ## Usage
 
-#### Create a Favorite:
-    Create favorites by dropping a folder from the file browser on to the favorites pane.
+#### Create a Bookmark:
 
-#### Delete a Favorite:
-    Select the desired favorite and press delete.
+    Create bookmarks by dropping a folder from the file browser on to the bookmarks pane.
 
-#### Rearrange Favorites:
-    Click on and drag a favorite and drop it wherever you'd like it to create any arrangement you'd prefer.
+#### Delete a Bookmark:
+
+    Select the desired bookmark and press delete.
+
+#### Rearrange Bookmark:
+
+    Click on and drag a bookmark and drop it wherever you'd like it to create any arrangement you'd prefer.
 
 #### Folder Navigation:
+
     Instantly navigate to any location.
     Drag and drop a file or folder from Windows File Explorer on the preview pane.
 
 #### Open Files:
+
     Open a supported file in a system default application by pressing the spacebar while the file is selected.

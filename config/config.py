@@ -16,14 +16,13 @@ ROOT = Path(__file__).resolve().parent.parent
 RESOURCES = ROOT / "Resources"
 
 FILES = RESOURCES / "Files"
-FAVORITES: Path = FILES / "favorites.dat"
 SPLASH_FILE: Path = FILES / "FileViewerSplash.html"
 
 IMAGES = RESOURCES / "Images"
 LOGO: Path = IMAGES / "logo.png"
 
 with (FILES / "config.toml").open(
-    mode="rb",
+        mode="rb",
 ) as config_file:
     config = tomllib.load(config_file)
 

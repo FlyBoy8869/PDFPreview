@@ -1,3 +1,6 @@
+# bookmark_repository.py
+# handles the CRUD operations
+
 from tinydb import Query
 from tinydb.table import Document
 
@@ -11,3 +14,9 @@ def create_bookmark(bookmark_dict: dict):
 
 def get_bookmarks() -> list[Document]:
     return bookmarks_table.all()
+
+def truncate_bookmarks() -> None:
+    bookmarks_table.truncate()
+
+def delete_bookmark(name: str) -> None:
+    bookmarks_table.remove(BookmarkQuery.name == name)
