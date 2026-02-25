@@ -43,7 +43,6 @@ class BookmarkListEventFilter(QObject):
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         source = cast("QListWidget", source)
         if event.type() == QEvent.Type.DragEnter:
-            print("processing drag enter event")
             event = cast("QDragEnterEvent", event)
             if (
                     event.proposedAction() == Qt.DropAction.CopyAction
@@ -54,7 +53,6 @@ class BookmarkListEventFilter(QObject):
             event.ignore()
 
         if event.type() == QEvent.Type.Drop:
-            print("processing drop event")
             path: str = (
                 cast("QDropEvent", event).mimeData().text().replace(PATH_PREFIX, "")
             )
@@ -64,7 +62,6 @@ class BookmarkListEventFilter(QObject):
             source.addItem(item)
 
             register_bookmark(name=favorites_text, path=path, index=source.count() - 1)
-            print("created bookmark")
 
             event.accept()
             return event.isAccepted()
