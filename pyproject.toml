@@ -14,4 +14,5 @@ dependencies = [
 [dependency-groups]
 dev = [
     "icecream>=2.1.10",
+    "pyinstaller>=6.19.0",
 ]
