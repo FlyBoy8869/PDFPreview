@@ -1,4 +1,4 @@
-# bookmark_service.py
+# services.bookmark_service.py
 # Business logic layer that uses repositories
 
 from PDFPreview.database.bookmark_repository import create_bookmark, get_bookmarks, truncate_bookmarks, \

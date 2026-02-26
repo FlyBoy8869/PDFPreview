@@ -1,4 +1,4 @@
-# bookmark_repository.py
+# database.bookmark_repository.py
 # handles the CRUD operations
 
 from tinydb import Query
