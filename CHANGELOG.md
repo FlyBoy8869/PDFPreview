@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.9.1
+
+### Fix
+
+- Re-ordering and re-naming are now immediately reflected in the bookmarks database
+
 ## 0.9.0
 
 ### Change
