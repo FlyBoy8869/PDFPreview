@@ -21,7 +21,6 @@ from PySide6.QtWidgets import (
 
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui
-from .. import eventfilters
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
 
 from .ui_mainwindow import Ui_MainWindow
@@ -89,7 +88,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
-        self.lw_bookmarks_eventfilter: eventfilters.BookmarkListEventFilter = (
+        self.lw_bookmarks_eventfilter: BookmarkListEventFilter = (
             BookmarkListEventFilter(self.lw_bookmarks, self.model)
         )
         self.lw_bookmarks.installEventFilter(self.lw_bookmarks_eventfilter)
