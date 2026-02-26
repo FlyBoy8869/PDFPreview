@@ -1,3 +1,5 @@
+# eventfilters.about_eventfilter.py
+
 from PySide6.QtCore import QObject, QEvent
 
 

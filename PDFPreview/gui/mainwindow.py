@@ -25,8 +25,8 @@ from .. import eventfilters
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
 
 from .ui_mainwindow import Ui_MainWindow
-from PDFPreview.eventfilters.about import AboutDialogFilter
-from PDFPreview.eventfilters.bookmarklist import BookmarkListEventFilter
+from PDFPreview.eventfilters.about_eventfilter import AboutDialogFilter
+from PDFPreview.eventfilters.bookmark_eventfilter import BookmarkListEventFilter
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
