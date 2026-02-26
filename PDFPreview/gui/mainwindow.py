@@ -25,6 +25,8 @@ from PDFPreview.helpers import eventfilters, bookmarks, fileoperations, gui
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
 
 from .ui_mainwindow import Ui_MainWindow
+from ..helpers.eventfilters.about import AboutDialogFilter
+from ..helpers.eventfilters.bookmarklist import BookmarkListEventFilter
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
@@ -63,7 +65,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.HIDE_TOOLBAR = ""
 
         self.about_window = about.create_about_dialog()
-        self.about_event_filter = eventfilters.AboutDialogFilter(self.about_window)
+        self.about_event_filter = AboutDialogFilter(self.about_window)
         self.about_window.installEventFilter(self.about_event_filter)
 
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
@@ -88,7 +90,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
         self.lw_bookmarks_eventfilter: eventfilters.BookmarkListEventFilter = (
-            eventfilters.BookmarkListEventFilter(self.lw_bookmarks, self.model)
+            BookmarkListEventFilter(self.lw_bookmarks, self.model)
         )
         self.lw_bookmarks.installEventFilter(self.lw_bookmarks_eventfilter)
         self.lw_bookmarks.itemClicked.connect(self.handle_favorite_clicked)

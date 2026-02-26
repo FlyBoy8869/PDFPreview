@@ -45,8 +45,8 @@ class Ui_MainWindow(object):
         self.action_hide_files.setChecked(True)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.horizontalLayout_2 = QHBoxLayout(self.centralwidget)
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.verticalLayout_3 = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.splitter_2 = QSplitter(self.centralwidget)
         self.splitter_2.setObjectName(u"splitter_2")
         self.splitter_2.setOrientation(Qt.Orientation.Horizontal)
@@ -83,31 +83,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.lw_bookmarks)
 
         self.splitter.addWidget(self.groupBox)
-        self.layoutWidget = QWidget(self.splitter)
-        self.layoutWidget.setObjectName(u"layoutWidget")
-        self.verticalLayout_3 = QVBoxLayout(self.layoutWidget)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pbBack = QPushButton(self.layoutWidget)
-        self.pbBack.setObjectName(u"pbBack")
-
-        self.horizontalLayout.addWidget(self.pbBack)
-
-        self.pb_root = QPushButton(self.layoutWidget)
-        self.pb_root.setObjectName(u"pb_root")
-
-        self.horizontalLayout.addWidget(self.pb_root)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
-
-
-        self.verticalLayout_3.addLayout(self.horizontalLayout)
-
-        self.gb_file_browser = QGroupBox(self.layoutWidget)
+        self.gb_file_browser = QGroupBox(self.splitter)
         self.gb_file_browser.setObjectName(u"gb_file_browser")
         self.gb_file_browser.setStyleSheet(u"")
         self.verticalLayout_2 = QVBoxLayout(self.gb_file_browser)
@@ -139,10 +115,30 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.treeView)
 
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.verticalLayout_3.addWidget(self.gb_file_browser)
+        self.horizontalLayout.addItem(self.horizontalSpacer_2)
 
-        self.splitter.addWidget(self.layoutWidget)
+        self.pbBack = QPushButton(self.gb_file_browser)
+        self.pbBack.setObjectName(u"pbBack")
+
+        self.horizontalLayout.addWidget(self.pbBack)
+
+        self.pb_root = QPushButton(self.gb_file_browser)
+        self.pb_root.setObjectName(u"pb_root")
+
+        self.horizontalLayout.addWidget(self.pb_root)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+
+        self.splitter.addWidget(self.gb_file_browser)
         self.splitter_2.addWidget(self.splitter)
         self.browser = QWebEngineView(self.splitter_2)
         self.browser.setObjectName(u"browser")
@@ -155,7 +151,7 @@ class Ui_MainWindow(object):
         self.browser.setUrl(QUrl(u"about:blank"))
         self.splitter_2.addWidget(self.browser)
 
-        self.horizontalLayout_2.addWidget(self.splitter_2)
+        self.verticalLayout_3.addWidget(self.splitter_2)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -189,9 +185,9 @@ class Ui_MainWindow(object):
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
         self.action_hide_files.setText(QCoreApplication.translate("MainWindow", u"Hide Files", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u" Bookmarks: ", None))
+        self.gb_file_browser.setTitle(QCoreApplication.translate("MainWindow", u" File Browser: ", None))
         self.pbBack.setText(QCoreApplication.translate("MainWindow", u"< Back", None))
         self.pb_root.setText(QCoreApplication.translate("MainWindow", u"Root", None))
-        self.gb_file_browser.setTitle("")
         self.menuOptions.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
     # retranslateUi

@@ -1,36 +1,12 @@
-import platform
-from typing import TYPE_CHECKING, Literal, cast
+from typing import cast
 
-from PySide6.QtCore import QEvent, QObject, Qt
-from PySide6.QtWidgets import QFileSystemModel, QListWidget
+from PySide6.QtCore import QObject, QEvent, Qt
+from PySide6.QtWidgets import QListWidget, QFileSystemModel, QListWidgetItem
+from PySide6.QtGui import QDragEnterEvent, QKeyEvent
 
 from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 from PDFPreview.services.bookmark_service import register_bookmark, delete_bookmark
-
-if TYPE_CHECKING:
-    from PySide6.QtGui import QDragEnterEvent, QKeyEvent
-    from PySide6.QtWidgets import QListWidgetItem
-
-PATH_PREFIX: Literal["file://", "file:///"] = (
-    "file://" if "macOS" in platform.platform() else "file:///"
-)
-
-
-class AboutDialogFilter(QObject):
-    def __init__(self, source):
-        self.source = source
-        super().__init__()
-
-    def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
-        if (
-                event.type() == QEvent.Type.MouseButtonRelease
-                or event.type() == QEvent.Type.KeyRelease
-        ):
-            self.source.close()
-            event.accept()
-            return event.isAccepted()
-
-        return False
+from config.config import PATH_PREFIX
 
 
 class BookmarkListEventFilter(QObject):

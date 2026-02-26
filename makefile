@@ -1,3 +1,4 @@
+# C:\Users\charles.cognato\AppData\Roaming\Python\Scripts\uv.exe run
 win_activate:
 	cmd.exe /K .venv\Scripts\activate
 
