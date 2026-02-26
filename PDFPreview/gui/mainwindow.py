@@ -7,7 +7,6 @@ from PySide6.QtGui import (
     QCloseEvent,
     QDragEnterEvent,
     QDropEvent,
-    QKeyEvent,
     QKeySequence,
     QShortcut,
 )
@@ -21,12 +20,13 @@ from PySide6.QtWidgets import (
 )
 
 from PDFPreview.gui.dialogs import about
-from PDFPreview.helpers import eventfilters, bookmarks, fileoperations, gui
+from PDFPreview.helpers import bookmarks, fileoperations, gui
+from .. import eventfilters
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
 
 from .ui_mainwindow import Ui_MainWindow
-from ..helpers.eventfilters.about import AboutDialogFilter
-from ..helpers.eventfilters.bookmarklist import BookmarkListEventFilter
+from PDFPreview.eventfilters.about import AboutDialogFilter
+from PDFPreview.eventfilters.bookmarklist import BookmarkListEventFilter
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
