@@ -208,8 +208,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.browser.setUrl(url)
 
-        # TODO: need to test with "tiff" and "svg"
-        if file_path.rsplit(".", 1)[1] in ["png", "jpg", "jpeg", "gif", "bmp", "webp"]:
+        if file_path.rsplit(".", 1)[1] in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             self.browser.setZoomFactor(1.00)
 
         self.update_title_bar_from_index(index)
