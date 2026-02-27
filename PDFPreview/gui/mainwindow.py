@@ -201,9 +201,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.model.isDir(index):
             return
 
-        url: QUrl = QUrl.fromLocalFile(self.model.filePath(index))
+        file_path = self.model.filePath(index)
+
+        url: QUrl = QUrl.fromLocalFile(file_path)
         url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
+
         self.browser.setUrl(url)
+
+        # TODO: need to test with "tiff" and "svg"
+        if file_path.rsplit(".", 1)[1] in ["png", "jpg", "jpeg", "gif", "bmp", "webp"]:
+            self.browser.setZoomFactor(1.00)
 
         self.update_title_bar_from_index(index)
 

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.9.2
+
+### Fix
+
+- Sets zoom factor for images to 100% when loading into the viewer to account for zoom adjustment changes for previous
+  image viewing
+
 ## 0.9.1
 
 ### Fix
