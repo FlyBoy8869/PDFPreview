@@ -53,7 +53,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.pbBack.setText("")
+        self.pbBack.setToolTip("back")
         self.pbBack.setIcon(QIcon((IMAGES / "back-arrow.png").resolve().as_posix()))
+        self.pb_root.setText("")
+        self.pb_root.setToolTip("My Computer")
         self.pb_root.setIcon(QIcon((IMAGES / "my_computer.png").resolve().as_posix()))
         self.setWindowTitle(f"{TITLE} [{VERSION}]")
 

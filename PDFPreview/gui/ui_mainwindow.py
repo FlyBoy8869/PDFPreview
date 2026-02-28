@@ -91,10 +91,6 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setContentsMargins(5, 5, 5, 5)
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_2)
-
         self.pbBack = QPushButton(self.gb_file_browser)
         self.pbBack.setObjectName(u"pbBack")
 
