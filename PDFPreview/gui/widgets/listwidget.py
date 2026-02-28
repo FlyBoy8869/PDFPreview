@@ -5,4 +5,4 @@ from PySide6.QtWidgets import QListWidgetItem
 class VListWidgetItem(QListWidgetItem):
     def __init__(self, *args, extra: QModelIndex, **kwargs):
         super().__init__(*args, **kwargs)
-        self.extra: QModelIndex = extra
+        self.bookmark_index: QModelIndex = extra
