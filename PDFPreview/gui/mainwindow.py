@@ -8,7 +8,7 @@ from PySide6.QtGui import (
     QDragEnterEvent,
     QDropEvent,
     QKeySequence,
-    QShortcut,
+    QShortcut, QIcon,
 )
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import (
@@ -32,7 +32,7 @@ if TYPE_CHECKING:
 
     from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 
-from config.config import PATH_PREFIX, SPLASH_FILE, TITLE, VERSION
+from config.config import PATH_PREFIX, SPLASH_FILE, TITLE, VERSION, IMAGES
 
 # noinspection PyTypeChecker
 file_filters: dict[bool, QDir.Filter] = {
@@ -53,6 +53,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.pbBack.setIcon(QIcon((IMAGES / "back-arrow.png").resolve().as_posix()))
+        self.pb_root.setIcon(QIcon((IMAGES / "my_computer.png").resolve().as_posix()))
         self.setWindowTitle(f"{TITLE} [{VERSION}]")
 
         self.help_shortcut = QShortcut(QKeySequence("h"), self)
