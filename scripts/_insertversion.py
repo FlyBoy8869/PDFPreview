@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 import re
 
-regx = r'version = "(\d*\.\d*\.\d*).+"?'
+regx = r'version = "(\d*\.\d*\.\d*).+"'
 
 with Path("pyproject.toml").resolve().open(mode="r", encoding="utf-8") as infile:
     for line in infile:
