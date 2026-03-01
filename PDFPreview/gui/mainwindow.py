@@ -56,13 +56,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setWindowTitle(f"{TITLE} [{VERSION}]")
+
         self.pbBack.setText("")
         self.pbBack.setToolTip("back")
         self.pbBack.setIcon(QIcon((IMAGES / "back-arrow.png").resolve().as_posix()))
+
         self.pb_root.setText("")
         self.pb_root.setToolTip("My Computer")
         self.pb_root.setIcon(QIcon((IMAGES / "my_computer.png").resolve().as_posix()))
-        self.setWindowTitle(f"{TITLE} [{VERSION}]")
 
         self.path_changed.connect(self.update_title_bar)
 
@@ -291,7 +293,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         lw = self.lw_bookmarks
         bookmarks_ = []
         for row in range(lw.count()):
-            bookmarks_.append((lw.item(row).text(), self.model.filePath(lw.item(row).extra), row))
+            bookmarks_.append((lw.item(row).text(), self.model.filePath(lw.item(row).bookmark_index), row))
 
         update_bookmark_order(bookmarks_)
 
