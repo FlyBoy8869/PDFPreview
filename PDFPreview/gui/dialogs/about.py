@@ -37,8 +37,11 @@ def create_about_dialog() -> QWidget:
     if version_label := about_window.findChild(QLabel, "lbl_about"):
         version_label.setTextFormat(Qt.TextFormat.RichText)
         version_label.setText(
-            f"<center><h1>{TITLE}</h1></center><center>Version: {VERSION}</center><center>Author: Charles Cognato</center>"
-            "<center>Email: charlescognato@gmail.com</center>",
+            f"<center><h1>{TITLE}</h1></center>"
+            f"<center><h4>Version: {VERSION}</h4></center>"
+            "<center>Author: Charles Cognato</center>"
+            "<center>Email: charlescognato@gmail.com</center>"
+            "<center>Copyright \u00A9 2026 CharlesIndustries</center>",
         )
 
     return about_window

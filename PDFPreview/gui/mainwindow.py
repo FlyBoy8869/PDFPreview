@@ -59,7 +59,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowTitle(f"{TITLE} [{VERSION}]")
 
         self.pbBack.setText("")
-        self.pbBack.setToolTip("back")
+        self.pbBack.setToolTip("Back")
         self.pbBack.setIcon(QIcon((IMAGES / "back-arrow.png").resolve().as_posix()))
 
         self.pb_root.setText("")
@@ -139,6 +139,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_back_button_clicked(self, _) -> None:
         current_index: QModelIndex = self.treeView.currentIndex()
+
         if current_index.parent().data() == self.top_level_index.data():
             self.treeView.collapseAll()
             self.treeView.setCurrentIndex(self.top_level_index)
