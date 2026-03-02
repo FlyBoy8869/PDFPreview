@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from PySide6.QtCore import QFile, Qt
+from PySide6.QtCore import QFile, Qt, QSize
 from PySide6.QtGui import QColor, QPalette, QPixmap
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QLabel, QWidget
@@ -32,7 +32,8 @@ def create_about_dialog() -> QWidget:
     about_window.setWindowModality(Qt.WindowModality.ApplicationModal)
 
     if logo_label := about_window.findChild(QLabel, "lbl_logo"):
-        logo_label.setPixmap(QPixmap(LOGO.as_posix()))
+        logo_label.setPixmap(
+            QPixmap(LOGO.as_posix()))
 
     if version_label := about_window.findChild(QLabel, "lbl_about"):
         version_label.setTextFormat(Qt.TextFormat.RichText)
