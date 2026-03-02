@@ -38,22 +38,24 @@ def open_file_location(path: str) -> None:
         pass
 
 
-def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> None:
+def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> bool:
     if not index.isValid():
-        return
+        return False
 
     try:
         validate_filename(new_name)
     except ValidationError as e:
         print(f"{e}\n")
-        return
+        return False
 
     read_only_state = model.isReadOnly()
     model.setReadOnly(False)
 
-    model.setData(index, new_name, Qt.ItemDataRole.EditRole)
+    result = model.setData(index, new_name, Qt.ItemDataRole.EditRole)
 
     model.setReadOnly(read_only_state)
+
+    return result
 
 
 def delete_file(model: QFileSystemModel, index: QModelIndex) -> None:

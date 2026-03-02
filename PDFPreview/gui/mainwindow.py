@@ -355,4 +355,5 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 "Enter a new name for this file:",
                 text=index.data(),
         )[0]:
-            fileoperations.rename_file(self.model, index, new_name)
+            if fileoperations.rename_file(self.model, index, new_name):
+                self.update_title_bar(self.model.filePath(self.treeView.currentIndex()))

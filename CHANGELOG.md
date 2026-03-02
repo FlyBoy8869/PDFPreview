@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.9.7
+
+### Fix
+
+- Fixes an issue where the titlebar was not updated with the new name after renaming a file
+
+## 0.9.6
+
+### Fix
+
+- Fixes an issue where text in the about dialog was cut off
+
 ## 0.9.2
 
 ### Fix
