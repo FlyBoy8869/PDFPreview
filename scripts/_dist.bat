@@ -1,10 +1,11 @@
 @echo off
 
 echo Bumping Patch Version...
-CALL .\scripts\bump.bat %1
+CALL .\scripts\_bump.bat %1
 
-echo Updating __version__.py file...
-CALL .\scripts\insertversion.bat
+echo Inserting new version number into __version__.py...
+CALL .\scripts\_insertversion.bat
 
 echo Building application with pyinstaller...
-CALL .\scripts\build.bat
+CALL .\scripts\_build.bat
+
