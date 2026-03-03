@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes pertinent to the end user of this project will be documented in this file.
 
 ## 0.9.7
 
