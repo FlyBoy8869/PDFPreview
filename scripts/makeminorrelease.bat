@@ -1,4 +1,4 @@
 @echo off
 
 echo creating minor release...
-CALL _dist.bat minor
+CALL .\scripts\_dist.bat minor

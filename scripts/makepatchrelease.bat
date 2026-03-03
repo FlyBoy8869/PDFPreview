@@ -1,4 +1,4 @@
 @echo off
 
 echo creating patch release...
-CALL _dist.bat patch
+CALL .\scripts\_dist.bat patch
