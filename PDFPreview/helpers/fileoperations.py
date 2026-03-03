@@ -48,12 +48,7 @@ def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> b
         print(f"{e}\n")
         return False
 
-    read_only_state = model.isReadOnly()
-    model.setReadOnly(False)
-
     result = model.setData(index, new_name, Qt.ItemDataRole.EditRole)
-
-    model.setReadOnly(read_only_state)
 
     return result
 

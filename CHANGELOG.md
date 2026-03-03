@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.10.0
+
+### Change
+
+- Allows folders to be renamed
+
 ## 0.9.7
 
 ### Fix

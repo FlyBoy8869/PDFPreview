@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QMainWindow,
     QMenu,
-    QMessageBox,
+    QMessageBox, QStyle,
 )
 
 from PDFPreview.gui.dialogs import about
@@ -58,6 +58,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle(f"{TITLE} [{VERSION}]")
 
+        self.actionAbout.setIcon(
+            self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation)
+        )
+
         self.pbBack.setText("")
         self.pbBack.setToolTip("Back")
         self.pbBack.setIcon(QIcon((IMAGES / "back-arrow.png").resolve().as_posix()))
@@ -97,6 +101,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.file_loaded.connect(self.update_title_bar)
 
         self.model: QFileSystemModel = QFileSystemModel()
+        self.model.setReadOnly(False)
         self.model.setFilter(file_filters[self.action_hide_files.isChecked()])
         self.model.setRootPath("")
 
@@ -117,6 +122,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.treeView.header().hideSection(i)
         self.treeView.currentIndexChanged.connect(self.view_file)
         self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
+        self.treeView.itemDelegate().closeEditor.connect(
+            lambda: self.update_title_bar(self.model.filePath(self.treeView.currentIndex())))
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(
             self.handle_treeview_context_menu_request,
@@ -200,16 +207,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         acrobat: QAction = open_with.addAction("with Adobe Acrobat")
         acrobat.setObjectName("acrobat")
+
         explorer: QAction = open_with.addAction("Location in Windows Explorer")
         explorer.setObjectName("explorer")
+
         rename: QAction = menu.addAction("Rename")
         rename.setObjectName("rename")
+
         delete: QAction = menu.addAction("Delete")
         delete.setObjectName("delete")
+        delete.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton))
 
         if self.model.isDir(index):
             open_with.removeAction(acrobat)
             menu.removeAction(delete)
+        else:
+            menu.removeAction(rename)
 
         if action := menu.exec(self.treeView.viewport().mapToGlobal(position)):
             self.context_menu_actions[action.objectName()](index)
