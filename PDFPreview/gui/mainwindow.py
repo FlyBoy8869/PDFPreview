@@ -209,6 +209,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         acrobat: QAction = open_with.addAction("Adobe Acrobat")
         acrobat.setObjectName("acrobat")
+        acrobat.setIcon(QPixmap((config.config.IMAGES / "acrobat-logo.png").resolve().as_posix()))
 
         explorer: QAction = open_with.addAction("Windows Explorer")
         explorer.setObjectName("explorer")

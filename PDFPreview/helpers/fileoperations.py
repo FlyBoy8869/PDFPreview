@@ -42,7 +42,8 @@ def open_with_mspaint(path: str) -> None:
     print(f"{path =}")
     try:
         subprocess.Popen(
-            f'mspaint.exe "{path.replace("/", "\\")}"')
+            ["mspaint.exe", f"{path.replace("/", "\\")}"]
+        )
     except FileNotFoundError:
         pass
 
