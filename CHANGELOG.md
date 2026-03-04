@@ -2,6 +2,18 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.10.2
+
+### Update
+
+- Adds more icons
+
+## 0.10.1
+
+### Update
+
+- Updated and added icons
+
 ## 0.10.0
 
 ### Change

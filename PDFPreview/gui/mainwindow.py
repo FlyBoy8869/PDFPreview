@@ -212,6 +212,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         explorer: QAction = open_with.addAction("Windows Explorer")
         explorer.setObjectName("explorer")
+        explorer.setIcon(
+            QPixmap((config.config.IMAGES / "explorer.jpg").resolve().as_posix())
+        )
+
+        if self.model.filePath(index).rsplit(".", 1)[-1] in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
+            paint: QAction = open_with.addAction("MS Paint")
+            paint.setObjectName("paint")
+            paint.setIcon(
+                QPixmap((config.config.IMAGES / "brush-2.jpg").resolve().as_posix())
+            )
 
         rename: QAction = menu.addAction("Rename")
         rename.setObjectName("rename")
@@ -346,6 +356,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "explorer": self._do_explorer_action,
             "rename": self._do_rename_action,
             "delete": self._do_delete_action,
+            "paint": self._do_paint_action,
         }
 
     def _do_acrobat_action(self, index: QModelIndex) -> None:
@@ -375,3 +386,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )[0]:
             if fileoperations.rename_file(self.model, index, new_name):
                 self.update_title_bar(self.model.filePath(self.treeView.currentIndex()))
+
+    def _do_paint_action(self, index: QModelIndex) -> None:
+        fileoperations.open_with_mspaint(self.model.filePath(index))

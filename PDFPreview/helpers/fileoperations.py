@@ -38,6 +38,15 @@ def open_file_location(path: str) -> None:
         pass
 
 
+def open_with_mspaint(path: str) -> None:
+    print(f"{path =}")
+    try:
+        subprocess.Popen(
+            f'mspaint.exe "{path.replace("/", "\\")}"')
+    except FileNotFoundError:
+        pass
+
+
 def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> bool:
     if not index.isValid():
         return False
