@@ -8,7 +8,7 @@ from PySide6.QtGui import (
     QDragEnterEvent,
     QDropEvent,
     QKeySequence,
-    QShortcut, QIcon,
+    QShortcut, QIcon, QPixmap,
 )
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import (
@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
     QMessageBox, QStyle,
 )
 
+import config.config
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
@@ -202,17 +203,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
 
         menu: QMenu = QMenu()
-        open_with: QMenu = QMenu("Open...", menu)
+        open_with: QMenu = QMenu("Open With", menu)
+        open_with.setIcon(QIcon((config.config.IMAGES / "open_with.ico").resolve().as_posix()))
         menu.addMenu(open_with)
 
-        acrobat: QAction = open_with.addAction("with Adobe Acrobat")
+        acrobat: QAction = open_with.addAction("Adobe Acrobat")
         acrobat.setObjectName("acrobat")
 
-        explorer: QAction = open_with.addAction("Location in Windows Explorer")
+        explorer: QAction = open_with.addAction("Windows Explorer")
         explorer.setObjectName("explorer")
 
         rename: QAction = menu.addAction("Rename")
         rename.setObjectName("rename")
+        rename.setIcon(
+            QPixmap((config.config.IMAGES / "rename.png").resolve().as_posix())
+        )
 
         delete: QAction = menu.addAction("Delete")
         delete.setObjectName("delete")
