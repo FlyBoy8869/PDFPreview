@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.10.4
+
+### Update
+
+- Updates build script to append the version number to the deployment folder
+
 ## 0.10.3
 
 ### Update
