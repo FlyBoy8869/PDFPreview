@@ -4,7 +4,7 @@ REM Enable delayed expansion to handle variables correctly within the loop
 setlocal EnableDelayedExpansion
 
 REM Define the name of the file you want to read
-set "filename=Files Safe to Delete from dist.txt"
+set "filename=.\scripts\Files Safe to Delete from dist.txt"
 
 echo Removing unneeded distribution files...
 
