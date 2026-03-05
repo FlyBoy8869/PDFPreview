@@ -214,7 +214,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         explorer: QAction = open_with.addAction("Windows Explorer")
         explorer.setObjectName("explorer")
         explorer.setIcon(
-            QPixmap((config.config.IMAGES / "explorer.jpg").resolve().as_posix())
+            QPixmap((config.config.IMAGES / "explorer-1.png").resolve().as_posix())
         )
 
         if self.model.filePath(index).rsplit(".", 1)[-1] in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
