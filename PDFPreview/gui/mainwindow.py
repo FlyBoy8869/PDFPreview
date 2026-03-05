@@ -1,3 +1,4 @@
+from contextlib import suppress
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
@@ -221,7 +222,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             paint: QAction = open_with.addAction("MS Paint")
             paint.setObjectName("paint")
             paint.setIcon(
-                QPixmap((config.config.IMAGES / "brush-2.jpg").resolve().as_posix())
+                QPixmap((config.config.IMAGES / "palette.png").resolve().as_posix())
             )
 
         rename: QAction = menu.addAction("Rename")
@@ -344,8 +345,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.browser.setUrl(url)
 
-        if file_path.rsplit(".", 1)[1] in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
-            self.browser.setZoomFactor(1.00)
+        with suppress(IndexError):
+            if file_path.rsplit(".", 1)[1] in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
+                self.browser.setZoomFactor(1.00)
 
         self.file_loaded.emit(file_path)
 
