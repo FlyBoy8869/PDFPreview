@@ -1,16 +1,13 @@
 @echo off
 
-echo Bumping Patch Version...
 CALL .\scripts\_bump.bat %1
 
-echo Inserting new version number into __version__.py...
 CALL .\scripts\_insertversion.bat
 
-echo Building application with pyinstaller...
 CALL .\scripts\_build.bat
 
-echo Purging distribution of unnecessary files...
 CALL .\scripts\cleandist.bat
 
-echo Deploying new distribution...
 CALL .\scripts\_makedeploy.bat
+
+CALL .\scripts\_copyfiles.bat

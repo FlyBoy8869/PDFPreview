@@ -2,6 +2,13 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.10.3
+
+### Update
+
+- Tweaks icons
+- Updates build scripts
+
 ## 0.10.2
 
 ### Update
