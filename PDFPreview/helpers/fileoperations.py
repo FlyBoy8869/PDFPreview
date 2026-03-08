@@ -1,6 +1,7 @@
 # helpers.fileoperations.py
 
 import subprocess
+from contextlib import suppress
 
 try:
     from os import startfile  # type: ignore  # noqa: PGH003
@@ -32,20 +33,28 @@ def open_with_acrobat(path: str) -> None:
 
 
 def open_file_location(path: str) -> None:
-    try:
+    # try:
+    #     subprocess.Popen(f'explorer.exe /select,"{path.replace("/", "\\")}"')
+    # except FileNotFoundError:
+    #     pass
+
+    with suppress(FileNotFoundError):
         subprocess.Popen(f'explorer.exe /select,"{path.replace("/", "\\")}"')
-    except FileNotFoundError:
-        pass
 
 
 def open_with_mspaint(path: str) -> None:
     print(f"{path =}")
-    try:
+    # try:
+    #     subprocess.Popen(
+    #         ["mspaint.exe", f"{path.replace("/", "\\")}"]
+    #     )
+    # except FileNotFoundError:
+    #     pass
+
+    with suppress(FileNotFoundError):
         subprocess.Popen(
             ["mspaint.exe", f"{path.replace("/", "\\")}"]
         )
-    except FileNotFoundError:
-        pass
 
 
 def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> bool:
