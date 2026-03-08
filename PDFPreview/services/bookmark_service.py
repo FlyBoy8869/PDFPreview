@@ -22,6 +22,4 @@ def register_bookmark(name: str, path: str, index: int):
 def update_bookmark_order(items: list[tuple[str, str, int]]) -> None:
     truncate_bookmarks()
     for item in items:
-        name, path, index = item
-        bookmark = Bookmark(name=name, path=path, index=index)
-        create_bookmark(bookmark.__dict__)
+        register_bookmark(*item)
