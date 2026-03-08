@@ -21,3 +21,5 @@ echo deleting translations folder...
 IF EXIST ".\dist\FileViewer\_internal\PySide6\translations" ( RMDIR /S /Q ".\dist\FileViewer\_internal\PySide6\translations" )
 
 endlocal
+
+echo ... End _cleandist.bat

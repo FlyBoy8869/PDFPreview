@@ -6,8 +6,10 @@ CALL .\scripts\_insertversion.bat
 
 CALL .\scripts\_build.bat
 
-CALL .\scripts\cleandist.bat
+CALL .\scripts\_cleandist.bat
 
 CALL .\scripts\_makedeploy.bat
 
 CALL .\scripts\_copyfiles.bat
+
+echo ... End _dist.bat
