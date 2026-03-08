@@ -2,12 +2,12 @@
 # Business logic layer that uses repositories
 
 from PDFPreview.database.bookmark_repository import create_bookmark, get_bookmarks, truncate_bookmarks, \
-    delete_bookmark as del_bookmark
+    delete_bookmark as _delete_bookmark
 from PDFPreview.models.bookmark import Bookmark
 
 
 def delete_bookmark(name: str) -> None:
-    del_bookmark(name)
+    _delete_bookmark(name)
 
 
 def load_bookmarks() -> list[Bookmark]:
