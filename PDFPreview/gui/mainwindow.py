@@ -218,7 +218,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QPixmap((config.config.IMAGES / "explorer-1.png").resolve().as_posix())
         )
 
-        if self.model.filePath(index).rsplit(".", 1)[-1] in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
+        if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             paint: QAction = open_with.addAction("MS Paint")
             paint.setObjectName("paint")
             paint.setIcon(
@@ -346,7 +346,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.browser.setUrl(url)
 
         with suppress(IndexError):
-            if file_path.rsplit(".", 1)[1] in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
+            if file_path.rsplit(".", 1)[1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
                 self.browser.setZoomFactor(1.00)
 
         self.file_loaded.emit(file_path)
