@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QMainWindow,
     QMenu,
-    QMessageBox, QStyle,
+    QMessageBox, QStyle, QApplication,
 )
 
 import config.config
@@ -106,6 +106,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.model.setReadOnly(False)
         self.model.setFilter(file_filters[self.action_hide_files.isChecked()])
         self.model.setRootPath("")
+        self.model.fileRenamed.connect(lambda p, o, n: self.update_title_bar(f"{p}/{n}"))
 
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
@@ -124,8 +125,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.treeView.header().hideSection(i)
         self.treeView.currentIndexChanged.connect(self.view_file)
         self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
-        self.treeView.itemDelegate().closeEditor.connect(
-            lambda: self.update_title_bar(self.model.filePath(self.treeView.currentIndex())))
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(
             self.handle_treeview_context_menu_request,
@@ -200,6 +199,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_treeview_context_menu_request(self, position) -> None:
         index: QModelIndex = self.treeView.indexAt(position)
+        control_key = QApplication.keyboardModifiers() & Qt.KeyboardModifier.ControlModifier == Qt.KeyboardModifier.ControlModifier
+
+        print(f"{control_key =}")
         if not index.isValid():
             return
 
@@ -237,7 +239,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if self.model.isDir(index):
             open_with.removeAction(acrobat)
-            menu.removeAction(delete)
+            if not control_key:
+                menu.removeAction(delete)
         else:
             menu.removeAction(rename)
 
