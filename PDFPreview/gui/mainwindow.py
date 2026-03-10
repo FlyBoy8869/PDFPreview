@@ -203,13 +203,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_treeview_context_menu_request(self, position) -> None:
         index: QModelIndex = self.treeView.indexAt(position)
-        control_key = QApplication.queryKeyboardModifiers() & Qt.KeyboardModifier.ControlModifier == Qt.KeyboardModifier.ControlModifier
-
-        print(f"{control_key =}")
         if not index.isValid():
             return
 
+        control_key = QApplication.queryKeyboardModifiers() & Qt.KeyboardModifier.ControlModifier == Qt.KeyboardModifier.ControlModifier
+
         menu: QMenu = QMenu()
+
         open_with: QMenu = QMenu("Open With", menu)
         open_with.setIcon(QIcon((config.config.IMAGES / "open_with.ico").resolve().as_posix()))
         menu.addMenu(open_with)
@@ -243,12 +243,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if self.model.isDir(index):
             open_with.removeAction(acrobat)
-            if not control_key:
-                menu.removeAction(delete)
-            else:
-                delete.setObjectName("deletedir")
-        else:
-            menu.removeAction(rename)
 
         if action := menu.exec(self.treeView.viewport().mapToGlobal(position)):
             self.context_menu_actions[action.objectName()](index)
@@ -369,7 +363,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "explorer": self._do_explorer_action,
             "rename": self._do_rename_action,
             "delete": self._do_delete_action,
-            "deletedir": self._do_delete_dir_action,
             "paint": self._do_paint_action,
         }
 
@@ -382,16 +375,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             fileoperations.open_file(path.as_posix())
 
     def _do_delete_action(self, index: QModelIndex) -> None:
-        # if (
-        #         QMessageBox.question(self, "Delete", "Are you sure?")
-        #         == QMessageBox.StandardButton.Yes
-        # ):
-        if self._ask_yes_or_no(self, "Delete", "Are you sure?"):
-            fileoperations.delete_file(self.model, index)
-
-    def _do_delete_dir_action(self, index: QModelIndex) -> None:
         if self._ask_yes_or_no(self, "Delete", "This action can not be undone.\nAre you sure?"):
-            fileoperations.delete_directory(self.model, index)
+            fileoperations.delete_file(self.model, index)
 
     def _do_explorer_action(self, index: QModelIndex) -> None:
         fileoperations.open_file_location(self.model.filePath(index))

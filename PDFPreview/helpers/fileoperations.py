@@ -64,14 +64,7 @@ def delete_file(model: QFileSystemModel, index: QModelIndex) -> None:
         return
 
     if model.isDir(index):
+        QDir(model.filePath(index)).removeRecursively()
         return
 
     model.remove(index)
-
-
-def delete_directory(model: QFileSystemModel, index: QModelIndex) -> None:
-    if not index.isValid():
-        return
-
-    dir_ = QDir(model.filePath(index))
-    dir_.removeRecursively()
