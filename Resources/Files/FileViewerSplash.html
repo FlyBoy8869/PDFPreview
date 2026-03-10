@@ -6,71 +6,90 @@
     <title>FileViewer</title>
     <style>
         .header {
-            text-align: center; color: white; background-color: steelblue;
-            border-radius: 10px; padding-bottom: 1rem;
+            text-align: center;
+            color: white;
+            background-color: steelblue;
+            border-radius: 10px;
+            padding-bottom: 1rem;
         }
+
         .title {
-            font-size: 3em; padding-top: 1rem; padding-bottom: 0rem;
+            font-size: 3em;
+            padding-top: 1rem;
+            padding-bottom: 0rem;
         }
+
         .titledescription {
-            font-size: 1.3em; margin-top: .1rem;
+            font-size: 1.3em;
+            margin-top: .1rem;
         }
+
         .subheading {
-            text-indent: 1em; padding-top: 5px; padding-bottom: 10px;
-            background-color: lightsteelblue; border-radius: 5px;
+            text-indent: 1em;
+            padding-top: 5px;
+            padding-bottom: 10px;
+            background-color: lightsteelblue;
+            border-radius: 5px;
         }
+
         .description {
-            text-indent: 20px; margin-top: 0px;
+            text-indent: 20px;
+            margin-top: 0px;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <p class="title">FileViewer</p>
-        <p class="titledescription">Intended as a basic PDF file viewer but now able to view several other file types.</p>
+<div class="header">
+    <p class="title">FileViewer</p>
+    <p class="titledescription">Intended as a basic PDF file viewer but now able to view several other file types.</p>
+</div>
+<div style="margin-left: 1.5rem; margin-right: 1.5em;">
+    <h3 class="subheading">Features:</h3>
+    <div>
+        <ul>
+            <li>Create/Rename/Rearrange/Delete Bookmarks</li>
+            <li>Folder navigation</li>
+            <li>External folder navigation via drag & drop</li>
+            <li>Open supported files in system default applications</li>
+            <li>File and folder renaming and deletion</li>
+        </ul>
     </div>
-    <div style="margin-left: 1.5rem; margin-right: 1.5em;">
-        <h3 class="subheading">Features:</h3>
-        <div>
-            <ul>
-                <li>Create/Rename/Rearrange/Delete Bookmarks</li>
-                <li>Folder navigation</li>
-                <li>External folder navigation via drag & drop</li>
-                <li>Open supported files in system default applications</li>
-                <li>File renaming and deletion</li>
-                <li>Folder renaming only</li>
-            </ul>
+    <div style="margin-top: 2rem;">
+        <h3 class="subheading">Usage:</h3>
+        <div style="margin-left: 2rem;">
+            <h5 style="margin-bottom: 5px;">Creating Bookmarks:</h5>
+            <p class="description">Create bookmarks by dropping files or folders from the file browser pane on to the
+                bookmarks pane.</p>
+
+            <h5 style="margin-bottom: 5px;">Renaming Bookmarks:</h5>
+            <p class="description">Double-click a bookmark to enter a new title.</p>
+
+            <h5 style="margin-bottom: 5px;">Rearranging Bookmarks:</h5>
+            <p class="description">Drag & Drop a bookmark wherever you like to create any arrangement you prefer.</p>
+
+            <h5 style="margin-bottom: 5px;">Deleting Bookmarks:</h5>
+            <p class="description">Select the desired bookmark and press delete.</p>
+
+            <h5 style="margin-bottom: 5px;">External Folder Navigation:</h5>
+            <p class="description">To instantly navigate to a location, drag and drop a file or folder from Windows File
+                Explorer on to the preview pane.</p>
+
+            <h5 style="margin-bottom: 5px;">Open Files and Folders:</h5>
+            <p class="description">Open supported files in system default applications by pressing the spacebar while
+                the file is selected.</p>
+            <p class="description">Open folders in Windows File Explorer by selecting the folder in the browser pane and
+                pressing the spacebar.</p>
+            <p class="description">Right-clicking and selecting Open with Acrobat opens supported files in Adobe Acrobat
+                if installed.</p>
+
+            <h5 style="margin-bottom: 5px;">Renaming and Deletion:</h5>
+            <p class="description">Right-click a file or folder and select desired operation. To delete a folder,
+                CTRL-Right-Click.</p>
         </div>
-        <div style="margin-top: 2rem;">
-            <h3 class="subheading">Usage:</h3>
-            <div style="margin-left: 2rem;">
-                <h5 style="margin-bottom: 5px;">Creating Bookmarks:</h5>
-                <p class="description">Create bookmarks by dropping files or folders from the file browser pane on to the bookmarks pane.</p>
-
-                <h5 style="margin-bottom: 5px;">Renaming Bookmarks:</h5>
-                <p class="description">Double-click a bookmark to enter a new title.</p>
-
-                <h5 style="margin-bottom: 5px;">Rearranging Bookmarks:</h5>
-                <p class="description">Drag & Drop a bookmark wherever you like to create any arrangement you prefer.</p>
-
-                <h5 style="margin-bottom: 5px;">Deleting Bookmarks:</h5>
-                <p class="description">Select the desired bookmark and press delete.</p>
-
-                <h5 style="margin-bottom: 5px;">External Folder Navigation:</h5>
-                <p class="description">To instantly navigate to a location, drag and drop a file or folder from Windows File Explorer on to the preview pane.</p>
-
-                <h5 style="margin-bottom: 5px;">Open Files and Folders:</h5>
-                <p class="description">Open supported files in system default applications by pressing the spacebar while the file is selected.</p>
-                <p class="description">Open folders in Windows File Explorer by selecting the folder in the browser pane and pressing the spacebar.</p>
-                <p class="description">Right-clicking and selecting Open with Acrobat opens supported files in Adobe Acrobat if installed.</p>
-
-                <h5 style="margin-bottom: 5px;">Renaming and Deletion:</h5>
-                <p class="description">Right-click a file or folder and select desired operation.</p>
-            </div>
-        </div>
     </div>
-    <div style="margin-top: 2rem; font-size: .8em;">
-        <p>When viewing files, press CTRL+h to show this page, again to hide.</p>
-    </div>
+</div>
+<div style="margin-top: 2rem; font-size: .8em;">
+    <p>When viewing files, press CTRL+h to show this page, again to hide.</p>
+</div>
 </body>
 </html>

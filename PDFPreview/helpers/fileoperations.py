@@ -12,7 +12,7 @@ except ImportError:
     startfile: Callable[..., bool] = webbrowser.open_new_tab
 
 from pathvalidate import ValidationError, validate_filename
-from PySide6.QtCore import QModelIndex, Qt, QUrl
+from PySide6.QtCore import QModelIndex, Qt, QUrl, QDir
 from PySide6.QtWidgets import QFileSystemModel
 
 from config.config import ADOBE_ACROBAT_PATH
@@ -67,3 +67,11 @@ def delete_file(model: QFileSystemModel, index: QModelIndex) -> None:
         return
 
     model.remove(index)
+
+
+def delete_directory(model: QFileSystemModel, index: QModelIndex) -> None:
+    if not index.isValid():
+        return
+
+    dir_ = QDir(model.filePath(index))
+    dir_.removeRecursively()

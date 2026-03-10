@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.11.0
+
+### Update
+
+- Allows directories to be deleted
+
 ## 0.10.4
 
 ### Update

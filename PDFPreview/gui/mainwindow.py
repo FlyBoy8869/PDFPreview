@@ -52,7 +52,9 @@ pdf_toolbar: dict[bool, str] = {
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
+    # emitted when a file has been loaded in to the viewer
     file_loaded: Signal = Signal(str)
+
     path_changed: Signal = Signal(str)
 
     def __init__(self):
@@ -189,17 +191,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setCurrentIndex(bookmark_index)
         self.treeView.collapseAll()
 
-        path = self.model.filePath(list_item.bookmark_index) if is_file else self.model.filePath(bookmark_index)
-        self.path_changed.emit(path)
+        path = Path(
+            self.model.filePath(list_item.bookmark_index) if is_file else self.model.filePath(bookmark_index)
+        )
+        self.path_changed.emit(str(path))
 
     def handle_treeview_double_click(self, index: QModelIndex) -> None:
         if self.model.isDir(index):
             self.treeView.setRootIndex(index)
-            self.path_changed.emit(self.model.filePath(index))
+            self.path_changed.emit(str(Path(self.model.filePath(index))))
 
     def handle_treeview_context_menu_request(self, position) -> None:
         index: QModelIndex = self.treeView.indexAt(position)
-        control_key = QApplication.keyboardModifiers() & Qt.KeyboardModifier.ControlModifier == Qt.KeyboardModifier.ControlModifier
+        control_key = QApplication.queryKeyboardModifiers() & Qt.KeyboardModifier.ControlModifier == Qt.KeyboardModifier.ControlModifier
 
         print(f"{control_key =}")
         if not index.isValid():
@@ -241,6 +245,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             open_with.removeAction(acrobat)
             if not control_key:
                 menu.removeAction(delete)
+            else:
+                delete.setObjectName("deletedir")
         else:
             menu.removeAction(rename)
 
@@ -288,7 +294,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                 if self.model.isDir(new_index):
                     self.treeView.setRootIndex(self.model.index(path.as_posix()))
-                    self.update_title_bar(path.as_posix())
+                    self.update_title_bar(str(path))
                 else:
                     self.treeView.setRootIndex(self.model.index(path.parent.as_posix()))
                     self.view_file(new_index)
@@ -341,18 +347,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.model.isDir(index):
             return
 
-        file_path = self.model.filePath(index)
+        file_path = Path(self.model.filePath(index))
+        print(f"line 347: {file_path = }")
 
-        url: QUrl = QUrl.fromLocalFile(file_path)
+        url: QUrl = QUrl.fromLocalFile(str(file_path))
         url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
 
         self.browser.setUrl(url)
 
         with suppress(IndexError):
-            if file_path.rsplit(".", 1)[1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
+            if file_path.as_posix().rsplit(".", 1)[1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
                 self.browser.setZoomFactor(1.00)
 
-        self.file_loaded.emit(file_path)
+        self.file_loaded.emit(str(file_path))
 
     # Context Menu Actions
 
@@ -362,6 +369,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "explorer": self._do_explorer_action,
             "rename": self._do_rename_action,
             "delete": self._do_delete_action,
+            "deletedir": self._do_delete_dir_action,
             "paint": self._do_paint_action,
         }
 
@@ -379,6 +387,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 == QMessageBox.StandardButton.Yes
         ):
             fileoperations.delete_file(self.model, index)
+
+    def _do_delete_dir_action(self, index: QModelIndex) -> None:
+        if (
+                QMessageBox.question(self, "Delete", "This action is irreversible.\nAre you sure?")
+                == QMessageBox.StandardButton.Yes
+        ):
+            fileoperations.delete_directory(self.model, index)
 
     def _do_explorer_action(self, index: QModelIndex) -> None:
         fileoperations.open_file_location(self.model.filePath(index))
