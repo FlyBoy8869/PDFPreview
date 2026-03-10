@@ -154,7 +154,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.treeView.collapseAll()
             self.treeView.setCurrentIndex(self.top_level_index)
             self.treeView.setRootIndex(self.top_level_index)
-            self.path_changed.emit(self.model.filePath(current_index.parent()))
+            self.path_changed.emit(
+                str(Path(self.model.filePath(current_index.parent())))
+            )
             return
 
         new_index: QModelIndex = (
@@ -168,7 +170,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.collapseAll()
 
         if new_index.data() != self.model.rootPath():
-            self.path_changed.emit(self.model.filePath(new_index))
+            self.path_changed.emit(str(Path(self.model.filePath(new_index))))
 
     def handle_root_button_clicked(self, _) -> None:
         self.treeView.setRootIndex(self.top_level_index)
