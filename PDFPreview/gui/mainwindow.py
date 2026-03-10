@@ -382,17 +382,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             fileoperations.open_file(path.as_posix())
 
     def _do_delete_action(self, index: QModelIndex) -> None:
-        if (
-                QMessageBox.question(self, "Delete", "Are you sure?")
-                == QMessageBox.StandardButton.Yes
-        ):
+        # if (
+        #         QMessageBox.question(self, "Delete", "Are you sure?")
+        #         == QMessageBox.StandardButton.Yes
+        # ):
+        if self._ask_yes_or_no(self, "Delete", "Are you sure?"):
             fileoperations.delete_file(self.model, index)
 
     def _do_delete_dir_action(self, index: QModelIndex) -> None:
-        if (
-                QMessageBox.question(self, "Delete", "This action is irreversible.\nAre you sure?")
-                == QMessageBox.StandardButton.Yes
-        ):
+        if self._ask_yes_or_no(self, "Delete", "This action can not be undone.\nAre you sure?"):
             fileoperations.delete_directory(self.model, index)
 
     def _do_explorer_action(self, index: QModelIndex) -> None:
@@ -410,3 +408,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_paint_action(self, index: QModelIndex) -> None:
         fileoperations.open_with_mspaint(self.model.filePath(index))
+
+    @staticmethod
+    def _ask_yes_or_no(parent, title: str, message: str) -> bool:
+        return QMessageBox.question(
+            parent,
+            title,
+            message
+        ) == QMessageBox.StandardButton.Yes
