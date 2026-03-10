@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QMainWindow,
     QMenu,
-    QMessageBox, QStyle, QApplication,
+    QMessageBox, QStyle,
 )
 
 import config.config
@@ -205,8 +205,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         index: QModelIndex = self.treeView.indexAt(position)
         if not index.isValid():
             return
-
-        control_key = QApplication.queryKeyboardModifiers() & Qt.KeyboardModifier.ControlModifier == Qt.KeyboardModifier.ControlModifier
 
         menu: QMenu = QMenu()
 
