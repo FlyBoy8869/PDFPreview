@@ -62,6 +62,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle(f"{TITLE} [{VERSION}]")
 
+        self.blur_effect = QGraphicsBlurEffect()
+        self.blur_effect.setBlurRadius(7)
+        self.blur_effect.setEnabled(False)
+        self.setGraphicsEffect(self.blur_effect)
+
         self.actionAbout.setIcon(
             self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation)
         )
@@ -87,7 +92,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_window = about.create_about_dialog()
         self.about_event_filter = AboutDialogFilter(self.about_window)
         self.about_window.installEventFilter(self.about_event_filter)
-        self.about_event_filter.closing_window.connect(lambda: self.setGraphicsEffect(None))
+        self.about_event_filter.closing_window.connect(lambda: self.blur_effect.setEnabled(False))
 
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
         self.action_hide_files.toggled.connect(self.handle_action_hide_files)
@@ -307,10 +312,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.view_file(index)
 
     def show_about(self) -> None:
-        self.blur_effect = QGraphicsBlurEffect()
-        self.blur_effect.setBlurRadius(5)
-        self.setGraphicsEffect(self.blur_effect)
-        # self.setWindowOpacity(0.75)
+        self.blur_effect.setEnabled(True)
         self.about_window.move(
             gui.center_window_on_parent(parent=self, child=self.about_window),
         )
