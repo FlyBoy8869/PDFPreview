@@ -62,10 +62,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle(f"{TITLE} [{VERSION}]")
 
-        self.blur_effect = QGraphicsBlurEffect()
-        self.blur_effect.setBlurRadius(7)
-        self.blur_effect.setEnabled(False)
-        self.setGraphicsEffect(self.blur_effect)
+        self.browser_blur_effect = QGraphicsBlurEffect()
+        self.browser_blur_effect.setBlurRadius(7)
+        self.browser_blur_effect.setEnabled(False)
+        self.browser.setGraphicsEffect(self.browser_blur_effect)
+
+        self.gb_bookmarks_blur_effect = QGraphicsBlurEffect()
+        self.gb_bookmarks_blur_effect.setBlurRadius(7)
+        self.gb_bookmarks_blur_effect.setEnabled(False)
+        self.gb_bookmarks.setGraphicsEffect(self.gb_bookmarks_blur_effect)
+
+        self.gb_file_browser_blur_effect = QGraphicsBlurEffect()
+        self.gb_file_browser_blur_effect.setBlurRadius(7)
+        self.gb_file_browser_blur_effect.setEnabled(False)
+        self.gb_file_browser.setGraphicsEffect(self.gb_file_browser_blur_effect)
 
         self.actionAbout.setIcon(
             self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation)
@@ -92,7 +102,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_window = about.create_about_dialog()
         self.about_event_filter = AboutDialogFilter(self.about_window)
         self.about_window.installEventFilter(self.about_event_filter)
-        self.about_event_filter.closing_window.connect(lambda: self.blur_effect.setEnabled(False))
+        self.about_event_filter.closing_window.connect(
+            lambda: (self.browser_blur_effect.setEnabled(False),self.gb_bookmarks_blur_effect.setEnabled(False), self.gb_file_browser_blur_effect.setEnabled(False))
+        )
 
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
         self.action_hide_files.toggled.connect(self.handle_action_hide_files)
@@ -312,7 +324,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.view_file(index)
 
     def show_about(self) -> None:
-        self.blur_effect.setEnabled(True)
+        self.browser_blur_effect.setEnabled(True)
+        self.gb_bookmarks_blur_effect.setEnabled(True)
+        self.gb_file_browser_blur_effect.setEnabled(True)
+
         self.about_window.move(
             gui.center_window_on_parent(parent=self, child=self.about_window),
         )
