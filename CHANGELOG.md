@@ -2,6 +2,18 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.12.0
+
+### Added
+
+- Main application windows is now blurred when the about dialog is shown
+
+## 0.11.1
+
+### Fix
+
+- Fixes the / vs \ in the titlebar when clicking the back button
+
 ## 0.11.0
 
 ### Update
