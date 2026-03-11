@@ -62,20 +62,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle(f"{TITLE} [{VERSION}]")
 
-        self.browser_blur_effect = QGraphicsBlurEffect()
-        self.browser_blur_effect.setBlurRadius(7)
-        self.browser_blur_effect.setEnabled(False)
-        self.browser.setGraphicsEffect(self.browser_blur_effect)
-
-        self.gb_bookmarks_blur_effect = QGraphicsBlurEffect()
-        self.gb_bookmarks_blur_effect.setBlurRadius(7)
-        self.gb_bookmarks_blur_effect.setEnabled(False)
-        self.gb_bookmarks.setGraphicsEffect(self.gb_bookmarks_blur_effect)
-
-        self.gb_file_browser_blur_effect = QGraphicsBlurEffect()
-        self.gb_file_browser_blur_effect.setBlurRadius(7)
-        self.gb_file_browser_blur_effect.setEnabled(False)
-        self.gb_file_browser.setGraphicsEffect(self.gb_file_browser_blur_effect)
+        self._create_and_set_blur_effects()
 
         self.actionAbout.setIcon(
             self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation)
@@ -387,6 +374,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "delete": self._do_delete_action,
             "paint": self._do_paint_action,
         }
+
+    def _create_and_set_blur_effects(self) -> None:
+        self.browser_blur_effect = QGraphicsBlurEffect()
+        self.browser_blur_effect.setBlurRadius(7)
+        self.browser_blur_effect.setEnabled(False)
+        self.browser.setGraphicsEffect(self.browser_blur_effect)
+
+        self.gb_bookmarks_blur_effect = QGraphicsBlurEffect()
+        self.gb_bookmarks_blur_effect.setBlurRadius(7)
+        self.gb_bookmarks_blur_effect.setEnabled(False)
+        self.gb_bookmarks.setGraphicsEffect(self.gb_bookmarks_blur_effect)
+
+        self.gb_file_browser_blur_effect = QGraphicsBlurEffect()
+        self.gb_file_browser_blur_effect.setBlurRadius(7)
+        self.gb_file_browser_blur_effect.setEnabled(False)
+        self.gb_file_browser.setGraphicsEffect(self.gb_file_browser_blur_effect)
 
     def _do_acrobat_action(self, index: QModelIndex) -> None:
         path = Path(self.model.filePath(index))
