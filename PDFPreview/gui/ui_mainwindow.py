@@ -89,6 +89,25 @@ class Ui_MainWindow(object):
         self.verticalLayout_2 = QVBoxLayout(self.gb_file_browser)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setContentsMargins(5, 5, 5, 5)
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.pbBack = QPushButton(self.gb_file_browser)
+        self.pbBack.setObjectName(u"pbBack")
+
+        self.horizontalLayout.addWidget(self.pbBack)
+
+        self.pb_root = QPushButton(self.gb_file_browser)
+        self.pb_root.setObjectName(u"pb_root")
+
+        self.horizontalLayout.addWidget(self.pb_root)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+
         self.treeView = VTreeView(self.gb_file_browser)
         self.treeView.setObjectName(u"treeView")
         sizePolicy2 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
@@ -115,29 +134,6 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.treeView)
 
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_2)
-
-        self.pbBack = QPushButton(self.gb_file_browser)
-        self.pbBack.setObjectName(u"pbBack")
-
-        self.horizontalLayout.addWidget(self.pbBack)
-
-        self.pb_root = QPushButton(self.gb_file_browser)
-        self.pb_root.setObjectName(u"pb_root")
-
-        self.horizontalLayout.addWidget(self.pb_root)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
-
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
-
         self.splitter.addWidget(self.gb_file_browser)
         self.splitter_2.addWidget(self.splitter)
         self.browser = QWebEngineView(self.splitter_2)
@@ -156,7 +152,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1188, 34))
+        self.menubar.setGeometry(QRect(0, 0, 1188, 33))
         self.menuOptions = QMenu(self.menubar)
         self.menuOptions.setObjectName(u"menuOptions")
         self.menuHelp = QMenu(self.menubar)

@@ -2,6 +2,18 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.12.2
+
+### Fix
+
+- Fixes regression where the back and root buttons were improperly placed at the bottom of the file browser pane
+
+## 0.12.1
+
+### Fix
+
+- Groupbox labels are now blurred
+
 ## 0.12.0
 
 ### Added

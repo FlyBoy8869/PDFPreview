@@ -89,8 +89,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_window = about.create_about_dialog()
         self.about_event_filter = AboutDialogFilter(self.about_window)
         self.about_window.installEventFilter(self.about_event_filter)
-        self.about_event_filter.closing_window.connect(
-            lambda: (self.browser_blur_effect.setEnabled(False),self.gb_bookmarks_blur_effect.setEnabled(False), self.gb_file_browser_blur_effect.setEnabled(False))
+        self.about_event_filter.window_closing.connect(
+            lambda: [effect.setEnabled(False) for effect in self.blur_effects]
         )
 
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
@@ -311,9 +311,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.view_file(index)
 
     def show_about(self) -> None:
-        self.browser_blur_effect.setEnabled(True)
-        self.gb_bookmarks_blur_effect.setEnabled(True)
-        self.gb_file_browser_blur_effect.setEnabled(True)
+        # self.browser_blur_effect.setEnabled(True)
+        # self.gb_bookmarks_blur_effect.setEnabled(True)
+        # self.gb_file_browser_blur_effect.setEnabled(True)
+        [effect.setEnabled(True) for effect in self.blur_effects]
 
         self.about_window.move(
             gui.center_window_on_parent(parent=self, child=self.about_window),
@@ -351,7 +352,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
 
         file_path = Path(self.model.filePath(index))
-        print(f"line 347: {file_path = }")
 
         url: QUrl = QUrl.fromLocalFile(str(file_path))
         url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
@@ -376,20 +376,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         }
 
     def _create_and_set_blur_effects(self) -> None:
-        self.browser_blur_effect = QGraphicsBlurEffect()
-        self.browser_blur_effect.setBlurRadius(7)
-        self.browser_blur_effect.setEnabled(False)
-        self.browser.setGraphicsEffect(self.browser_blur_effect)
+        self.blur_effects = (
+            QGraphicsBlurEffect(self.gb_bookmarks),
+            QGraphicsBlurEffect(self.gb_file_browser),
+            QGraphicsBlurEffect(self.browser)
+        )
+        [effect.setBlurRadius(7) for effect in self.blur_effects]
+        [effect.setEnabled(False) for effect in self.blur_effects]
 
-        self.gb_bookmarks_blur_effect = QGraphicsBlurEffect()
-        self.gb_bookmarks_blur_effect.setBlurRadius(7)
-        self.gb_bookmarks_blur_effect.setEnabled(False)
-        self.gb_bookmarks.setGraphicsEffect(self.gb_bookmarks_blur_effect)
-
-        self.gb_file_browser_blur_effect = QGraphicsBlurEffect()
-        self.gb_file_browser_blur_effect.setBlurRadius(7)
-        self.gb_file_browser_blur_effect.setEnabled(False)
-        self.gb_file_browser.setGraphicsEffect(self.gb_file_browser_blur_effect)
+        widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser)
+        [widget.setGraphicsEffect(effect) for widget, effect in zip(widgets, self.blur_effects)]
 
     def _do_acrobat_action(self, index: QModelIndex) -> None:
         path = Path(self.model.filePath(index))
