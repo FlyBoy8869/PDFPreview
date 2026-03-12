@@ -45,8 +45,8 @@ class Ui_MainWindow(object):
         self.action_hide_files.setChecked(True)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout_3 = QVBoxLayout(self.centralwidget)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_4 = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.splitter_2 = QSplitter(self.centralwidget)
         self.splitter_2.setObjectName(u"splitter_2")
         self.splitter_2.setOrientation(Qt.Orientation.Horizontal)
@@ -86,17 +86,21 @@ class Ui_MainWindow(object):
         self.gb_file_browser = QGroupBox(self.splitter)
         self.gb_file_browser.setObjectName(u"gb_file_browser")
         self.gb_file_browser.setStyleSheet(u"")
-        self.verticalLayout_2 = QVBoxLayout(self.gb_file_browser)
+        self.verticalLayout_3 = QVBoxLayout(self.gb_file_browser)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.groupBox = QGroupBox(self.gb_file_browser)
+        self.groupBox.setObjectName(u"groupBox")
+        self.verticalLayout_2 = QVBoxLayout(self.groupBox)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(5, 5, 5, 5)
+        self.verticalLayout_2.setContentsMargins(5, 5, -1, 5)
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pbBack = QPushButton(self.gb_file_browser)
+        self.pbBack = QPushButton(self.groupBox)
         self.pbBack.setObjectName(u"pbBack")
 
         self.horizontalLayout.addWidget(self.pbBack)
 
-        self.pb_root = QPushButton(self.gb_file_browser)
+        self.pb_root = QPushButton(self.groupBox)
         self.pb_root.setObjectName(u"pb_root")
 
         self.horizontalLayout.addWidget(self.pb_root)
@@ -107,6 +111,9 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout_2.addLayout(self.horizontalLayout)
+
+
+        self.verticalLayout_3.addWidget(self.groupBox)
 
         self.treeView = VTreeView(self.gb_file_browser)
         self.treeView.setObjectName(u"treeView")
@@ -132,7 +139,7 @@ class Ui_MainWindow(object):
         self.treeView.header().setProperty(u"showSortIndicator", False)
         self.treeView.header().setStretchLastSection(True)
 
-        self.verticalLayout_2.addWidget(self.treeView)
+        self.verticalLayout_3.addWidget(self.treeView)
 
         self.splitter.addWidget(self.gb_file_browser)
         self.splitter_2.addWidget(self.splitter)
@@ -147,12 +154,12 @@ class Ui_MainWindow(object):
         self.browser.setUrl(QUrl(u"about:blank"))
         self.splitter_2.addWidget(self.browser)
 
-        self.verticalLayout_3.addWidget(self.splitter_2)
+        self.verticalLayout_4.addWidget(self.splitter_2)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1188, 33))
+        self.menubar.setGeometry(QRect(0, 0, 1188, 34))
         self.menuOptions = QMenu(self.menubar)
         self.menuOptions.setObjectName(u"menuOptions")
         self.menuHelp = QMenu(self.menubar)
@@ -182,6 +189,7 @@ class Ui_MainWindow(object):
         self.action_hide_files.setText(QCoreApplication.translate("MainWindow", u"Hide Files", None))
         self.gb_bookmarks.setTitle(QCoreApplication.translate("MainWindow", u" Bookmarks: ", None))
         self.gb_file_browser.setTitle(QCoreApplication.translate("MainWindow", u" File Browser: ", None))
+        self.groupBox.setTitle("")
         self.pbBack.setText(QCoreApplication.translate("MainWindow", u"< Back", None))
         self.pb_root.setText(QCoreApplication.translate("MainWindow", u"Root", None))
         self.menuOptions.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
