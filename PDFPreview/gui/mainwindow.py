@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QMainWindow,
     QMenu,
-    QMessageBox, QStyle, QGraphicsBlurEffect,
+    QMessageBox, QStyle, QGraphicsBlurEffect, QLabel,
 )
 
 import config.config
@@ -60,7 +60,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.setWindowTitle(f"{TITLE} [{VERSION}]")
+        self.setWindowTitle(f"{TITLE}")
+
+        self.statusbar.insertPermanentWidget(0, QLabel(f"  Version: {VERSION}"), 1)
 
         self._create_and_set_blur_effects()
 
@@ -379,12 +381,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.blur_effects = (
             QGraphicsBlurEffect(self.gb_bookmarks),
             QGraphicsBlurEffect(self.gb_file_browser),
-            QGraphicsBlurEffect(self.browser)
+            QGraphicsBlurEffect(self.browser),
+            QGraphicsBlurEffect(self.statusbar),
         )
         [effect.setBlurRadius(7) for effect in self.blur_effects]
         [effect.setEnabled(False) for effect in self.blur_effects]
 
-        widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser)
+        widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser, self.statusbar)
         [widget.setGraphicsEffect(effect) for widget, effect in zip(widgets, self.blur_effects)]
 
     def _do_acrobat_action(self, index: QModelIndex) -> None:
