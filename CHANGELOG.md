@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.12.5
+
+### Fix
+
+- "My Computer" button now properly updates the titlebar path
+
 ## 0.12.4
 
 ### Update
