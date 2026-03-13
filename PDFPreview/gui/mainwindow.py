@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (
     QMenu,
     QMessageBox, QStyle, QGraphicsBlurEffect, QLabel,
 )
-from icecream import ic
 
 import config.config
 from PDFPreview.gui.dialogs import about
@@ -50,8 +49,6 @@ pdf_toolbar: dict[bool, str] = {
     True: "toolbar=0",
     False: "",
 }
-
-ic.configureOutput(includeContext=True)
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
