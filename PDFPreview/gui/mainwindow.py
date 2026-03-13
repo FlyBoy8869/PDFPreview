@@ -161,7 +161,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         current_index: QModelIndex = self.treeView.currentIndex()
 
         if current_index.parent() == self.top_level_index:
-            self.setWindowTitle(f"{TITLE}")
+            self.setWindowTitle(f'{TITLE} - "This PC"')
 
         new_index: QModelIndex = (
             current_index.parent()

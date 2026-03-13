@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.12.4
+
+### Update
+
+- Titlebar path tweak
+
 ## 0.12.3
 
 ### Fix
