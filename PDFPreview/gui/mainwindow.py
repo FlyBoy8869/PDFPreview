@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
     QMenu,
     QMessageBox, QStyle, QGraphicsBlurEffect, QLabel,
 )
+from icecream import ic
 
 import config.config
 from PDFPreview.gui.dialogs import about
@@ -49,6 +50,8 @@ pdf_toolbar: dict[bool, str] = {
     True: "toolbar=0",
     False: "",
 }
+
+ic.configureOutput(includeContext=True)
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -157,14 +160,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_back_button_clicked(self, _) -> None:
         current_index: QModelIndex = self.treeView.currentIndex()
 
-        if current_index.parent().data() == self.top_level_index.data():
-            self.treeView.collapseAll()
-            self.treeView.setCurrentIndex(self.top_level_index)
-            self.treeView.setRootIndex(self.top_level_index)
-            self.path_changed.emit(
-                str(Path(self.model.filePath(current_index.parent())))
-            )
-            return
+        if current_index.parent() == self.top_level_index:
+            self.setWindowTitle(f"{TITLE}")
 
         new_index: QModelIndex = (
             current_index.parent()
@@ -176,7 +173,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setRootIndex(new_index)
         self.treeView.collapseAll()
 
-        if new_index.data() != self.model.rootPath():
+        if new_index != self.top_level_index:
             self.path_changed.emit(str(Path(self.model.filePath(new_index))))
 
     def handle_root_button_clicked(self, _) -> None:
@@ -383,11 +380,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QGraphicsBlurEffect(self.gb_file_browser),
             QGraphicsBlurEffect(self.browser),
             QGraphicsBlurEffect(self.statusbar),
+            QGraphicsBlurEffect(self.menubar),
         )
         [effect.setBlurRadius(7) for effect in self.blur_effects]
         [effect.setEnabled(False) for effect in self.blur_effects]
 
-        widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser, self.statusbar)
+        widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser, self.statusbar, self.menubar)
         [widget.setGraphicsEffect(effect) for widget, effect in zip(widgets, self.blur_effects)]
 
     def _do_acrobat_action(self, index: QModelIndex) -> None:
