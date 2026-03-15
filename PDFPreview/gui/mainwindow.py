@@ -1,6 +1,6 @@
 from contextlib import suppress
 from pathlib import Path
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, cast, Any
 
 from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl, Signal
 from PySide6.QtGui import (
@@ -17,12 +17,12 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QMainWindow,
     QMenu,
-    QMessageBox, QStyle, QGraphicsBlurEffect, QLabel,
+    QMessageBox, QStyle, QGraphicsBlurEffect, QLabel, QComboBox,
 )
 
 import config.config
 from PDFPreview.gui.dialogs import about
-from PDFPreview.helpers import bookmarks, fileoperations, gui
+from PDFPreview.helpers import bookmarks, fileoperations, gui, recents
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
 
 from .ui_mainwindow import Ui_MainWindow
@@ -53,8 +53,8 @@ pdf_toolbar: dict[bool, str] = {
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     # emitted when a file has been loaded in to the viewer
+    file_deleted: Signal = Signal(str)
     file_loaded: Signal = Signal(str)
-
     path_changed: Signal = Signal(str)
 
     def __init__(self):
@@ -132,7 +132,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setRootIndex(self.model.index(""))
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
-        self.treeView.currentIndexChanged.connect(self.view_file)
+        # self.treeView.currentIndexChanged.connect(self.handle_treeview_current_index_changed)
+        self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
         self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(
@@ -141,6 +142,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setItemsExpandable(False)
         self.treeView.setRootIsDecorated(False)
         self.treeView.installEventFilter(self)
+
+        self.cb_recents.activated.connect(self.handle_recents_clicked)
+        self.recents_tracker: recents.RecentsTracker = recents.RecentsTracker(self.cb_recents)
+        self.file_deleted.connect(self.recents_tracker.remove)
 
         self.pbBack.clicked.connect(self.handle_back_button_clicked)
         self.pb_root.clicked.connect(self.handle_root_button_clicked)
@@ -198,6 +203,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.model.filePath(list_item.bookmark_index) if is_file else self.model.filePath(bookmark_index)
         )
         self.path_changed.emit(str(path))
+
+    def handle_recents_clicked(self, index: int) -> None:
+        self.view_file(self.model.index(self.recents_tracker.item_data(index)))
+
+    def handle_treeview_current_index_changed(self, index: QModelIndex) -> None:
+        if not self.model.isDir(index):
+            self.recents_tracker.add(self.model.filePath(index))
+        self.view_file(index)
 
     def handle_treeview_double_click(self, index: QModelIndex) -> None:
         if self.model.isDir(index):
@@ -307,9 +320,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.view_file(index)
 
     def show_about(self) -> None:
-        # self.browser_blur_effect.setEnabled(True)
-        # self.gb_bookmarks_blur_effect.setEnabled(True)
-        # self.gb_file_browser_blur_effect.setEnabled(True)
         [effect.setEnabled(True) for effect in self.blur_effects]
 
         self.about_window.move(
@@ -395,7 +405,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_delete_action(self, index: QModelIndex) -> None:
         if self._ask_yes_or_no(self, "Delete", "This action can not be undone.\nAre you sure?"):
-            fileoperations.delete_file(self.model, index)
+            if fileoperations.delete_file(self.model, index):
+                self.file_deleted.emit(self.model.filePath(index))
 
     def _do_explorer_action(self, index: QModelIndex) -> None:
         fileoperations.open_file_location(self.model.filePath(index))

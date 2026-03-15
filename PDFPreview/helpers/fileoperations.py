@@ -59,12 +59,11 @@ def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> b
     return result
 
 
-def delete_file(model: QFileSystemModel, index: QModelIndex) -> None:
+def delete_file(model: QFileSystemModel, index: QModelIndex) -> bool:
     if not index.isValid():
-        return
+        return False
 
     if model.isDir(index):
-        QDir(model.filePath(index)).removeRecursively()
-        return
+        return QDir(model.filePath(index)).removeRecursively()
 
-    model.remove(index)
+    return model.remove(index)
