@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.13.0
+
+### Update
+
+- Add a recents list
+
 ## 0.12.5
 
 ### Fix
