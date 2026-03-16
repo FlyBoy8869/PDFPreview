@@ -24,15 +24,15 @@ class RecentsTracker:
         return self.widget.itemData(index, Qt.ItemDataRole.UserRole)
 
     def remove(self, recent: str) -> None:
-        from pprint import pprint
-        print(f"file name: {recent}")
-
         name: str = Path(recent).name
         for i in range(self.widget.count()):
             widget_text = self.widget.itemText(i).lower()
             if name.lower() == widget_text:
                 self.widget.removeItem(i)
                 self._indexes.pop(recent)
-                pprint(self._indexes)
                 return
 
+    def rename(self, path: str, old_name: str, new_name: str) -> None:
+        index = self.widget.findText(old_name)
+        self.widget.setItemText(index, new_name)
+        self.widget.setItemData(index, f"{path}/{new_name}", Qt.ItemDataRole.UserRole)

@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (
 )
 
 import config.config
+from config.config import config
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui, recents
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
@@ -53,9 +54,9 @@ pdf_toolbar: dict[bool, str] = {
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     # emitted when a file has been loaded in to the viewer
-    file_deleted: Signal = Signal(str)
-    file_loaded: Signal = Signal(str)
-    path_changed: Signal = Signal(str)
+    fileDeleted: Signal = Signal(str)
+    fileLoaded: Signal = Signal(str)
+    pathChanged: Signal = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -78,7 +79,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pb_root.setToolTip("My Computer")
         self.pb_root.setIcon(QIcon((IMAGES / "my_computer.png").resolve().as_posix()))
 
-        self.path_changed.connect(self.update_title_bar)
+        self.pathChanged.connect(self.update_title_bar)
 
         self.help_shortcut = QShortcut(QKeySequence("h"), self)
         self.help_shortcut.activated.connect(self.show_help)
@@ -109,7 +110,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             True,
         )
         self.browser.installEventFilter(self)
-        self.file_loaded.connect(self.update_title_bar)
+        self.fileLoaded.connect(self.update_title_bar)
 
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setReadOnly(False)
@@ -144,8 +145,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.installEventFilter(self)
 
         self.cb_recents.activated.connect(self.handle_recents_clicked)
-        self.recents_tracker: recents.RecentsTracker = recents.RecentsTracker(self.cb_recents)
-        self.file_deleted.connect(self.recents_tracker.remove)
+        self.recents_tracker: recents.RecentsTracker = recents.RecentsTracker(self.cb_recents,
+                                                                              config["general"]["recents_limit"])
+        self.fileDeleted.connect(self.recents_tracker.remove)
+        self.model.fileRenamed.connect(self.recents_tracker.rename)
 
         self.pbBack.clicked.connect(self.handle_back_button_clicked)
         self.pb_root.clicked.connect(self.handle_root_button_clicked)
@@ -176,7 +179,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.collapseAll()
 
         if new_index != self.top_level_index:
-            self.path_changed.emit(str(Path(self.model.filePath(new_index))))
+            self.pathChanged.emit(str(Path(self.model.filePath(new_index))))
 
     def handle_root_button_clicked(self, _) -> None:
         self.treeView.setRootIndex(self.top_level_index)
@@ -202,7 +205,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         path = Path(
             self.model.filePath(list_item.bookmark_index) if is_file else self.model.filePath(bookmark_index)
         )
-        self.path_changed.emit(str(path))
+        self.pathChanged.emit(str(path))
 
     def handle_recents_clicked(self, index: int) -> None:
         self.view_file(self.model.index(self.recents_tracker.item_data(index)))
@@ -215,7 +218,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_treeview_double_click(self, index: QModelIndex) -> None:
         if self.model.isDir(index):
             self.treeView.setRootIndex(index)
-            self.path_changed.emit(str(Path(self.model.filePath(index))))
+            self.pathChanged.emit(str(Path(self.model.filePath(index))))
 
     def handle_treeview_context_menu_request(self, position) -> None:
         index: QModelIndex = self.treeView.indexAt(position)
@@ -368,7 +371,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if file_path.as_posix().rsplit(".", 1)[1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
                 self.browser.setZoomFactor(1.00)
 
-        self.file_loaded.emit(str(file_path))
+        self.fileLoaded.emit(str(file_path))
 
     # Context Menu Actions
 
@@ -406,7 +409,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _do_delete_action(self, index: QModelIndex) -> None:
         if self._ask_yes_or_no(self, "Delete", "This action can not be undone.\nAre you sure?"):
             if fileoperations.delete_file(self.model, index):
-                self.file_deleted.emit(self.model.filePath(index))
+                self.fileDeleted.emit(self.model.filePath(index))
 
     def _do_explorer_action(self, index: QModelIndex) -> None:
         fileoperations.open_file_location(self.model.filePath(index))
@@ -420,6 +423,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )[0]:
             if fileoperations.rename_file(self.model, index, new_name):
                 self.update_title_bar(self.model.filePath(self.treeView.currentIndex()))
+                self.fileRenamed.emit(self.model.filePath(index))
 
     def _do_paint_action(self, index: QModelIndex) -> None:
         fileoperations.open_with_mspaint(self.model.filePath(index))
