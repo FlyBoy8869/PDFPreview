@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.13.1
+
+### Fix
+
+- Fixes an issue which caused the context menu to not work
+
 ## 0.13.0
 
 ### Update

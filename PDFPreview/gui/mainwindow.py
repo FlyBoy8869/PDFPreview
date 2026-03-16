@@ -228,30 +228,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         menu: QMenu = QMenu()
 
         open_with: QMenu = QMenu("Open With", menu)
-        open_with.setIcon(QIcon((config.config.IMAGES / "open_with.ico").resolve().as_posix()))
+        open_with.setIcon(QIcon((IMAGES / "open_with.ico").resolve().as_posix()))
         menu.addMenu(open_with)
 
         acrobat: QAction = open_with.addAction("Adobe Acrobat")
         acrobat.setObjectName("acrobat")
-        acrobat.setIcon(QPixmap((config.config.IMAGES / "acrobat-logo.png").resolve().as_posix()))
+        acrobat.setIcon(QPixmap((IMAGES / "acrobat-logo.png").resolve().as_posix()))
 
         explorer: QAction = open_with.addAction("Windows Explorer")
         explorer.setObjectName("explorer")
         explorer.setIcon(
-            QPixmap((config.config.IMAGES / "explorer-1.png").resolve().as_posix())
+            QPixmap((IMAGES / "explorer-1.png").resolve().as_posix())
         )
 
         if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             paint: QAction = open_with.addAction("MS Paint")
             paint.setObjectName("paint")
             paint.setIcon(
-                QPixmap((config.config.IMAGES / "palette.png").resolve().as_posix())
+                QPixmap((IMAGES / "palette.png").resolve().as_posix())
             )
 
         rename: QAction = menu.addAction("Rename")
         rename.setObjectName("rename")
         rename.setIcon(
-            QPixmap((config.config.IMAGES / "rename.png").resolve().as_posix())
+            QPixmap((IMAGES / "rename.png").resolve().as_posix())
         )
 
         delete: QAction = menu.addAction("Delete")
