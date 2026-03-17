@@ -1,8 +1,8 @@
 from pathlib import Path
 
 from tinydb import TinyDB
+from config.config import config
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DB_PATH = BASE_DIR / "Resources/Files/database.json"
+DB_PATH = Path(config["paths"]["database"]) / "database.json"
 
 db = TinyDB(DB_PATH, indent=4)

@@ -2,6 +2,14 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.13.2
+
+### Change
+
+- Relocated database.json to %APPDATA%\Local\FileViewer to avoid the need to keep manually copying it from one release
+  folder to
+  the next
+
 ## 0.13.1
 
 ### Fix

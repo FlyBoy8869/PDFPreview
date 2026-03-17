@@ -3,3 +3,4 @@ recents_limit = 20
 
 [paths]
 acrobat = "C:\\Program Files\\Adobe\\Acrobat DC\\Acrobat\\Acrobat.exe"
+database = "C:\\Users\\charles.cognato\\AppData\\Local\\FileViewer"
