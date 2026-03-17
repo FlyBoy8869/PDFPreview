@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.13.4
+
+### Change
+
+- Tweaked the UI
+
 ## 0.13.3
 
 ### Fix

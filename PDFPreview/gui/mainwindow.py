@@ -144,9 +144,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setRootIsDecorated(False)
         self.treeView.installEventFilter(self)
 
+        self.cb_recents.setToolTip("Recents")
         self.cb_recents.activated.connect(self.handle_recents_clicked)
-        self.recents_tracker: recents.RecentsTracker = recents.RecentsTracker(self.cb_recents,
-                                                                              config["general"]["recents_limit"])
+        self.recents_tracker: recents.RecentsTracker = recents.RecentsTracker(
+            self.cb_recents,
+            config["general"]["recents_limit"]
+        )
         self.fileDeleted.connect(self.recents_tracker.remove)
         self.model.fileRenamed.connect(self.recents_tracker.rename)
 

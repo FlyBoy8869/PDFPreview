@@ -88,12 +88,14 @@ class Ui_MainWindow(object):
         self.gb_file_browser.setStyleSheet(u"")
         self.verticalLayout_3 = QVBoxLayout(self.gb_file_browser)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_3.setContentsMargins(3, 3, 3, 3)
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.groupBox = QGroupBox(self.gb_file_browser)
         self.groupBox.setObjectName(u"groupBox")
         self.horizontalLayout = QHBoxLayout(self.groupBox)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(3, 3, 3, 3)
         self.pbBack = QPushButton(self.groupBox)
         self.pbBack.setObjectName(u"pbBack")
 
@@ -108,21 +110,13 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
-
-        self.horizontalLayout_2.addWidget(self.groupBox)
-
-        self.groupBox_2 = QGroupBox(self.gb_file_browser)
-        self.groupBox_2.setObjectName(u"groupBox_2")
-        self.verticalLayout_2 = QVBoxLayout(self.groupBox_2)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(3, 3, 3, 3)
-        self.cb_recents = QComboBox(self.groupBox_2)
+        self.cb_recents = QComboBox(self.groupBox)
         self.cb_recents.setObjectName(u"cb_recents")
 
-        self.verticalLayout_2.addWidget(self.cb_recents)
+        self.horizontalLayout.addWidget(self.cb_recents)
 
 
-        self.horizontalLayout_2.addWidget(self.groupBox_2)
+        self.horizontalLayout_2.addWidget(self.groupBox)
 
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_2)
@@ -204,7 +198,6 @@ class Ui_MainWindow(object):
         self.groupBox.setTitle("")
         self.pbBack.setText(QCoreApplication.translate("MainWindow", u"< Back", None))
         self.pb_root.setText(QCoreApplication.translate("MainWindow", u"Root", None))
-        self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"Recents:", None))
         self.menuOptions.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
     # retranslateUi
