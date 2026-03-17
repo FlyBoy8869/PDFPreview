@@ -4,19 +4,19 @@ All notable changes pertinent to the end user of this project will be documented
 
 ## 0.13.4
 
-### Change
+### Changed
 
 - Tweaked the UI
 
 ## 0.13.3
 
-### Fix
+### Fixed
 
 - Fix mis-configured directory specification
 
 ## 0.13.2
 
-### Change
+### Changed
 
 - Relocated database.json to %APPDATA%\Local\FileViewer to avoid the need to keep manually copying it from one release
   folder to
@@ -24,43 +24,43 @@ All notable changes pertinent to the end user of this project will be documented
 
 ## 0.13.1
 
-### Fix
+### Fixed
 
 - Fixes an issue which caused the context menu to not work
 
 ## 0.13.0
 
-### Update
+### Updated
 
 - Add a recents list
 
 ## 0.12.5
 
-### Fix
+### Fixed
 
 - "My Computer" button now properly updates the titlebar path
 
 ## 0.12.4
 
-### Update
+### Updated
 
 - Titlebar path tweak
 
 ## 0.12.3
 
-### Fix
+### Fixed
 
 - Fixes a regression in the titlebar path string
 
 ## 0.12.2
 
-### Fix
+### Fixed
 
 - Fixes regression where the back and root buttons were improperly placed at the bottom of the file browser pane
 
 ## 0.12.1
 
-### Fix
+### Fixed
 
 - Groupbox labels are now blurred
 
@@ -72,81 +72,81 @@ All notable changes pertinent to the end user of this project will be documented
 
 ## 0.11.1
 
-### Fix
+### Fixed
 
 - Fixes the / vs \ in the titlebar when clicking the back button
 
 ## 0.11.0
 
-### Update
+### Updated
 
 - Allows directories to be deleted
 
 ## 0.10.4
 
-### Update
+### Updated
 
 - Updates build script to append the version number to the deployment folder
 
 ## 0.10.3
 
-### Update
+### Updated
 
 - Tweaks icons
 - Updates build scripts
 
 ## 0.10.2
 
-### Update
+### Updated
 
 - Adds more icons
 
 ## 0.10.1
 
-### Update
+### Updated
 
 - Updated and added icons
 
 ## 0.10.0
 
-### Change
+### Changed
 
 - Allows folders to be renamed
 
 ## 0.9.7
 
-### Fix
+### Fixed
 
 - Fixes an issue where the titlebar was not updated with the new name after renaming a file
 
 ## 0.9.6
 
-### Fix
+### Fixed
 
 - Fixes an issue where text in the about dialog was cut off
 
 ## 0.9.2
 
-### Fix
+### Fixed
 
 - Sets zoom factor for images to 100% when loading into the viewer to account for zoom adjustment changes for previous
   image viewing
 
 ## 0.9.1
 
-### Fix
+### Fixed
 
 - Re-ordering and re-naming are now immediately reflected in the bookmarks database
 
 ## 0.9.0
 
-### Change
+### Changed
 
 - Transitions to using tinydb for managing bookmarks (formally favorites)
 
 ## 0.8.1
 
-### Fix
+### Fixed
 
 - Fixes a bug which caused opening a location in Windows Explorer to fail
 
@@ -158,13 +158,13 @@ All notable changes pertinent to the end user of this project will be documented
 
 ## 0.7.2
 
-### Fix
+### Fixed
 
 - Fixes a bug which prevented setting the file browser root path if that path had %XX sequences.
 
 ## 0.7.1
 
-### Fix
+### Fixed
 
 - Fixes a bug with the makefile pyinstaller target
 
@@ -188,7 +188,7 @@ All notable changes pertinent to the end user of this project will be documented
 
 ## 0.4.3
 
-### Fix
+### Fixed
 
 - Fixes a sorting issue introduced in 0.4.2
 - Fixes a rootpath issue which did not show other drives and network maps
