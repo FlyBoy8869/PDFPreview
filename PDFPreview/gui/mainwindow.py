@@ -1,6 +1,6 @@
 from contextlib import suppress
 from pathlib import Path
-from typing import TYPE_CHECKING, cast, Any
+from typing import TYPE_CHECKING, cast
 
 from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl, Signal
 from PySide6.QtGui import (
@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QMainWindow,
     QMenu,
-    QMessageBox, QStyle, QGraphicsBlurEffect, QLabel, QComboBox,
+    QMessageBox, QStyle, QGraphicsBlurEffect, QLabel,
 )
 
 import config.config
@@ -426,7 +426,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )[0]:
             if fileoperations.rename_file(self.model, index, new_name):
                 self.update_title_bar(self.model.filePath(self.treeView.currentIndex()))
-                self.fileRenamed.emit(self.model.filePath(index))
 
     def _do_paint_action(self, index: QModelIndex) -> None:
         fileoperations.open_with_mspaint(self.model.filePath(index))
