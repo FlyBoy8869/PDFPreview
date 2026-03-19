@@ -156,7 +156,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pbBack.clicked.connect(self.handle_back_button_clicked)
         self.pb_root.clicked.connect(self.handle_root_button_clicked)
 
-        self.load_favorites()
+        self.load_bookmarks()
 
         self.context_menu_actions = self._create_context_menu_dispatch_table()
 
@@ -323,7 +323,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         return super().eventFilter(source, event)
 
-    def load_favorites(self) -> None:
+    def load_bookmarks(self) -> None:
         bookmarks.load_bookmarks(load_bookmarks(), self.lw_bookmarks, self.model)
 
     def load_splash(self) -> None:
