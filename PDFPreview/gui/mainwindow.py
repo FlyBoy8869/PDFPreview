@@ -125,8 +125,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
         self.lw_bookmarks.installEventFilter(self.lw_bookmarks_eventfilter)
         self.lw_bookmarks.itemClicked.connect(self.handle_bookmark_clicked)
-        self.lw_bookmarks.model().rowsMoved.connect(self.update_bookmarks)
-        self.lw_bookmarks.model().dataChanged.connect(self.update_bookmarks)
+        self.lw_bookmarks.model().rowsMoved.connect(self._update_bookmarks)
+        self.lw_bookmarks.model().dataChanged.connect(self._update_bookmarks)
 
         self.treeView.setModel(self.model)
         self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
@@ -350,14 +350,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.HIDE_TOOLBAR = pdf_toolbar[checked]
         self.view_file(self.treeView.currentIndex())
 
-    def update_bookmarks(self) -> None:
-        lw = self.lw_bookmarks
-        bookmarks_ = []
-        for row in range(lw.count()):
-            bookmarks_.append((lw.item(row).text(), self.model.filePath(lw.item(row).bookmark_index), row))
-
-        update_bookmark_order(bookmarks_)
-
     def update_title_bar(self, path: str) -> None:
         separator = " - " if path else ""
         self.setWindowTitle(f"{TITLE}{separator}{path}")
@@ -381,10 +373,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.fileLoaded.emit(str(file_path))
 
-    # Context Menu Actions
-
     def _add_recent(self, path: Path) -> None:
         self.recents_tracker.add(str(path))
+
+    def _update_bookmarks(self) -> None:
+        lw = self.lw_bookmarks
+        bookmarks_ = []
+        for row in range(lw.count()):
+            bookmarks_.append((lw.item(row).text(), self.model.filePath(lw.item(row).bookmark_index), row))
+
+        update_bookmark_order(bookmarks_)
+
+    # Context Menu Actions
 
     def _create_context_menu_dispatch_table(self) -> dict:
         return {
