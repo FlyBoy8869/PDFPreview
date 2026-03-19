@@ -211,11 +211,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pathChanged.emit(str(path))
 
     def handle_recents_clicked(self, index: int) -> None:
-        self.view_file(self.model.index(self.recents_tracker.item_data(index)))
+        path = self.recents_tracker.item_data(index)
+        qm_index = self.model.index(path).parent()
+        self.treeView.setRootIndex(qm_index)
+        self.treeView.setCurrentIndex(qm_index)
+        # self.view_file(self.model.index(self.recents_tracker.item_data(index)))
+        self.view_file(self.model.index(path))
 
     def handle_treeview_current_index_changed(self, index: QModelIndex) -> None:
         if not self.model.isDir(index):
-            self.recents_tracker.add(self.model.filePath(index))
+            self._add_recent(Path(self.model.filePath(index)))
         self.view_file(index)
 
     def handle_treeview_double_click(self, index: QModelIndex) -> None:
@@ -377,6 +382,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.fileLoaded.emit(str(file_path))
 
     # Context Menu Actions
+
+    def _add_recent(self, path: Path) -> None:
+        self.recents_tracker.add(str(path))
 
     def _create_context_menu_dispatch_table(self) -> dict:
         return {

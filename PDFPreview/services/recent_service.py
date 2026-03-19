@@ -14,6 +14,6 @@ def load_recents() -> list[Recent]:
     return [Recent(**document) for document in get_recents()]
 
 
-def register_recent(name: str, path: str):
+def register_recent(name: str, path: str) -> None:
     recent = Recent(name=name, path=path)
     return create_recent(recent.__dict__)

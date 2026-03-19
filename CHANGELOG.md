@@ -2,6 +2,18 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.14.1 - 2026-03-19
+
+### Changed
+
+- Set the file browser to the recents parent when clicked.
+
+## 0.14.0 - 2026-03-19
+
+### Added
+
+- Keeps track of recently viewed files. Configurable via the recents_limit configuration option in config.toml.
+
 ## 0.13.4 - 2026-03-17
 
 ### Changed
