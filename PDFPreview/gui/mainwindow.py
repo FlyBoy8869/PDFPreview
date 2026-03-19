@@ -152,6 +152,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
         self.fileDeleted.connect(self.recents_tracker.remove)
         self.model.fileRenamed.connect(self.recents_tracker.rename)
+        self.actionClear_Recents.triggered.connect(self.handle_clear_recents)
 
         self.pbBack.clicked.connect(self.handle_back_button_clicked)
         self.pb_root.clicked.connect(self.handle_root_button_clicked)
@@ -164,6 +165,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
         return super().closeEvent(event)
+
+    def handle_clear_recents(self) -> None:
+        self.recents_tracker.clear_recents()
 
     def handle_back_button_clicked(self, _) -> None:
         current_index: QModelIndex = self.treeView.currentIndex()

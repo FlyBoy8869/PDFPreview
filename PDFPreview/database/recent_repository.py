@@ -20,3 +20,7 @@ def get_recents() -> list[Document]:
 
 def delete_recent(name: str) -> None:
     recents_table.remove(RecentQuery.name == name)
+
+
+def truncate_recents() -> None:
+    recents_table.truncate()

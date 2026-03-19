@@ -3,7 +3,7 @@ from pathlib import Path
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QComboBox
 
-from PDFPreview.services.recent_service import register_recent, load_recents, delete_recent
+from PDFPreview.services.recent_service import register_recent, load_recents, delete_recent, clear_recents as _clear_recents
 
 
 class RecentsTracker:
@@ -29,6 +29,11 @@ class RecentsTracker:
     def _add(self, path: str) -> None:
         self.widget.addItem(Path(path).resolve().name, path)
         self._indexes[path] = True
+
+    def clear_recents(self) -> None:
+        self.widget.clear()
+        self._indexes = {}
+        _clear_recents()
 
     def item_data(self, index: int) -> str:
         return self.widget.itemData(index, Qt.ItemDataRole.UserRole)

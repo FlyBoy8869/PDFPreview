@@ -244,13 +244,14 @@
      <x>0</x>
      <y>0</y>
      <width>1188</width>
-     <height>33</height>
+     <height>34</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
      <string>Options</string>
     </property>
+    <addaction name="actionClear_Recents"/>
     <addaction name="action_hide_files"/>
     <addaction name="actionHide_Toolbar"/>
    </widget>
@@ -296,6 +297,11 @@
    </property>
    <property name="text">
     <string>Hide Files</string>
+   </property>
+  </action>
+  <action name="actionClear_Recents">
+   <property name="text">
+    <string>Clear Recents</string>
    </property>
   </action>
  </widget>
