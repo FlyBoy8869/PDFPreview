@@ -3,8 +3,7 @@ from pathlib import Path
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QComboBox
 
-from PDFPreview.database.recent_repository import delete_recent
-from PDFPreview.services.recent_service import register_recent, load_recents
+from PDFPreview.services.recent_service import register_recent, load_recents, delete_recent
 
 
 class RecentsTracker:
