@@ -147,7 +147,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # RECENTS
         self.cb_recents.setToolTip("Recents")
         self.cb_recents.activated.connect(self.handle_recents_clicked)
-        self.recents_tracker: recents.RecentsTracker = recents.RecentsTracker(
+        self.recents_tracker: recents.RecentsManager = recents.RecentsManager(
             self.cb_recents,
             config["general"]["recents_limit"]
         )

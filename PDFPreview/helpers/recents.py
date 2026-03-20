@@ -3,11 +3,13 @@ from pathlib import Path
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QComboBox
 
-from PDFPreview.services.recent_service import register_recent, load_recents, delete_recent, \
+from PDFPreview.services.recent_service import (
+    register_recent, load_recents, delete_recent,
     clear_recents as _clear_recents
+)
 
 
-class RecentsTracker:
+class RecentsManager:
     def __init__(self, widget: QComboBox, limit: int = 10):
         self.widget: QComboBox = widget
         self.limit = limit
