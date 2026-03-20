@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.15.0 - 2026-03-20
+
+## Added
+
+- Menu option to clear the recents list.
+
 ## 0.14.1 - 2026-03-19
 
 ### Changed
