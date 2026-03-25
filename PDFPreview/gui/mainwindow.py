@@ -133,7 +133,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setRootIndex(self.model.index(""))
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
-        # self.treeView.currentIndexChanged.connect(self.handle_treeview_current_index_changed)
+        self.treeView.currentIndexChanged.connect(self.handle_treeview_current_index_changed)
         self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
         self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)

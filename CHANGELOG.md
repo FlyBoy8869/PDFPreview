@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.15.1 - 2026-03-25
+
+### Fixed
+
+- Fixed issue with arrow key navigation not showing files.
+
 ## 0.15.0 - 2026-03-20
 
 ## Added
