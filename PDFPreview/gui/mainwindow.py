@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QMainWindow,
     QMenu,
-    QMessageBox, QStyle, QGraphicsBlurEffect, QLabel,
+    QMessageBox, QStyle, QGraphicsBlurEffect
 )
 
 import config.config
@@ -35,7 +35,7 @@ if TYPE_CHECKING:
 
     from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 
-from config.config import PATH_PREFIX, SPLASH_FILE, TITLE, VERSION, IMAGES
+from config.config import PATH_PREFIX, SPLASH_FILE, TITLE, IMAGES
 
 # noinspection PyTypeChecker
 file_filters: dict[bool, QDir.Filter] = {
@@ -62,8 +62,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle(f"{TITLE}")
-
-        self.statusbar.insertPermanentWidget(0, QLabel(f"  Version: {VERSION}"), 1)
 
         self._create_and_set_blur_effects()
 
