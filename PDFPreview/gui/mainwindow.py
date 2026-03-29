@@ -65,10 +65,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self._create_and_set_blur_effects()
 
-        self.actionAbout.setIcon(
-            self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation)
-        )
+        self.pathChanged.connect(self.update_title_bar)
 
+        # NAVIGATION BUTTONS
         self.pbBack.setText("")
         self.pbBack.setToolTip("Back")
         self.pbBack.setIcon(QIcon((IMAGES / "back-arrow.png").resolve().as_posix()))
@@ -77,27 +76,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pb_root.setToolTip("My Computer")
         self.pb_root.setIcon(QIcon((IMAGES / "my_computer.png").resolve().as_posix()))
 
-        self.pathChanged.connect(self.update_title_bar)
+        self.pbBack.clicked.connect(self.handle_back_button_clicked)
+        self.pb_root.clicked.connect(self.handle_root_button_clicked)
+        # -----------------------------------------------------------
 
         self.help_shortcut = QShortcut(QKeySequence("h"), self)
         self.help_shortcut.activated.connect(self.show_help)
-
         self.help_save: QModelIndex | None = None
 
-        # this string gets appended to the url to show or hide the PDF viewer toolbar
-        self.HIDE_TOOLBAR = ""
-
+        # ABOUT WINDOW
         self.about_window = about.create_about_dialog()
         self.about_event_filter = AboutDialogFilter(self.about_window)
         self.about_window.installEventFilter(self.about_event_filter)
         self.about_event_filter.window_closing.connect(
             lambda: [effect.setEnabled(False) for effect in self.blur_effects]
         )
+        self.actionAbout.setIcon(
+            self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation)
+        )
+
+        # this string gets appended to the url to show or hide the PDF viewer toolbar
+        self.HIDE_TOOLBAR = ""
 
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
         self.action_hide_files.toggled.connect(self.handle_action_hide_files)
         self.actionAbout.triggered.connect(self.show_about)
 
+        # FILE VIEWER
         # must have in order for PDF viewing to work
         self.browser.page().settings().setAttribute(
             QWebEngineSettings.WebAttribute.PluginsEnabled,
@@ -110,14 +115,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.browser.installEventFilter(self)
         self.fileLoaded.connect(self.update_title_bar)
 
+        # WINDOW INTO THE FILE SYSTEM
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setReadOnly(False)
         self.model.setFilter(file_filters[self.action_hide_files.isChecked()])
         self.model.setRootPath("")
         self.model.fileRenamed.connect(lambda p, o, n: self.update_title_bar(f"{p}/{n}"))
-
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
+        # BOOKMARKS
         self.lw_bookmarks_eventfilter: BookmarkListEventFilter = (
             BookmarkListEventFilter(self.lw_bookmarks, self.model)
         )
@@ -126,6 +132,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.lw_bookmarks.model().rowsMoved.connect(self._update_bookmarks)
         self.lw_bookmarks.model().dataChanged.connect(self._update_bookmarks)
 
+        # FILE BROWSER
         self.treeView.setModel(self.model)
         self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
         self.treeView.setRootIndex(self.model.index(""))
@@ -152,10 +159,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.fileDeleted.connect(self.recents_tracker.remove)
         self.model.fileRenamed.connect(self.recents_tracker.rename)
         self.actionClear_Recents.triggered.connect(self.recents_tracker.clear_recents)
-
-        #
-        self.pbBack.clicked.connect(self.handle_back_button_clicked)
-        self.pb_root.clicked.connect(self.handle_root_button_clicked)
 
         self.load_bookmarks()
 
