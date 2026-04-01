@@ -21,7 +21,7 @@ class RecentsManager:
         if path in self._indexes:
             return
 
-        if self.widget.count() == self.limit:
+        if self.widget.count() >= self.limit:
             item = self.widget.itemText(0)
             delete_recent(item)
             self.widget.removeItem(0)

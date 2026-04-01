@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.15.2 - 2026-04-01
+
+### Fixed
+
+- Fixed a bug causing the recents list to grow unchecked.
+
 ## 0.15.1 - 2026-03-25
 
 ### Fixed
