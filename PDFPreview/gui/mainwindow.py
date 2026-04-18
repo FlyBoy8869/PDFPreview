@@ -420,6 +420,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_project_action(self, index: QModelIndex) -> None:
         print("opening project")
+        # get a list of all files in folder and subfolders, etc.
+        # open each file in the browser
 
     @staticmethod
     def _ask_yes_or_no(parent, title: str, message: str) -> bool:
