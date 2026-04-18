@@ -250,6 +250,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if self.model.isDir(index):
             open_with.removeAction(acrobat)
+            project: QAction = menu.addAction("Open as Project")
+            project.setObjectName("project")
 
         if action := menu.exec(self.treeView.viewport().mapToGlobal(position)):
             self.context_menu_actions[action.objectName()](index)
@@ -372,6 +374,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "rename": self._do_rename_action,
             "delete": self._do_delete_action,
             "paint": self._do_paint_action,
+            "project": self._do_project_action,
         }
 
     def _create_and_set_blur_effects(self) -> None:
@@ -414,6 +417,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_paint_action(self, index: QModelIndex) -> None:
         fileoperations.open_with_mspaint(self.model.filePath(index))
+
+    def _do_project_action(self, index: QModelIndex) -> None:
+        print("opening project")
 
     @staticmethod
     def _ask_yes_or_no(parent, title: str, message: str) -> bool:
