@@ -313,9 +313,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.view_file(index)
 
     def show_about(self) -> None:
-        # self.browser_blur_effect.setEnabled(True)
-        # self.gb_bookmarks_blur_effect.setEnabled(True)
-        # self.gb_file_browser_blur_effect.setEnabled(True)
         [effect.setEnabled(True) for effect in self.blur_effects]
 
         self.about_window.move(
