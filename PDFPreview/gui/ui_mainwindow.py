@@ -17,11 +17,11 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWebEngineWidgets import QWebEngineView
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QGroupBox, QHBoxLayout,
-    QHeaderView, QListWidget, QListWidgetItem, QMainWindow,
-    QMenu, QMenuBar, QPushButton, QSizePolicy,
-    QSpacerItem, QSplitter, QStatusBar, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QComboBox, QGroupBox,
+    QHBoxLayout, QHeaderView, QListWidget, QListWidgetItem,
+    QMainWindow, QMenu, QMenuBar, QPushButton,
+    QSizePolicy, QSpacerItem, QSplitter, QStatusBar,
+    QVBoxLayout, QWidget)
 
 from .widgets.treeview import VTreeView
 
@@ -43,10 +43,12 @@ class Ui_MainWindow(object):
         self.action_hide_files.setObjectName(u"action_hide_files")
         self.action_hide_files.setCheckable(True)
         self.action_hide_files.setChecked(True)
+        self.actionClear_Recents = QAction(MainWindow)
+        self.actionClear_Recents.setObjectName(u"actionClear_Recents")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout_4 = QVBoxLayout(self.centralwidget)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.horizontalLayout_3 = QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.splitter_2 = QSplitter(self.centralwidget)
         self.splitter_2.setObjectName(u"splitter_2")
         self.splitter_2.setOrientation(Qt.Orientation.Horizontal)
@@ -89,14 +91,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QVBoxLayout(self.gb_file_browser)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(3, 3, 3, 3)
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.groupBox = QGroupBox(self.gb_file_browser)
         self.groupBox.setObjectName(u"groupBox")
-        self.verticalLayout_2 = QVBoxLayout(self.groupBox)
-        self.verticalLayout_2.setSpacing(6)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(3, 0, 0, 0)
-        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout = QHBoxLayout(self.groupBox)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(3, 3, 3, 3)
         self.pbBack = QPushButton(self.groupBox)
         self.pbBack.setObjectName(u"pbBack")
 
@@ -111,11 +112,16 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
+        self.cb_recents = QComboBox(self.groupBox)
+        self.cb_recents.setObjectName(u"cb_recents")
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.horizontalLayout.addWidget(self.cb_recents)
 
 
-        self.verticalLayout_3.addWidget(self.groupBox)
+        self.horizontalLayout_2.addWidget(self.groupBox)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_2)
 
         self.treeView = VTreeView(self.gb_file_browser)
         self.treeView.setObjectName(u"treeView")
@@ -156,12 +162,12 @@ class Ui_MainWindow(object):
         self.browser.setUrl(QUrl(u"about:blank"))
         self.splitter_2.addWidget(self.browser)
 
-        self.verticalLayout_4.addWidget(self.splitter_2)
+        self.horizontalLayout_3.addWidget(self.splitter_2)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1188, 33))
+        self.menubar.setGeometry(QRect(0, 0, 1188, 34))
         self.menuOptions = QMenu(self.menubar)
         self.menuOptions.setObjectName(u"menuOptions")
         self.menuHelp = QMenu(self.menubar)
@@ -173,6 +179,7 @@ class Ui_MainWindow(object):
 
         self.menubar.addAction(self.menuOptions.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
+        self.menuOptions.addAction(self.actionClear_Recents)
         self.menuOptions.addAction(self.action_hide_files)
         self.menuOptions.addAction(self.actionHide_Toolbar)
         self.menuHelp.addAction(self.actionAbout)
@@ -189,6 +196,7 @@ class Ui_MainWindow(object):
         self.actionHide_Toolbar.setText(QCoreApplication.translate("MainWindow", u"Hide Toolbar", None))
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
         self.action_hide_files.setText(QCoreApplication.translate("MainWindow", u"Hide Files", None))
+        self.actionClear_Recents.setText(QCoreApplication.translate("MainWindow", u"Clear Recents", None))
         self.gb_bookmarks.setTitle(QCoreApplication.translate("MainWindow", u" Bookmarks: ", None))
         self.gb_file_browser.setTitle(QCoreApplication.translate("MainWindow", u" File Browser: ", None))
         self.groupBox.setTitle("")

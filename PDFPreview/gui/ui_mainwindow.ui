@@ -14,7 +14,7 @@
    <string/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_4">
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
      <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
@@ -103,28 +103,25 @@
           <number>3</number>
          </property>
          <item>
-          <widget class="QGroupBox" name="groupBox">
-           <property name="title">
-            <string/>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>3</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QGroupBox" name="groupBox">
+             <property name="title">
+              <string/>
+             </property>
              <layout class="QHBoxLayout" name="horizontalLayout">
+              <property name="leftMargin">
+               <number>3</number>
+              </property>
+              <property name="topMargin">
+               <number>3</number>
+              </property>
+              <property name="rightMargin">
+               <number>3</number>
+              </property>
+              <property name="bottomMargin">
+               <number>3</number>
+              </property>
               <item>
                <widget class="QPushButton" name="pbBack">
                 <property name="text">
@@ -152,10 +149,13 @@
                 </property>
                </spacer>
               </item>
+              <item>
+               <widget class="QComboBox" name="cb_recents"/>
+              </item>
              </layout>
-            </item>
-           </layout>
-          </widget>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <widget class="VTreeView" name="treeView">
@@ -244,13 +244,14 @@
      <x>0</x>
      <y>0</y>
      <width>1188</width>
-     <height>33</height>
+     <height>34</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
      <string>Options</string>
     </property>
+    <addaction name="actionClear_Recents"/>
     <addaction name="action_hide_files"/>
     <addaction name="actionHide_Toolbar"/>
    </widget>
@@ -296,6 +297,11 @@
    </property>
    <property name="text">
     <string>Hide Files</string>
+   </property>
+  </action>
+  <action name="actionClear_Recents">
+   <property name="text">
+    <string>Clear Recents</string>
    </property>
   </action>
  </widget>

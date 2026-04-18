@@ -17,12 +17,13 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QMainWindow,
     QMenu,
-    QMessageBox, QStyle, QGraphicsBlurEffect, QLabel,
+    QMessageBox, QStyle, QGraphicsBlurEffect
 )
 
 import config.config
+from config.config import config
 from PDFPreview.gui.dialogs import about
-from PDFPreview.helpers import bookmarks, fileoperations, gui
+from PDFPreview.helpers import bookmarks, fileoperations, gui, recents
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
 
 from .ui_mainwindow import Ui_MainWindow
@@ -34,7 +35,7 @@ if TYPE_CHECKING:
 
     from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 
-from config.config import PATH_PREFIX, SPLASH_FILE, TITLE, VERSION, IMAGES
+from config.config import PATH_PREFIX, SPLASH_FILE, TITLE, IMAGES
 
 # noinspection PyTypeChecker
 file_filters: dict[bool, QDir.Filter] = {
@@ -53,23 +54,20 @@ pdf_toolbar: dict[bool, str] = {
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     # emitted when a file has been loaded in to the viewer
-    file_loaded: Signal = Signal(str)
-
-    path_changed: Signal = Signal(str)
+    fileDeleted: Signal = Signal(str)
+    fileLoaded: Signal = Signal(str)
+    pathChanged: Signal = Signal(str)
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle(f"{TITLE}")
 
-        self.statusbar.insertPermanentWidget(0, QLabel(f"  Version: {VERSION}"), 1)
-
         self._create_and_set_blur_effects()
 
-        self.actionAbout.setIcon(
-            self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation)
-        )
+        self.pathChanged.connect(self.update_title_bar)
 
+        # NAVIGATION BUTTONS
         self.pbBack.setText("")
         self.pbBack.setToolTip("Back")
         self.pbBack.setIcon(QIcon((IMAGES / "back-arrow.png").resolve().as_posix()))
@@ -78,27 +76,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pb_root.setToolTip("My Computer")
         self.pb_root.setIcon(QIcon((IMAGES / "my_computer.png").resolve().as_posix()))
 
-        self.path_changed.connect(self.update_title_bar)
+        self.pbBack.clicked.connect(self.handle_back_button_clicked)
+        self.pb_root.clicked.connect(self.handle_root_button_clicked)
+        # -----------------------------------------------------------
 
         self.help_shortcut = QShortcut(QKeySequence("h"), self)
         self.help_shortcut.activated.connect(self.show_help)
-
         self.help_save: QModelIndex | None = None
 
-        # this string gets appended to the url to show or hide the PDF viewer toolbar
-        self.HIDE_TOOLBAR = ""
-
+        # ABOUT WINDOW
         self.about_window = about.create_about_dialog()
         self.about_event_filter = AboutDialogFilter(self.about_window)
         self.about_window.installEventFilter(self.about_event_filter)
         self.about_event_filter.window_closing.connect(
             lambda: [effect.setEnabled(False) for effect in self.blur_effects]
         )
+        self.actionAbout.setIcon(
+            self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation)
+        )
+
+        # this string gets appended to the url to show or hide the PDF viewer toolbar
+        self.HIDE_TOOLBAR = ""
 
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
         self.action_hide_files.toggled.connect(self.handle_action_hide_files)
         self.actionAbout.triggered.connect(self.show_about)
 
+        # FILE VIEWER
         # must have in order for PDF viewing to work
         self.browser.page().settings().setAttribute(
             QWebEngineSettings.WebAttribute.PluginsEnabled,
@@ -109,30 +113,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             True,
         )
         self.browser.installEventFilter(self)
-        self.file_loaded.connect(self.update_title_bar)
+        self.fileLoaded.connect(self.update_title_bar)
 
+        # WINDOW INTO THE FILE SYSTEM
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setReadOnly(False)
         self.model.setFilter(file_filters[self.action_hide_files.isChecked()])
         self.model.setRootPath("")
         self.model.fileRenamed.connect(lambda p, o, n: self.update_title_bar(f"{p}/{n}"))
-
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
+        # BOOKMARKS
         self.lw_bookmarks_eventfilter: BookmarkListEventFilter = (
             BookmarkListEventFilter(self.lw_bookmarks, self.model)
         )
         self.lw_bookmarks.installEventFilter(self.lw_bookmarks_eventfilter)
         self.lw_bookmarks.itemClicked.connect(self.handle_bookmark_clicked)
-        self.lw_bookmarks.model().rowsMoved.connect(self.update_bookmarks)
-        self.lw_bookmarks.model().dataChanged.connect(self.update_bookmarks)
+        self.lw_bookmarks.model().rowsMoved.connect(self._update_bookmarks)
+        self.lw_bookmarks.model().dataChanged.connect(self._update_bookmarks)
 
+        # FILE BROWSER
         self.treeView.setModel(self.model)
         self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
         self.treeView.setRootIndex(self.model.index(""))
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
-        self.treeView.currentIndexChanged.connect(self.view_file)
+        self.treeView.currentIndexChanged.connect(self.handle_treeview_current_index_changed)
+        self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
         self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(
@@ -142,10 +149,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setRootIsDecorated(False)
         self.treeView.installEventFilter(self)
 
-        self.pbBack.clicked.connect(self.handle_back_button_clicked)
-        self.pb_root.clicked.connect(self.handle_root_button_clicked)
+        # RECENTS
+        self.cb_recents.setToolTip("Recents")
+        self.cb_recents.activated.connect(self.handle_recents_clicked)
+        self.recents_tracker: recents.RecentsManager = recents.RecentsManager(
+            self.cb_recents,
+            config["general"]["recents_limit"]
+        )
+        self.fileDeleted.connect(self.recents_tracker.remove)
+        self.model.fileRenamed.connect(self.recents_tracker.rename)
+        self.actionClear_Recents.triggered.connect(self.recents_tracker.clear_recents)
 
-        self.load_favorites()
+        self.load_bookmarks()
 
         self.context_menu_actions = self._create_context_menu_dispatch_table()
 
@@ -157,14 +172,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_back_button_clicked(self, _) -> None:
         current_index: QModelIndex = self.treeView.currentIndex()
 
-        if current_index.parent().data() == self.top_level_index.data():
-            self.treeView.collapseAll()
-            self.treeView.setCurrentIndex(self.top_level_index)
-            self.treeView.setRootIndex(self.top_level_index)
-            self.path_changed.emit(
-                str(Path(self.model.filePath(current_index.parent())))
-            )
-            return
+        if current_index.parent() == self.top_level_index:
+            self.setWindowTitle(f'{TITLE} - "This PC"')
 
         new_index: QModelIndex = (
             current_index.parent()
@@ -176,13 +185,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.setRootIndex(new_index)
         self.treeView.collapseAll()
 
-        if new_index.data() != self.model.rootPath():
-            self.path_changed.emit(str(Path(self.model.filePath(new_index))))
+        if new_index != self.top_level_index:
+            self.pathChanged.emit(str(Path(self.model.filePath(new_index))))
 
     def handle_root_button_clicked(self, _) -> None:
         self.treeView.setRootIndex(self.top_level_index)
         self.treeView.setCurrentIndex(self.top_level_index)
-        self.path_changed.emit(self.model.filePath(self.top_level_index))
+        self.setWindowTitle(f'{TITLE} - "This PC"')
 
     def handle_action_hide_files(self, checked: bool) -> None:  # noqa: FBT001
         self.model.setFilter(file_filters[checked])
@@ -203,12 +212,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         path = Path(
             self.model.filePath(list_item.bookmark_index) if is_file else self.model.filePath(bookmark_index)
         )
-        self.path_changed.emit(str(path))
+        self.pathChanged.emit(str(path))
+
+    def handle_recents_clicked(self, index: int) -> None:
+        path = self.recents_tracker.item_data(index)
+        qm_index = self.model.index(path).parent()
+        self.treeView.setRootIndex(qm_index)
+        self.treeView.setCurrentIndex(qm_index)
+        # self.view_file(self.model.index(self.recents_tracker.item_data(index)))
+        self.view_file(self.model.index(path))
+
+    def handle_treeview_current_index_changed(self, index: QModelIndex) -> None:
+        if not self.model.isDir(index):
+            self._add_recent(Path(self.model.filePath(index)))
+        self.view_file(index)
 
     def handle_treeview_double_click(self, index: QModelIndex) -> None:
         if self.model.isDir(index):
             self.treeView.setRootIndex(index)
-            self.path_changed.emit(str(Path(self.model.filePath(index))))
+            self.pathChanged.emit(str(Path(self.model.filePath(index))))
 
     def handle_treeview_context_menu_request(self, position) -> None:
         index: QModelIndex = self.treeView.indexAt(position)
@@ -218,30 +240,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         menu: QMenu = QMenu()
 
         open_with: QMenu = QMenu("Open With", menu)
-        open_with.setIcon(QIcon((config.config.IMAGES / "open_with.ico").resolve().as_posix()))
+        open_with.setIcon(QIcon((IMAGES / "open_with.ico").resolve().as_posix()))
         menu.addMenu(open_with)
 
         acrobat: QAction = open_with.addAction("Adobe Acrobat")
         acrobat.setObjectName("acrobat")
-        acrobat.setIcon(QPixmap((config.config.IMAGES / "acrobat-logo.png").resolve().as_posix()))
+        acrobat.setIcon(QPixmap((IMAGES / "acrobat-logo.png").resolve().as_posix()))
 
         explorer: QAction = open_with.addAction("Windows Explorer")
         explorer.setObjectName("explorer")
         explorer.setIcon(
-            QPixmap((config.config.IMAGES / "explorer-1.png").resolve().as_posix())
+            QPixmap((IMAGES / "explorer-1.png").resolve().as_posix())
         )
 
         if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             paint: QAction = open_with.addAction("MS Paint")
             paint.setObjectName("paint")
             paint.setIcon(
-                QPixmap((config.config.IMAGES / "palette.png").resolve().as_posix())
+                QPixmap((IMAGES / "palette.png").resolve().as_posix())
             )
 
         rename: QAction = menu.addAction("Rename")
         rename.setObjectName("rename")
         rename.setIcon(
-            QPixmap((config.config.IMAGES / "rename.png").resolve().as_posix())
+            QPixmap((IMAGES / "rename.png").resolve().as_posix())
         )
 
         delete: QAction = menu.addAction("Delete")
@@ -307,7 +329,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         return super().eventFilter(source, event)
 
-    def load_favorites(self) -> None:
+    def load_bookmarks(self) -> None:
         bookmarks.load_bookmarks(load_bookmarks(), self.lw_bookmarks, self.model)
 
     def load_splash(self) -> None:
@@ -334,14 +356,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.HIDE_TOOLBAR = pdf_toolbar[checked]
         self.view_file(self.treeView.currentIndex())
 
-    def update_bookmarks(self) -> None:
-        lw = self.lw_bookmarks
-        bookmarks_ = []
-        for row in range(lw.count()):
-            bookmarks_.append((lw.item(row).text(), self.model.filePath(lw.item(row).bookmark_index), row))
-
-        update_bookmark_order(bookmarks_)
-
     def update_title_bar(self, path: str) -> None:
         separator = " - " if path else ""
         self.setWindowTitle(f"{TITLE}{separator}{path}")
@@ -363,7 +377,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if file_path.as_posix().rsplit(".", 1)[1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
                 self.browser.setZoomFactor(1.00)
 
-        self.file_loaded.emit(str(file_path))
+        self.fileLoaded.emit(str(file_path))
+
+    def _add_recent(self, path: Path) -> None:
+        self.recents_tracker.add(str(path))
+
+    def _update_bookmarks(self) -> None:
+        lw = self.lw_bookmarks
+        bookmarks_ = []
+        for row in range(lw.count()):
+            bookmarks_.append((lw.item(row).text(), self.model.filePath(lw.item(row).bookmark_index), row))
+
+        update_bookmark_order(bookmarks_)
 
     # Context Menu Actions
 
@@ -383,11 +408,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QGraphicsBlurEffect(self.gb_file_browser),
             QGraphicsBlurEffect(self.browser),
             QGraphicsBlurEffect(self.statusbar),
+            QGraphicsBlurEffect(self.menubar),
         )
         [effect.setBlurRadius(7) for effect in self.blur_effects]
         [effect.setEnabled(False) for effect in self.blur_effects]
 
-        widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser, self.statusbar)
+        widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser, self.statusbar, self.menubar)
         [widget.setGraphicsEffect(effect) for widget, effect in zip(widgets, self.blur_effects)]
 
     def _do_acrobat_action(self, index: QModelIndex) -> None:
@@ -400,7 +426,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_delete_action(self, index: QModelIndex) -> None:
         if self._ask_yes_or_no(self, "Delete", "This action can not be undone.\nAre you sure?"):
-            fileoperations.delete_file(self.model, index)
+            if fileoperations.delete_file(self.model, index):
+                self.fileDeleted.emit(self.model.filePath(index))
 
     def _do_explorer_action(self, index: QModelIndex) -> None:
         fileoperations.open_file_location(self.model.filePath(index))
