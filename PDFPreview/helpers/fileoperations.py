@@ -1,5 +1,6 @@
 # helpers.fileoperations.py
-
+import os
+import shutil
 import subprocess
 from contextlib import suppress
 
@@ -59,11 +60,21 @@ def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> b
     return result
 
 
-def delete_file(model: QFileSystemModel, index: QModelIndex) -> bool:
+def delete_file(model: QFileSystemModel, index: QModelIndex) -> tuple[bool, str]:
     if not index.isValid():
-        return False
+        return False, "Invalid Index"
 
     if model.isDir(index):
-        return QDir(model.filePath(index)).removeRecursively()
+        try:
+            shutil.rmtree(model.filePath(index))
+        except (PermissionError, OSError) as e:
+            return False, e.strerror
 
-    return model.remove(index)
+        return True, ""
+
+    try:
+        os.remove(model.filePath(index))
+    except (PermissionError, OSError, FileNotFoundError) as e:
+        return False, e.strerror
+
+    return True, ""
