@@ -62,5 +62,12 @@ class RecentsManager:
         self.widget.setItemData(index, f"{path}/{new_name}", Qt.ItemDataRole.UserRole)
 
     def _load_recents(self) -> None:
+        recents = load_recents()
+        if len(recents) > self.limit:
+            remove_count = len(recents) - self.limit
+            for i in range(remove_count):
+                r = recents.pop(0)
+                delete_recent(r.name)
+
         for recent in load_recents():
             self._add(recent.path)

@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.15.4 - 2026-05-27
+
+### Fixed
+
+- Recents list gets truncated to match the currently configured limit.
+
 ## 0.15.3 - 2026-05-27
 
 ### Changed
