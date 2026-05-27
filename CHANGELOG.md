@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.15.3 - 2026-05-27
+
+### Changed
+
+- File/Folder deletion now provides feedback if the deletion fails.
+
 ## 0.15.2 - 2026-04-01
 
 ### Fixed
@@ -98,7 +104,7 @@ All notable changes pertinent to the end user of this project will be documented
 
 ### Added
 
-- Main application windows is now blurred when the about dialog is shown
+- Main application windows is now blurred when the About dialog is shown
 
 ## 0.11.1 - 2026-03-10
 
@@ -153,7 +159,7 @@ All notable changes pertinent to the end user of this project will be documented
 
 ### Fixed
 
-- Fixes an issue where text in the about dialog was cut off
+- Fixes an issue where text in the About dialog was cut off
 
 ## 0.9.2 - 2026-02-27
 
