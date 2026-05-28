@@ -2,6 +2,12 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.17.1 - 2026-05-28
+
+### Added
+
+- Context menu icons.
+
 ## 0.17.0 - 2026-05-28
 
 ### Added

@@ -263,9 +263,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         duplicate: QAction = menu.addAction("Duplicate")
         duplicate.setObjectName("duplicate")
+        duplicate.setIcon(QIcon((IMAGES / "copy-64x64.png").resolve().as_posix()))
 
         move: QAction = menu.addAction("Move")
         move.setObjectName("move")
+        move.setIcon(QIcon((IMAGES / "filemove-64x64.png").resolve().as_posix()))
 
         rename: QAction = menu.addAction("Rename")
         rename.setObjectName("rename")
