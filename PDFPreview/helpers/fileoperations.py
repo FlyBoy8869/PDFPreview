@@ -3,6 +3,7 @@ import os
 import shutil
 import subprocess
 from contextlib import suppress
+from pathlib import Path
 
 try:
     from os import startfile  # type: ignore  # noqa: PGH003
@@ -78,3 +79,46 @@ def delete_file(model: QFileSystemModel, index: QModelIndex) -> tuple[bool, str]
         return False, e.strerror
 
     return True, ""
+
+
+def move_file(src: Path, dest: Path) -> tuple[bool, str]:
+    try:
+        src.move(dest)
+    except (PermissionError, OSError) as e:
+        return False, e.strerror
+
+    return True, ""
+
+
+def duplicate_file(model: QFileSystemModel, index: QModelIndex) -> bool:
+    if not index.isValid():
+        return False
+
+    original_path = Path(model.filePath(index))
+    unique_name = get_unique_filename(original_path)
+    original_path.copy(unique_name)
+
+    return True
+
+
+def get_unique_filename(filename: Path | str) -> str:
+    filename = Path(filename)
+
+    if not filename.exists():
+        return str(filename)
+
+    stem = filename.stem
+    suffix = filename.suffix
+
+    new_name = f"{stem} - Copy{suffix}"
+    candidate_path = filename.with_name(new_name)
+    if not candidate_path.exists():
+        return str(candidate_path)
+
+    counter = 1
+    while True:
+        new_name = f"{stem} - Copy ({counter}){suffix}"
+        candidate_path = filename.with_name(new_name)
+        if not candidate_path.exists():
+            return str(candidate_path)
+        counter += 1

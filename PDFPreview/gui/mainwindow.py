@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QMainWindow,
     QMenu,
-    QMessageBox, QStyle, QGraphicsBlurEffect
+    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog
 )
 
 import config.config
@@ -29,6 +29,7 @@ from PDFPreview.services.bookmark_service import update_bookmark_order, load_boo
 from .ui_mainwindow import Ui_MainWindow
 from PDFPreview.eventfilters.about_eventfilter import AboutDialogFilter
 from PDFPreview.eventfilters.bookmark_eventfilter import BookmarkListEventFilter
+from ..helpers.fileoperations import get_unique_filename
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
@@ -260,6 +261,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 QPixmap((IMAGES / "palette.png").resolve().as_posix())
             )
 
+        duplicate: QAction = menu.addAction("Duplicate")
+        duplicate.setObjectName("duplicate")
+
+        move: QAction = menu.addAction("Move")
+        move.setObjectName("move")
+
         rename: QAction = menu.addAction("Rename")
         rename.setObjectName("rename")
         rename.setIcon(
@@ -272,6 +279,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if self.model.isDir(index):
             open_with.removeAction(acrobat)
+            menu.removeAction(duplicate)
             project: QAction = menu.addAction("Open as Project")
             project.setObjectName("project")
 
@@ -400,6 +408,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "delete": self._do_delete_action,
             "paint": self._do_paint_action,
             "project": self._do_project_action,
+            "duplicate": self._do_duplicate_action,
+            "move": self._do_move_action,
         }
 
     def _create_and_set_blur_effects(self) -> None:
@@ -433,6 +443,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return
             self.fileDeleted.emit(self.model.filePath(index))
 
+    def _do_duplicate_action(self, index: QModelIndex) -> None:
+        fileoperations.duplicate_file(self.model, index)
+
+    def _do_move_action(self, index: QModelIndex) -> None:
+        if folder := QFileDialog.getExistingDirectory(self):
+            source_path = Path(self.model.filePath(index))
+            result, message = fileoperations.move_file(source_path, Path(folder) / source_path.name)
+            if not result:
+                QMessageBox.warning(self, "Warning", message)
+
     def _do_explorer_action(self, index: QModelIndex) -> None:
         fileoperations.open_file_location(self.model.filePath(index))
 
@@ -450,7 +470,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         fileoperations.open_with_mspaint(self.model.filePath(index))
 
     def _do_project_action(self, index: QModelIndex) -> None:
-        print("opening project")
+        QMessageBox.information(self, "Open as Project", "Option currently not implemented.")
         # get a list of all files in folder and subfolders, etc.
         # open each file in the browser
 

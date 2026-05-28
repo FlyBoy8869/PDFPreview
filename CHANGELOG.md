@@ -2,6 +2,18 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## 0.17.0 - 2026-05-28
+
+### Added
+
+- Files can be moved.
+
+## 0.16.0 - 2026-05-28
+
+### Added
+
+- Files can now be duplicated.
+
 ## 0.15.4 - 2026-05-27
 
 ### Fixed
