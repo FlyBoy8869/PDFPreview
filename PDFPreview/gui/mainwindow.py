@@ -265,8 +265,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if self.model.isDir(index):
             menu.removeAction(duplicate)
-            project: QAction = menu.addAction("Open as Project")
-            project.setObjectName("project")
+            self._add_action("Open as Project", "project", "", menu)
 
         # let's figure out what we're doing...
         if action := menu.exec(self.treeView.viewport().mapToGlobal(position)):
