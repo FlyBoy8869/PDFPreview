@@ -276,9 +276,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         action = menu.addAction(title)
         action.setObjectName(obj_name)
         if isinstance(icon, str):
-            action.setIcon(QIcon((IMAGES / icon).resolve().as_posix()))
-        else:
-            action.setIcon(icon)
+            icon = QIcon((IMAGES / icon).resolve().as_posix())
+        action.setIcon(icon)
         return action
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
