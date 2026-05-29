@@ -246,19 +246,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         menu.addMenu(open_with)
 
         if suffix in ["pdf"]:
-            self._add_action("Adobe Acrobat", "acrobat", (IMAGES / "acrobat-logo.png").resolve().as_posix(), open_with)
+            self._add_action("Adobe Acrobat", "acrobat", "acrobat-logo.png", open_with)
 
-        self._add_action("Windows Explorer", "explorer", (IMAGES / "explorer-1.png").resolve().as_posix(), open_with)
+        self._add_action("Windows Explorer", "explorer", "explorer-1.png", open_with)
 
         if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
-            self._add_action("MS Paint", "paint", (IMAGES / "palette.png").resolve().as_posix(), open_with)
+            self._add_action("MS Paint", "paint", "palette.png", open_with)
 
         duplicate: QAction = self._add_action(
-            "Duplicate", "duplicate", (IMAGES / "copy-64x64.png").resolve().as_posix(), menu
+            "Duplicate", "duplicate", "copy-64x64.png", menu
         )
 
-        self._add_action("Move", "move", (IMAGES / "filemove-64x64.png").resolve().as_posix(), menu)
-        self._add_action("Rename", "rename", (IMAGES / "rename.png").resolve().as_posix(), menu)
+        self._add_action("Move", "move", "filemove-64x64.png", menu)
+        self._add_action("Rename", "rename", "rename.png", menu)
 
         icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
         self._add_action("Delete", "delete", icon, menu)
