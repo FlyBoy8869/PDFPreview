@@ -237,6 +237,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         index: QModelIndex = self.treeView.indexAt(position)
         if not index.isValid():
             return
+        suffix = self.model.filePath(index).rsplit(".", 1)[-1].lower()
 
         menu: QMenu = QMenu()
 
@@ -244,49 +245,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         open_with.setIcon(QIcon((IMAGES / "open_with.ico").resolve().as_posix()))
         menu.addMenu(open_with)
 
-        acrobat: QAction = open_with.addAction("Adobe Acrobat")
-        acrobat.setObjectName("acrobat")
-        acrobat.setIcon(QPixmap((IMAGES / "acrobat-logo.png").resolve().as_posix()))
+        if suffix in ["pdf"]:
+            self._add_action("Adobe Acrobat", "acrobat", (IMAGES / "acrobat-logo.png").resolve().as_posix(), open_with)
 
-        explorer: QAction = open_with.addAction("Windows Explorer")
-        explorer.setObjectName("explorer")
-        explorer.setIcon(
-            QPixmap((IMAGES / "explorer-1.png").resolve().as_posix())
-        )
+        self._add_action("Windows Explorer", "explorer", (IMAGES / "explorer-1.png").resolve().as_posix(), open_with)
 
         if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
-            paint: QAction = open_with.addAction("MS Paint")
-            paint.setObjectName("paint")
-            paint.setIcon(
-                QPixmap((IMAGES / "palette.png").resolve().as_posix())
-            )
+            self._add_action("MS Paint", "paint", (IMAGES / "palette.png").resolve().as_posix(), open_with)
 
-        duplicate: QAction = menu.addAction("Duplicate")
-        duplicate.setObjectName("duplicate")
-        duplicate.setIcon(QIcon((IMAGES / "copy-64x64.png").resolve().as_posix()))
-
-        move: QAction = menu.addAction("Move")
-        move.setObjectName("move")
-        move.setIcon(QIcon((IMAGES / "filemove-64x64.png").resolve().as_posix()))
-
-        rename: QAction = menu.addAction("Rename")
-        rename.setObjectName("rename")
-        rename.setIcon(
-            QPixmap((IMAGES / "rename.png").resolve().as_posix())
+        duplicate: QAction = self._add_action(
+            "Duplicate", "duplicate", (IMAGES / "copy-64x64.png").resolve().as_posix(), menu
         )
 
-        delete: QAction = menu.addAction("Delete")
-        delete.setObjectName("delete")
-        delete.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton))
+        self._add_action("Move", "move", (IMAGES / "filemove-64x64.png").resolve().as_posix(), menu)
+        self._add_action("Rename", "rename", (IMAGES / "rename.png").resolve().as_posix(), menu)
+
+        icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
+        self._add_action("Delete", "delete", icon, menu)
 
         if self.model.isDir(index):
-            open_with.removeAction(acrobat)
             menu.removeAction(duplicate)
             project: QAction = menu.addAction("Open as Project")
             project.setObjectName("project")
 
+        # let's figure out what we're doing...
         if action := menu.exec(self.treeView.viewport().mapToGlobal(position)):
             self.context_menu_actions[action.objectName()](index)
+
+    @staticmethod
+    def _add_action(title: str, obj_name: str, icon: str | QIcon, menu: QMenu) -> QAction:
+        action = menu.addAction(title)
+        action.setObjectName(obj_name)
+        if isinstance(icon, str):
+            action.setIcon(QIcon((IMAGES / icon).resolve().as_posix()))
+        else:
+            action.setIcon(icon)
+        return action
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         if source is self.treeView and (
