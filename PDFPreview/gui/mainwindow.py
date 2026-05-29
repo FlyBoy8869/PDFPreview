@@ -248,7 +248,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if suffix in ["pdf"]:
             self._add_action("Adobe Acrobat", "acrobat", "acrobat-logo.png", open_with)
 
-        self._add_action("Windows Explorer", "explorer", "explorer-1.png", open_with)
+        self._add_action("Windows Explorer", "explorer", "explorer.png", open_with)
 
         if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             self._add_action("MS Paint", "paint", "palette.png", open_with)
