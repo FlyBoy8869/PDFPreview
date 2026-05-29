@@ -9,7 +9,7 @@ from PySide6.QtGui import (
     QDragEnterEvent,
     QDropEvent,
     QKeySequence,
-    QShortcut, QIcon, QPixmap,
+    QShortcut, QIcon,
 )
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import (
@@ -29,7 +29,6 @@ from PDFPreview.services.bookmark_service import update_bookmark_order, load_boo
 from .ui_mainwindow import Ui_MainWindow
 from PDFPreview.eventfilters.about_eventfilter import AboutDialogFilter
 from PDFPreview.eventfilters.bookmark_eventfilter import BookmarkListEventFilter
-from ..helpers.fileoperations import get_unique_filename
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
