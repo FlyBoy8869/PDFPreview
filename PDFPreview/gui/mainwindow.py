@@ -298,11 +298,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         event.proposedAction() == Qt.DropAction.CopyAction
                         and event.mimeData().hasUrls()
                 ):
-                    event.accept()
-                else:
-                    event.ignore()
+                    event.acceptProposedAction()
+                    return event.isAccepted()
 
-                return event.isAccepted()
+                return source.eventFilter(source, event)
 
             # handle drops on the preview pane
             if event.type() == QEvent.Type.Drop:
