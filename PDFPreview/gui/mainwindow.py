@@ -199,7 +199,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_bookmark_clicked(self, list_item: VListWidgetItem) -> None:
         bookmark_index: QModelIndex = list_item.bookmark_index
         if not Path(list_item.path).exists():
-            QMessageBox.information(self, "Info", f"{list_item.path} does not exist")
+            QMessageBox.information(self, "Info", f"File does not exist:\n\n{list_item.path}")
+
             return
 
         is_file: bool = not self.model.isDir(bookmark_index)
