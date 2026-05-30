@@ -90,15 +90,18 @@ def move_file(src: Path, dest: Path) -> tuple[bool, str]:
     return True, ""
 
 
-def duplicate_file(model: QFileSystemModel, index: QModelIndex) -> bool:
+def duplicate_file(model: QFileSystemModel, index: QModelIndex) -> tuple[bool, str]:
     if not index.isValid():
         return False
 
-    original_path = Path(model.filePath(index))
-    unique_name = get_unique_filename(original_path)
-    original_path.copy(unique_name)
+    try:
+        original_path = Path(model.filePath(index))
+        unique_name = get_unique_filename(original_path)
+        original_path.copy(unique_name)
+    except (PermissionError, OSError) as e:
+        return False, e.strerror
 
-    return True
+    return True, ""
 
 
 def get_unique_filename(filename: Path | str) -> str:

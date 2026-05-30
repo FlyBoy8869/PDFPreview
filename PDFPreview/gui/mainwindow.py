@@ -437,7 +437,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.fileDeleted.emit(self.model.filePath(index))
 
     def _do_duplicate_action(self, index: QModelIndex) -> None:
-        fileoperations.duplicate_file(self.model, index)
+        result, message = fileoperations.duplicate_file(self.model, index)
+        if not result:
+            QMessageBox.warning(self, "Warning", message)
 
     def _do_move_action(self, index: QModelIndex) -> None:
         if folder := QFileDialog.getExistingDirectory(self):
