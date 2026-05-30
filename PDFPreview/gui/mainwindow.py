@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, cast
 from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl, Signal
 from PySide6.QtGui import (
     QAction,
-    QCloseEvent,
     QDragEnterEvent,
     QDropEvent,
     QKeySequence,
@@ -124,10 +123,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
         # BOOKMARKS
-        self.lw_bookmarks_eventfilter: BookmarkListEventFilter = (
+        self.lw_bookmarks_event_filter: BookmarkListEventFilter = (
             BookmarkListEventFilter(self.lw_bookmarks, self.model)
         )
-        self.lw_bookmarks.installEventFilter(self.lw_bookmarks_eventfilter)
+        self.lw_bookmarks.installEventFilter(self.lw_bookmarks_event_filter)
         self.lw_bookmarks.itemClicked.connect(self.handle_bookmark_clicked)
         self.lw_bookmarks.model().rowsMoved.connect(self._update_bookmarks)
         self.lw_bookmarks.model().dataChanged.connect(self._update_bookmarks)
