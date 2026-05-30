@@ -1,10 +1,12 @@
 # database.recent_repository.py
 # handles the CRUD operations
+from pathlib import Path
 
 from tinydb import Query
 from tinydb.table import Document
 
 from .db import db
+from ..models.recent import Recent
 
 recents_table = db.table(name="recents")
 RecentQuery = Query()
@@ -24,3 +26,13 @@ def delete_recent(name: str) -> None:
 
 def truncate_recents() -> None:
     recents_table.truncate()
+
+
+def _validate_recents() -> None:
+    recents: list[Recent] = [Recent(**recent) for recent in get_recents()]
+    for recent in recents:
+        if not Path(recent.path).exists():
+            delete_recent(recent.name)
+
+
+_validate_recents()

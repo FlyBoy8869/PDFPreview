@@ -166,8 +166,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.load_splash()
 
-    def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
-        return super().closeEvent(event)
+    def close(self) -> bool:
+        return super().close()
 
     def handle_back_button_clicked(self, _) -> None:
         current_index: QModelIndex = self.treeView.currentIndex()
