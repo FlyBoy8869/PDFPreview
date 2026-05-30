@@ -1,4 +1,5 @@
 # helpers.bookmarks.py
+from pathlib import Path
 
 from PySide6.QtCore import Qt
 
@@ -7,9 +8,15 @@ from PDFPreview.models.bookmark import Bookmark
 
 from PySide6.QtWidgets import QFileSystemModel, QListWidget
 
+from PDFPreview.services.bookmark_service import delete_bookmark
+
 
 def load_bookmarks(bookmarks: list[Bookmark], list_widget: QListWidget, model: QFileSystemModel) -> None:
     for bookmark in bookmarks:
+        if not Path(bookmark.path).exists():
+            delete_bookmark(bookmark.name)
+            continue
+
         item = VListWidgetItem(
             bookmark.name,
             extra=model.index(bookmark.path),
