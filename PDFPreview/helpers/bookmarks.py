@@ -12,7 +12,8 @@ def load_bookmarks(bookmarks: list[Bookmark], list_widget: QListWidget, model: Q
     for bookmark in bookmarks:
         item = VListWidgetItem(
             bookmark.name,
-            extra=model.index(bookmark.path)
+            extra=model.index(bookmark.path),
+            path=bookmark.path,
         )
         item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
         list_widget.addItem(item)

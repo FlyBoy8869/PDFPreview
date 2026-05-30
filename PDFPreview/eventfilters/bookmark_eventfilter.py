@@ -30,7 +30,7 @@ class BookmarkListEventFilter(QObject):
         if event.type() == QEvent.Type.Drop:
             path: str = event.mimeData().text().replace(PATH_PREFIX, "")
             favorites_text: str = self.model.fileName(self.model.index(path))
-            item = VListWidgetItem(favorites_text, extra=self.model.index(path))
+            item = VListWidgetItem(favorites_text, extra=self.model.index(path), path=path)
             item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
             source.addItem(item)
 
