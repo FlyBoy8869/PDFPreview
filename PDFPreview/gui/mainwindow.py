@@ -28,6 +28,7 @@ from PDFPreview.services.bookmark_service import update_bookmark_order, load_boo
 from .ui_mainwindow import Ui_MainWindow
 from PDFPreview.eventfilters.about_eventfilter import AboutDialogFilter
 from PDFPreview.eventfilters.bookmark_eventfilter import BookmarkListEventFilter
+from ..services.recent_service import delete_recent
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
@@ -220,10 +221,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_recents_clicked(self, index: int) -> None:
         path = self.recents_tracker.item_data(index)
+        if not Path(path).exists():
+            delete_recent(Path(path).resolve().name)
+            self.recents_tracker.remove(Path(path).resolve().name)
+            self.statusBar().showMessage(f"Recent not found: {path}", 3000)
+            return
+
         qm_index = self.model.index(path).parent()
         self.treeView.setRootIndex(qm_index)
         self.treeView.setCurrentIndex(qm_index)
-        # self.view_file(self.model.index(self.recents_tracker.item_data(index)))
         self.view_file(self.model.index(path))
 
     def handle_treeview_current_index_changed(self, index: QModelIndex) -> None:
