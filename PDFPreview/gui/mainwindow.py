@@ -438,7 +438,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_delete_action(self, index: QModelIndex) -> None:
         if self._ask_yes_or_no(self, "Delete", f"Deleting '{self.model.fileName(index)}'.\n\nThis action can not be undone.\nAre you sure?"):
-            # if fileoperations.delete_file(self.model, index):
             result, message = fileoperations.delete_file(self.model, index)
             if not result:
                 QMessageBox.warning(self, "Warning", message)
