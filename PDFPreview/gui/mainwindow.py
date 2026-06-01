@@ -408,7 +408,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QGraphicsBlurEffect(self.statusbar),
             QGraphicsBlurEffect(self.menubar),
         )
-        [(effect.setBlurRadius(7), effect.setEnabled(False) ) for effect in self.blur_effects]
+        [(effect.setBlurRadius(7), effect.setEnabled(False)) for effect in self.blur_effects]
 
         widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser, self.statusbar, self.menubar)
         [widget.setGraphicsEffect(effect) for widget, effect in zip(widgets, self.blur_effects)]
