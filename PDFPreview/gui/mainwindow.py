@@ -243,6 +243,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.pathChanged.emit(str(Path(self.model.filePath(index))))
 
     def handle_treeview_context_menu_request(self, position) -> None:
+        """Create a dynamic menu based on the file type."""
         index: QModelIndex = self.treeView.indexAt(position)
         if not index.isValid():
             return
@@ -276,7 +277,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             menu.removeAction(duplicate)
             self._add_action("Open as Project", "project", "", menu)
 
-        # let's figure out what we're doing...
+        # let's figure out what we're doing... and then do it!
         if action := menu.exec(self.treeView.viewport().mapToGlobal(position)):
             self.context_menu_actions[action.objectName()](index)
 
