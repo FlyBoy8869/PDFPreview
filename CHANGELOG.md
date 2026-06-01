@@ -3,6 +3,8 @@
 All notable changes pertinent to the end user of this project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- File's name is now included in the file deletion confirmation dialog.
 
 ## [0.17.2] - 2026-06-01
 
