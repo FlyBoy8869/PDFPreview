@@ -263,10 +263,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             self._add_action("MS Paint", "paint", "palette.png", open_with)
 
-        duplicate: QAction = self._add_action(
-            "Duplicate", "duplicate", "copy-64x64.png", menu
-        )
-
+        duplicate: QAction = self._add_action("Duplicate", "duplicate", "copy-64x64.png", menu)
         self._add_action("Move", "move", "filemove-64x64.png", menu)
         self._add_action("Rename", "rename", "rename.png", menu)
 
