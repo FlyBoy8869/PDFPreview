@@ -431,7 +431,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _do_acrobat_action(self, index: QModelIndex) -> None:
         path = Path(self.model.filePath(index))
         if path.suffix.lower() == ".pdf":
-            # sneaky behavior; open a non-pdf in a hopefully appropriate system program
             fileoperations.open_with_acrobat(self.model.filePath(index))
         else:
             fileoperations.open_file(path.as_posix())
