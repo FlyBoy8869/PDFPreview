@@ -401,16 +401,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         update_bookmark_order(bookmarks_)
 
     def _create_and_set_blur_effects(self) -> None:
-        self.blur_effects = (
-            QGraphicsBlurEffect(self.gb_bookmarks),
-            QGraphicsBlurEffect(self.gb_file_browser),
-            QGraphicsBlurEffect(self.browser),
-            QGraphicsBlurEffect(self.statusbar),
-            QGraphicsBlurEffect(self.menubar),
-        )
-        [(effect.setBlurRadius(7), effect.setEnabled(False)) for effect in self.blur_effects]
-
         widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser, self.statusbar, self.menubar)
+        self.blur_effects = [QGraphicsBlurEffect(widget) for widget in widgets]
+        [(effect.setBlurRadius(7), effect.setEnabled(False)) for effect in self.blur_effects]
         [widget.setGraphicsEffect(effect) for widget, effect in zip(widgets, self.blur_effects)]
 
     # Context Menu Actions
