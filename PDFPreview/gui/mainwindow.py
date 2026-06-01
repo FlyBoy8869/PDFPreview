@@ -432,8 +432,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         path = Path(self.model.filePath(index))
         if path.suffix.lower() == ".pdf":
             fileoperations.open_with_acrobat(self.model.filePath(index))
-        else:
-            fileoperations.open_file(path.as_posix())
 
     def _do_delete_action(self, index: QModelIndex) -> None:
         if self._ask_yes_or_no(self, "Delete", f"Deleting '{self.model.fileName(index)}'.\n\nThis action can not be undone.\nAre you sure?"):
