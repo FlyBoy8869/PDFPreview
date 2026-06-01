@@ -400,7 +400,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         update_bookmark_order(bookmarks_)
 
-
     def _create_and_set_blur_effects(self) -> None:
         self.blur_effects = (
             QGraphicsBlurEffect(self.gb_bookmarks),
