@@ -400,19 +400,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         update_bookmark_order(bookmarks_)
 
-    # Context Menu Actions
-
-    def _create_context_menu_dispatch_table(self) -> dict:
-        return {
-            "acrobat": self._do_acrobat_action,
-            "explorer": self._do_explorer_action,
-            "rename": self._do_rename_action,
-            "delete": self._do_delete_action,
-            "paint": self._do_paint_action,
-            "project": self._do_project_action,
-            "duplicate": self._do_duplicate_action,
-            "move": self._do_move_action,
-        }
 
     def _create_and_set_blur_effects(self) -> None:
         self.blur_effects = (
@@ -427,6 +414,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser, self.statusbar, self.menubar)
         [widget.setGraphicsEffect(effect) for widget, effect in zip(widgets, self.blur_effects)]
+
+    # Context Menu Actions
+
+    def _create_context_menu_dispatch_table(self) -> dict:
+        return {
+            "acrobat": self._do_acrobat_action,
+            "explorer": self._do_explorer_action,
+            "rename": self._do_rename_action,
+            "delete": self._do_delete_action,
+            "paint": self._do_paint_action,
+            "project": self._do_project_action,
+            "duplicate": self._do_duplicate_action,
+            "move": self._do_move_action,
+        }
 
     def _do_acrobat_action(self, index: QModelIndex) -> None:
         path = Path(self.model.filePath(index))
