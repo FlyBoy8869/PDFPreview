@@ -4,10 +4,13 @@ All notable changes pertinent to the end user of this project will be documented
 
 ## [Unreleased]
 
+## [0.17.2] - 2026-06-01
+
 ### Fixed
 - When the application starts, bookmarks and recents are now validated to make sure their targets exist and get removed otherwise.
 - While the application is running, clicking a bookmark which has been deleted outside the application will pop a dialog informing the user that the file the bookmark was pointing to is now non-existent.
 - Recents are now removed from the list and no action will be taken if its target has been deleted outside the application.
+
 ## [0.17.1] - 2026-05-28
 
 ### Added

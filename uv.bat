@@ -1,0 +1,1 @@
+C:\Users\charles.cognato\AppData\Roaming\Python\Scripts\uv.exe %1 %2 %3 %4 %5 %6 %7
