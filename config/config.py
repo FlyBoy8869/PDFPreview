@@ -1,7 +1,7 @@
 import os
 import platform
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Any
 
 import tomllib
 
@@ -37,6 +37,6 @@ if not DATABASE_PATH.exists():
 with (_config_path / "config.toml").open(
         mode="rb",
 ) as config_file:
-    config = tomllib.load(config_file)
+    config: dict[str, Any] = tomllib.load(config_file)
 
 ADOBE_ACROBAT_PATH = config["paths"]["acrobat"]

@@ -19,8 +19,9 @@ from PySide6.QtWidgets import (
     QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog
 )
 
-import config.config
+# import config.config
 from config.config import config
+from config.config import PATH_PREFIX, SPLASH_FILE, TITLE, IMAGES
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui, recents
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
@@ -35,7 +36,6 @@ if TYPE_CHECKING:
 
     from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 
-from config.config import PATH_PREFIX, SPLASH_FILE, TITLE, IMAGES
 
 # noinspection PyTypeChecker
 file_filters: dict[bool, QDir.Filter] = {
@@ -290,7 +290,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         if source is self.treeView and (
                 event.type() == QEvent.Type.KeyPress
-                and cast(QKeyEvent, event).key() == Qt.Key.Key_Space
+                and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
         ):
             # open selected file when the spacebar is pressed
             fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
@@ -299,7 +299,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if source is self.browser:
             if event.type() == QEvent.Type.DragEnter:
-                event = cast(QDragEnterEvent, event)
+                event = cast("QDragEnterEvent", event)
 
                 # allow drops if they have urls attached
                 if (
@@ -314,7 +314,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # handle drops on the preview pane
             if event.type() == QEvent.Type.Drop:
                 path = Path(
-                    cast(QDropEvent, event)
+                    cast("QDropEvent", event)
                     .mimeData()
                     .text()
                     .replace("%23", "#")  # dirty workaround
