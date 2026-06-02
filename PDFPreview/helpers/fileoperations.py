@@ -2,6 +2,7 @@
 import os
 import shutil
 import subprocess
+from collections import namedtuple
 from contextlib import suppress
 from pathlib import Path
 
@@ -18,6 +19,9 @@ from PySide6.QtCore import QModelIndex, Qt, QUrl, QDir
 from PySide6.QtWidgets import QFileSystemModel
 
 from config.config import ADOBE_ACROBAT_PATH
+
+
+Result = namedtuple("Result", ["success", "message"])
 
 
 def open_file(path: str) -> None:
@@ -43,32 +47,32 @@ def open_with_mspaint(path: str) -> None:
     with suppress(FileNotFoundError):
         subprocess.Popen(["mspaint.exe", str(Path(path))])
 
-def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> tuple[bool, str]:
+def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> Result:
     if not index.isValid():
-        return False, "Invalid Index"
+        return Result(False, "Invalid Index")
 
     try:
         validate_filename(new_name)
     except ValidationError as e:
         print(f"{e}\n")
-        return False, e.reason.description
+        return Result(False, e.reason.description)
 
     result = model.setData(index, new_name, Qt.ItemDataRole.EditRole)
 
-    return result, ""
+    return Result(result, "")
 
 
-def delete_file(model: QFileSystemModel, index: QModelIndex) -> tuple[bool, str]:
+def delete_file(model: QFileSystemModel, index: QModelIndex) -> Result:
     if not index.isValid():
-        return False, "Invalid Index"
+        return Result(False, "Invalid Index")
 
     if model.isDir(index):
         try:
             shutil.rmtree(model.filePath(index))
         except (PermissionError, OSError) as e:
-            return False, e.strerror
+            return Result(False, e.strerror)
 
-        return True, ""
+        return Result(True, "")
 
     try:
         os.remove(model.filePath(index))
@@ -78,27 +82,27 @@ def delete_file(model: QFileSystemModel, index: QModelIndex) -> tuple[bool, str]
     return True, ""
 
 
-def move_file(src: Path, dest: Path) -> tuple[bool, str]:
+def move_file(src: Path, dest: Path) -> Result:
     try:
         src.move(dest)
     except (PermissionError, OSError) as e:
-        return False, e.strerror
+        return Result(False, e.strerror)
 
-    return True, ""
+    return Result(True, "")
 
 
-def duplicate_file(model: QFileSystemModel, index: QModelIndex) -> tuple[bool, str]:
+def duplicate_file(model: QFileSystemModel, index: QModelIndex) -> Result:
     if not index.isValid():
-        return False, "Invalid Index"
+        return Result(False, "Invalid Index")
 
     try:
         original_path = Path(model.filePath(index))
         unique_name = get_unique_filename(original_path)
         original_path.copy(unique_name)
     except (PermissionError, OSError) as e:
-        return False, e.strerror
+        return Result(False, e.strerror)
 
-    return True, ""
+    return Result(True, "")
 
 
 def get_unique_filename(filename: Path | str) -> str:

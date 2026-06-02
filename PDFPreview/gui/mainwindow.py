@@ -21,7 +21,7 @@ from PySide6.QtWidgets import (
 
 # import config.config
 from config.config import config
-from config.config import PATH_PREFIX, SPLASH_FILE, TITLE, IMAGES
+from config.config import SPLASH_FILE, TITLE, IMAGES
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui, recents
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
@@ -419,39 +419,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_delete_action(self, index: QModelIndex) -> None:
         if self._ask_yes_or_no(self, "Delete", f"Deleting '{self.model.fileName(index)}'.\n\nThis action can not be undone.\nAre you sure?"):
-            result, message = fileoperations.delete_file(self.model, index)
-            if not result:
-                QMessageBox.warning(self, "Warning", message)
+            result = fileoperations.delete_file(self.model, index)
+            if not result.success:
+                QMessageBox.warning(self, "Warning", result.message)
                 return
             self.fileDeleted.emit(self.model.filePath(index))
 
     def _do_duplicate_action(self, index: QModelIndex) -> None:
-        result, message = fileoperations.duplicate_file(self.model, index)
-        if not result:
-            QMessageBox.warning(self, "Warning", message)
+        result = fileoperations.duplicate_file(self.model, index)
+        if not result.success:
+            QMessageBox.warning(self, "Warning", result.message)
 
     def _do_move_action(self, index: QModelIndex) -> None:
         if folder := QFileDialog.getExistingDirectory(self):
             source_path = Path(self.model.filePath(index))
-            result, message = fileoperations.move_file(source_path, Path(folder) / source_path.name)
-            if not result:
-                QMessageBox.warning(self, "Warning", message)
+            result = fileoperations.move_file(source_path, Path(folder) / source_path.name)
+            if not result.success:
+                QMessageBox.warning(self, "Warning", result.message)
 
     def _do_explorer_action(self, index: QModelIndex) -> None:
         fileoperations.open_file_location(self.model.filePath(index))
 
     def _do_rename_action(self, index: QModelIndex) -> None:
+        # TODO: Look into filing a bug report about the return value of this method.
         if new_name := QInputDialog.getText(
                 self,
                 "Rename File",
                 "Enter a new name for this file:",
                 text=index.data(),
         )[0]:
-            result, message = fileoperations.rename_file(self.model, index, new_name)
-            if result:
+            result = fileoperations.rename_file(self.model, index, new_name)
+            if result.success:
                 self.update_title_bar(self.model.filePath(self.treeView.currentIndex()))
-                return
-            self.statusbar.showMessage(f"Renaming failed: {message}", 5000)
+            else:
+                self.statusbar.showMessage(f"Renaming failed: {result.message}", 5000)
 
     def _do_paint_action(self, index: QModelIndex) -> None:
         fileoperations.open_with_mspaint(self.model.filePath(index))
