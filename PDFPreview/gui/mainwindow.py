@@ -313,13 +313,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             # handle drops on the preview pane
             if event.type() == QEvent.Type.Drop:
-                path = Path(
-                    cast("QDropEvent", event)
-                    .mimeData()
-                    .text()
-                    .replace("%23", "#")  # dirty workaround
-                    .replace(PATH_PREFIX, ""),
-                )
+                path = Path.from_uri(cast("QDropEvent", event).mimeData().urls()[0].toString())
                 new_index: QModelIndex = self.model.index(path.as_posix())
 
                 self.treeView.collapseAll()
