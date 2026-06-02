@@ -295,7 +295,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # open selected file when the spacebar is pressed
             fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
             event.accept()
-            return event.isAccepted()
+            return True
 
         if source is self.browser:
             if event.type() == QEvent.Type.DragEnter:
@@ -307,7 +307,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         and event.mimeData().hasUrls()
                 ):
                     event.acceptProposedAction()
-                    return event.isAccepted()
+                    return True
 
                 return source.eventFilter(source, event)
 
@@ -333,7 +333,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.view_file(new_index)
 
                 event.accept()
-                return event.isAccepted()
+                return True
 
         return super().eventFilter(source, event)
 
