@@ -41,10 +41,7 @@ def open_file_location(path: str) -> None:
 
 def open_with_mspaint(path: str) -> None:
     with suppress(FileNotFoundError):
-        subprocess.Popen(
-            ["mspaint.exe", f"{path.replace("/", "\\")}"]
-        )
-
+        subprocess.Popen(["mspaint.exe", str(Path(path))])
 
 def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> bool:
     if not index.isValid():
@@ -92,7 +89,7 @@ def move_file(src: Path, dest: Path) -> tuple[bool, str]:
 
 def duplicate_file(model: QFileSystemModel, index: QModelIndex) -> tuple[bool, str]:
     if not index.isValid():
-        return False
+        return False, "Invalid Index"
 
     try:
         original_path = Path(model.filePath(index))
