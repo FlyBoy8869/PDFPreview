@@ -447,8 +447,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 "Enter a new name for this file:",
                 text=index.data(),
         )[0]:
-            if fileoperations.rename_file(self.model, index, new_name):
+            result, message = fileoperations.rename_file(self.model, index, new_name)
+            if result:
                 self.update_title_bar(self.model.filePath(self.treeView.currentIndex()))
+                return
+            self.statusbar.showMessage(f"Renaming failed: {message}", 5000)
 
     def _do_paint_action(self, index: QModelIndex) -> None:
         fileoperations.open_with_mspaint(self.model.filePath(index))
