@@ -243,7 +243,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.pathChanged.emit(str(Path(self.model.filePath(index))))
 
     def handle_treeview_context_menu_request(self, position) -> None:
-        """Create a dynamic menu based on the file type."""
+        """Creates a dynamic menu based on the file type."""
         index: QModelIndex = self.treeView.indexAt(position)
         if not index.isValid():
             return
@@ -263,8 +263,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             self._add_action("MS Paint", "paint", "palette.png", open_with)
 
-        duplicate = self._add_action("Duplicate", "duplicate", "copy-64x64.png", menu)
-        self._add_action("Move", "move", "filemove-64x64.png", menu)
+        duplicate = self._add_action("Duplicate", "duplicate", "copy.png", menu)
+        self._add_action("Move", "move", "move.png", menu)
         self._add_action("Rename", "rename", "rename.png", menu)
 
         icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
@@ -290,7 +290,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         if source is self.treeView and (
                 event.type() == QEvent.Type.KeyPress
-                and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
+                and cast(QKeyEvent, event).key() == Qt.Key.Key_Space
         ):
             # open selected file when the spacebar is pressed
             fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
@@ -299,7 +299,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if source is self.browser:
             if event.type() == QEvent.Type.DragEnter:
-                event = cast("QDragEnterEvent", event)
+                event = cast(QDragEnterEvent, event)
 
                 # allow drops if they have urls attached
                 if (
@@ -314,7 +314,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # handle drops on the preview pane
             if event.type() == QEvent.Type.Drop:
                 path = Path(
-                    cast("QDropEvent", event)
+                    cast(QDropEvent, event)
                     .mimeData()
                     .text()
                     .replace("%23", "#")  # dirty workaround
