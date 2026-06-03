@@ -90,6 +90,14 @@ def move_file(src: Path, dest: Path) -> Result:
     return Result(True, "")
 
 
+def mkdir(path: Path) -> Result:
+    try:
+        (path / "New Folder").mkdir(parents=True, exist_ok=True)
+    except (PermissionError, OSError) as e:
+        return Result(False, e.strerror)
+
+    return Result(True, "")
+
 def duplicate_file(model: QFileSystemModel, index: QModelIndex) -> Result:
     if not index.isValid():
         return Result(False, "Invalid Index")

@@ -4,6 +4,7 @@ All notable changes pertinent to the end user of this project will be documented
 
 ## [Unreleased]
 ### Added
+- Context menu option to create a new folder.
 - File name to the file deletion confirmation dialog.
 
 ## [0.17.2] - 2026-06-01

@@ -246,6 +246,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """Creates a dynamic menu based on the file type."""
         index: QModelIndex = self.treeView.indexAt(position)
         if not index.isValid():
+            print("clicked in the deadspace...")
             return
         suffix = self.model.filePath(index).rsplit(".", 1)[-1].lower()
 
@@ -262,6 +263,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             self._add_action("MS Paint", "paint", "palette.png", open_with)
+
+        self._add_action("New Folder", "new_folder", "", menu)
 
         duplicate = self._add_action("Duplicate", "duplicate", "copy.png", menu)
         self._add_action("Move", "move", "move.png", menu)
@@ -410,6 +413,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "project": self._do_project_action,
             "duplicate": self._do_duplicate_action,
             "move": self._do_move_action,
+            "new_folder": self._do_new_folder_action,
         }
 
     def _do_acrobat_action(self, index: QModelIndex) -> None:
@@ -436,6 +440,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             result = fileoperations.move_file(source_path, Path(folder) / source_path.name)
             if not result.success:
                 QMessageBox.warning(self, "Warning", result.message)
+
+    def _do_new_folder_action(self, index: QModelIndex) -> None:
+        result = fileoperations.mkdir(Path(self.model.filePath(index)).parent)
+        if not result.success:
+            QMessageBox.warning(self, "Warning", result.message)
 
     def _do_explorer_action(self, index: QModelIndex) -> None:
         fileoperations.open_file_location(self.model.filePath(index))
