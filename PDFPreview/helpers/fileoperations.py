@@ -54,8 +54,7 @@ def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> R
     try:
         validate_filename(new_name)
     except ValidationError as e:
-        print(f"{e}\n")
-        return Result(False, e.reason.description)
+        return Result(False, f"{e.reason.description.upper()}\n\n'{new_name}' is an invalid file name.")
 
     result = model.setData(index, new_name, Qt.ItemDataRole.EditRole)
 

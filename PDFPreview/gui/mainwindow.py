@@ -452,7 +452,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if result.success:
                 self.update_title_bar(self.model.filePath(self.treeView.currentIndex()))
             else:
-                self.statusbar.showMessage(f"Renaming failed: {result.message}", 5000)
+                # self.statusbar.showMessage(f"Renaming failed: {result.message}", 5000)
+                QMessageBox.warning(self, "Rename Failed", f"{result.message}\n\nUnable to rename this file.")
 
     def _do_paint_action(self, index: QModelIndex) -> None:
         fileoperations.open_with_mspaint(self.model.filePath(index))
