@@ -69,7 +69,8 @@ def delete_file(model: QFileSystemModel, index: QModelIndex) -> Result:
 
     if model.isDir(index):
         try:
-            shutil.rmtree(model.filePath(index))
+            # shutil.rmtree(model.filePath(index))
+            Path(model.filePath(index)).rmdir()
             # folder = QDir(model.filePath(index))
             # folder.removeRecursively()
         except (PermissionError, OSError) as e:
