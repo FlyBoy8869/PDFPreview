@@ -62,12 +62,16 @@ def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> R
 
 
 def delete_file(model: QFileSystemModel, index: QModelIndex) -> Result:
+    print(f"Deleting file: \"{model.filePath(index)}\"")
+    print(f"Is folder: {model.isDir(index)}")
     if not index.isValid():
         return Result(False, "Invalid Index")
 
     if model.isDir(index):
         try:
             shutil.rmtree(model.filePath(index))
+            # folder = QDir(model.filePath(index))
+            # folder.removeRecursively()
         except (PermissionError, OSError) as e:
             return Result(False, e.strerror)
 
@@ -76,9 +80,9 @@ def delete_file(model: QFileSystemModel, index: QModelIndex) -> Result:
     try:
         os.remove(model.filePath(index))
     except (PermissionError, OSError, FileNotFoundError) as e:
-        return False, e.strerror
+        return Result(False, e.strerror)
 
-    return True, ""
+    return Result(True, "")
 
 
 def move_file(src: Path, dest: Path) -> Result:
@@ -92,8 +96,9 @@ def move_file(src: Path, dest: Path) -> Result:
 
 def mkdir(path: Path) -> Result:
     try:
-        (path / "New Folder").mkdir(parents=True, exist_ok=True)
-    except (PermissionError, OSError) as e:
+        unique_name = get_unique_filename(path / "New Folder")
+        Path(unique_name).mkdir(parents=True, mode=0o777)
+    except (PermissionError, OSError, FileExistsError) as e:
         return Result(False, e.strerror)
 
     return Result(True, "")

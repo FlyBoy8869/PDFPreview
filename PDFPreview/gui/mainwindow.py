@@ -246,7 +246,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """Creates a dynamic menu based on the file type."""
         index: QModelIndex = self.treeView.indexAt(position)
         if not index.isValid():
-            print("clicked in the deadspace...")
+            print("clicked in the 'dead space'...")
             return
         suffix = self.model.filePath(index).rsplit(".", 1)[-1].lower()
 
@@ -264,7 +264,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             self._add_action("MS Paint", "paint", "palette.png", open_with)
 
-        self._add_action("New Folder", "new_folder", "", menu)
+        icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogOpenButton)
+        self._add_action("New Folder", "new_folder", icon, menu)
 
         duplicate = self._add_action("Duplicate", "duplicate", "copy.png", menu)
         self._add_action("Move", "move", "move.png", menu)
@@ -461,7 +462,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if result.success:
                 self.update_title_bar(self.model.filePath(self.treeView.currentIndex()))
             else:
-                # self.statusbar.showMessage(f"Renaming failed: {result.message}", 5000)
                 QMessageBox.warning(self, "Rename Failed", f"{result.message}\n\nUnable to rename this file.")
 
     def _do_paint_action(self, index: QModelIndex) -> None:
