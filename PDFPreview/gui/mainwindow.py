@@ -424,6 +424,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_delete_action(self, index: QModelIndex) -> None:
         if self._ask_yes_or_no(self, "Delete", f"Deleting '{self.model.fileName(index)}'.\n\nThis action can not be undone.\nAre you sure?"):
+            if self.model.isDir(index):
+                path = Path(self.model.filePath(index))
+                result = fileoperations.delete_folder(path)
+                if not result.success and result.message == "Not Empty":
+                    if self._ask_yes_or_no(self, "Warning", "Folder is not empty. Are you sure?"):
+                        result = fileoperations.delete_folder(path, force=True)
+                        if not result.success:
+                            QMessageBox.warning(self, "Warning", result.message)
+                elif not result.success:
+                    QMessageBox.warning(self, "Warning", result.message)
+                return
+
             result = fileoperations.delete_file(self.model, index)
             if not result.success:
                 QMessageBox.warning(self, "Warning", result.message)

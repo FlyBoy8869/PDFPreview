@@ -7,6 +7,9 @@ All notable changes pertinent to the end user of this project will be documented
 - Context menu option to create a new folder.
 - File name to the file deletion confirmation dialog.
 
+### Changed
+- Changed the behavior for folder deletion to warn of non-empty folders and get confirmation.
+
 ## [0.17.2] - 2026-06-01
 
 ### Fixed

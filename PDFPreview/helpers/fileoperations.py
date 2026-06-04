@@ -62,25 +62,35 @@ def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> R
 
 
 def delete_file(model: QFileSystemModel, index: QModelIndex) -> Result:
-    print(f"Deleting file: \"{model.filePath(index)}\"")
-    print(f"Is folder: {model.isDir(index)}")
     if not index.isValid():
         return Result(False, "Invalid Index")
-
-    if model.isDir(index):
-        try:
-            # shutil.rmtree(model.filePath(index))
-            Path(model.filePath(index)).rmdir()
-            # folder = QDir(model.filePath(index))
-            # folder.removeRecursively()
-        except (PermissionError, OSError) as e:
-            return Result(False, e.strerror)
-
-        return Result(True, "")
 
     try:
         os.remove(model.filePath(index))
     except (PermissionError, OSError, FileNotFoundError) as e:
+        return Result(False, e.strerror)
+
+    return Result(True, "")
+
+
+def delete_folder(path: Path, force: bool = False) -> Result:
+    def has_files() -> bool:
+        try:
+            next(path.glob("*"))
+            return True
+        except StopIteration:
+            return False
+
+    if has_files() and not force:
+        return Result(False, "Not Empty")
+
+    try:
+        folder = QDir(path)
+        success = folder.removeRecursively()
+        if not success:
+            # need to get reason for failure since QDir.removeRecursively doesn't give one
+            path.rmdir()
+    except (PermissionError, OSError) as e:
         return Result(False, e.strerror)
 
     return Result(True, "")
