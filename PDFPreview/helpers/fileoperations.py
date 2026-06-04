@@ -114,14 +114,11 @@ def mkdir(path: Path) -> Result:
 
     return Result(True, "")
 
-def duplicate_file(model: QFileSystemModel, index: QModelIndex) -> Result:
-    if not index.isValid():
-        return Result(False, "Invalid Index")
 
+def duplicate_file(path: Path) -> Result:
     try:
-        original_path = Path(model.filePath(index))
-        unique_name = get_unique_filename(original_path)
-        original_path.copy(unique_name)
+        unique_name = get_unique_filename(path)
+        path.copy(unique_name)
     except (PermissionError, OSError) as e:
         return Result(False, e.strerror)
 

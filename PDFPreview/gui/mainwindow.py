@@ -280,7 +280,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # let's figure out what we're doing... and then do it!
         if action := menu.exec(self.treeView.viewport().mapToGlobal(position)):
-            self.context_menu_actions[action.objectName()](index)
+            self._dispatch_action(action.objectName(), index)
 
     @staticmethod
     def _add_action(title: str, obj_name: str, icon: str | QIcon, menu: QMenu) -> QAction:
@@ -417,6 +417,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "new_folder": self._do_new_folder_action,
         }
 
+    def _dispatch_action(self, action: str, index: QModelIndex) -> None:
+        if not index.isValid():
+            return
+        self.context_menu_actions[action](index)
+
     def _do_acrobat_action(self, index: QModelIndex) -> None:
         path = Path(self.model.filePath(index))
         if path.suffix.lower() == ".pdf":
@@ -443,7 +448,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.fileDeleted.emit(self.model.filePath(index))
 
     def _do_duplicate_action(self, index: QModelIndex) -> None:
-        result = fileoperations.duplicate_file(self.model, index)
+        result = fileoperations.duplicate_file(Path(self.model.filePath(index)))
         if not result.success:
             QMessageBox.warning(self, "Warning", result.message)
 
