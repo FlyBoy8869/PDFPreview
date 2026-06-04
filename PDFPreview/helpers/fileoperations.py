@@ -61,12 +61,9 @@ def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> R
     return Result(result, "")
 
 
-def delete_file(model: QFileSystemModel, index: QModelIndex) -> Result:
-    if not index.isValid():
-        return Result(False, "Invalid Index")
-
+def delete_file(path: Path) -> Result:
     try:
-        os.remove(model.filePath(index))
+        os.remove(str(path))
     except (PermissionError, OSError, FileNotFoundError) as e:
         return Result(False, e.strerror)
 

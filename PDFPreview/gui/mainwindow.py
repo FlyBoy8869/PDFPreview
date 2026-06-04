@@ -441,7 +441,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     QMessageBox.warning(self, "Warning", result.message)
                 return
 
-            result = fileoperations.delete_file(self.model, index)
+            result = fileoperations.delete_file(Path(self.model.filePath(index)))
             if not result.success:
                 QMessageBox.warning(self, "Warning", result.message)
                 return
