@@ -47,10 +47,8 @@ def open_with_mspaint(path: str) -> None:
     with suppress(FileNotFoundError):
         subprocess.Popen(["mspaint.exe", str(Path(path))])
 
-def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> Result:
-    if not index.isValid():
-        return Result(False, "Invalid Index")
 
+def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> Result:
     try:
         validate_filename(new_name)
     except ValidationError as e:
