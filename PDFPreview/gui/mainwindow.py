@@ -433,7 +433,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 path = Path(self.model.filePath(index))
                 result = fileoperations.delete_folder(path)
                 if not result.success and result.message == "Not Empty":
-                    if self._ask_yes_or_no(self, "Warning", "Folder is not empty. Are you sure?"):
+                    if self._ask_yes_or_no(self, "Warning", "Folder is not empty. Continue?"):
                         result = fileoperations.delete_folder(path, recurse=True)
                         if not result.success:
                             QMessageBox.warning(self, "Warning", result.message)
