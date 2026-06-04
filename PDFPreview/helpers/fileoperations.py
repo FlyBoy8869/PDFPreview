@@ -73,7 +73,7 @@ def delete_file(model: QFileSystemModel, index: QModelIndex) -> Result:
     return Result(True, "")
 
 
-def delete_folder(path: Path, force: bool = False) -> Result:
+def delete_folder(path: Path, recurse: bool = False) -> Result:
     def has_files() -> bool:
         try:
             next(path.glob("*"))
@@ -81,7 +81,7 @@ def delete_folder(path: Path, force: bool = False) -> Result:
         except StopIteration:
             return False
 
-    if has_files() and not force:
+    if has_files() and not recurse:
         return Result(False, "Not Empty")
 
     try:
