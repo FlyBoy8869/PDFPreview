@@ -2,7 +2,8 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
-## [Unreleased]
+## [0.18.0] - 2026-06-05
+
 ### Added
 - Context menu option to create a new folder.
 - File name to the file deletion confirmation dialog.
