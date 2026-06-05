@@ -102,8 +102,8 @@ def move_file(src: Path, dest: Path) -> Result:
 
 def mkdir(path: Path) -> Result:
     try:
-        unique_name = get_unique_filename(path / "New Folder")
-        Path(unique_name).mkdir(parents=True, mode=0o777)
+        unique_name = get_unique_filename(path / "New folder")
+        Path(unique_name).mkdir(parents=True)
     except (PermissionError, OSError, FileExistsError) as e:
         return Result(False, e.strerror)
 
