@@ -250,6 +250,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not index.isValid():
             print("clicked in the 'dead space'...")
             return
+
         suffix = self.model.filePath(index).rsplit(".", 1)[-1].lower()
 
         menu: QMenu = QMenu()
