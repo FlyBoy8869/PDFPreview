@@ -421,7 +421,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "rename": self._do_rename_action,
             "delete": self._do_delete_action,
             "paint": self._do_paint_action,
-            "project": self._do_project_action,
             "duplicate": self._do_duplicate_action,
             "move": self._do_move_action,
             "new_folder": self._do_new_folder_action,
@@ -499,11 +498,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_paint_action(self, index: QModelIndex) -> None:
         fileoperations.open_with_mspaint(self.model.filePath(index))
-
-    def _do_project_action(self, index: QModelIndex) -> None:
-        QMessageBox.information(self, "Open as Project", "Option currently not implemented.")
-        # get a list of all files in folder and subfolders, etc.
-        # open each file in the browser
 
     @staticmethod
     def _ask_yes_or_no(parent, title: str, message: str) -> bool:
