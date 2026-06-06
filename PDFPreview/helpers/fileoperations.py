@@ -1,6 +1,5 @@
 # helpers.fileoperations.py
 import os
-import shutil
 import subprocess
 from collections import namedtuple
 from contextlib import suppress
