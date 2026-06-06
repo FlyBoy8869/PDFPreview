@@ -24,6 +24,81 @@ from config.config import ADOBE_ACROBAT_PATH
 Result = namedtuple("Result", ["success", "message"])
 
 
+def delete_file(path: Path) -> Result:
+    try:
+        os.remove(str(path))
+    except (PermissionError, OSError, FileNotFoundError) as e:
+        return Result(False, e.strerror)
+
+    return Result(True, "")
+
+
+def delete_folder(path: Path, recurse: bool = False) -> Result:
+    def has_files() -> bool:
+        try:
+            next(path.glob("*"))
+            return True
+        except StopIteration:
+            return False
+
+    if has_files() and not recurse:
+        return Result(False, "Not Empty")
+
+    try:
+        folder = QDir(path)
+        success = folder.removeRecursively()
+        if not success:
+            # need to get reason for failure since QDir.removeRecursively doesn't give one
+            path.rmdir()
+    except (PermissionError, OSError) as e:
+        return Result(False, e.strerror)
+
+    return Result(True, "")
+
+
+def duplicate_file(path: Path) -> Result:
+    try:
+        unique_name = get_unique_filename(path)
+        path.copy(unique_name)
+    except (PermissionError, OSError) as e:
+        return Result(False, e.strerror)
+
+    return Result(True, "")
+
+
+def mkdir(path: Path) -> Result:
+    try:
+        unique_name = get_unique_filename(path / "New folder")
+        Path(unique_name).mkdir(parents=True)
+    except (PermissionError, OSError, FileExistsError) as e:
+        return Result(False, e.strerror)
+
+    return Result(True, "")
+
+
+def move_file(src: Path, dest: Path) -> Result:
+    try:
+        src.move(dest)
+    except (PermissionError, OSError) as e:
+        return Result(False, e.strerror)
+
+    return Result(True, "")
+
+
+def new_txt_file(path: Path) -> Result:
+    unique_name = get_unique_filename(path / "text.txt", "")
+    new_file = Path(unique_name)
+    try:
+        new_file.touch()
+        with new_file.open(mode="w") as out_file:
+            out_file.write("This is a text file created by PDFPreview a.k.a, FileViewer.\n")
+
+    except (PermissionError, OSError) as e:
+        return Result(False, e.strerror)
+
+    return Result(True, "")
+
+
 def open_file(path: str) -> None:
     """Open file in the default application."""
     startfile(QUrl.fromLocalFile(path).url())
@@ -59,68 +134,7 @@ def rename_file(model: QFileSystemModel, index: QModelIndex, new_name: str) -> R
     return Result(result, "")
 
 
-def delete_file(path: Path) -> Result:
-    try:
-        os.remove(str(path))
-    except (PermissionError, OSError, FileNotFoundError) as e:
-        return Result(False, e.strerror)
-
-    return Result(True, "")
-
-
-def delete_folder(path: Path, recurse: bool = False) -> Result:
-    def has_files() -> bool:
-        try:
-            next(path.glob("*"))
-            return True
-        except StopIteration:
-            return False
-
-    if has_files() and not recurse:
-        return Result(False, "Not Empty")
-
-    try:
-        folder = QDir(path)
-        success = folder.removeRecursively()
-        if not success:
-            # need to get reason for failure since QDir.removeRecursively doesn't give one
-            path.rmdir()
-    except (PermissionError, OSError) as e:
-        return Result(False, e.strerror)
-
-    return Result(True, "")
-
-
-def move_file(src: Path, dest: Path) -> Result:
-    try:
-        src.move(dest)
-    except (PermissionError, OSError) as e:
-        return Result(False, e.strerror)
-
-    return Result(True, "")
-
-
-def mkdir(path: Path) -> Result:
-    try:
-        unique_name = get_unique_filename(path / "New folder")
-        Path(unique_name).mkdir(parents=True)
-    except (PermissionError, OSError, FileExistsError) as e:
-        return Result(False, e.strerror)
-
-    return Result(True, "")
-
-
-def duplicate_file(path: Path) -> Result:
-    try:
-        unique_name = get_unique_filename(path)
-        path.copy(unique_name)
-    except (PermissionError, OSError) as e:
-        return Result(False, e.strerror)
-
-    return Result(True, "")
-
-
-def get_unique_filename(filename: Path | str) -> str:
+def get_unique_filename(filename: Path | str, text: str = " - Copy") -> str:
     filename = Path(filename)
 
     if not filename.exists():
@@ -129,14 +143,14 @@ def get_unique_filename(filename: Path | str) -> str:
     stem = filename.stem
     suffix = filename.suffix
 
-    new_name = f"{stem} - Copy{suffix}"
+    new_name = f"{stem}{text}{suffix}"
     candidate_path = filename.with_name(new_name)
     if not candidate_path.exists():
         return str(candidate_path)
 
     counter = 1
     while True:
-        new_name = f"{stem} - Copy ({counter}){suffix}"
+        new_name = f"{stem}{text} ({counter}){suffix}"
         candidate_path = filename.with_name(new_name)
         if not candidate_path.exists():
             return str(candidate_path)
