@@ -246,8 +246,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """Creates a dynamic menu based on the file type."""
         index: QModelIndex = self.treeView.indexAt(position)
         print(f"index points to {self.model.filePath(index)}")
+        index_valid: bool = index.isValid()
 
-        if not index.isValid():
+        if not index_valid:
             print("clicked in the 'dead space'...")
             return
 
