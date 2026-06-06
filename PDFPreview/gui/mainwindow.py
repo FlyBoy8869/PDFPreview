@@ -245,6 +245,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_treeview_context_menu_request(self, position) -> None:
         """Creates a dynamic menu based on the file type."""
         index: QModelIndex = self.treeView.indexAt(position)
+        print(f"index points to {self.model.filePath(index)}")
+
         if not index.isValid():
             print("clicked in the 'dead space'...")
             return
@@ -254,7 +256,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         open_with: QMenu = QMenu("Open With", menu)
         open_with.setIcon(QIcon((IMAGES / "open_with.ico").resolve().as_posix()))
+
+        new_menu: QMenu = QMenu("New", menu)
+
         menu.addMenu(open_with)
+        menu.addMenu(new_menu)
 
         if suffix in ["pdf"]:
             self._add_action("Adobe Acrobat", "acrobat", "acrobat-logo.png", open_with)
@@ -264,8 +270,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             self._add_action("MS Paint", "paint", "palette.png", open_with)
 
-        icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogOpenButton)
-        self._add_action("New Folder", "new_folder", icon, menu)
+        icon = QIcon((IMAGES / "folder.png").resolve().as_posix())
+        self._add_action("Folder", "new_folder", icon, new_menu)
+        icon = self.style().standardIcon(QStyle.StandardPixmap.SP_FileIcon)
+        self._add_action("Text Document", "new_text_file", icon, new_menu)
 
         duplicate = self._add_action("Duplicate", "duplicate", "copy.png", menu)
         self._add_action("Move", "move", "move.png", menu)
@@ -276,7 +284,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if self.model.isDir(index):
             menu.removeAction(duplicate)
-            self._add_action("Open as Project", "project", "", menu)
 
         # let's figure out what we're doing... and then do it!
         if action := menu.exec(self.treeView.viewport().mapToGlobal(position)):
@@ -415,6 +422,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "duplicate": self._do_duplicate_action,
             "move": self._do_move_action,
             "new_folder": self._do_new_folder_action,
+            "new_text_file": self._do_new_text_file_action,
         }
 
     def _dispatch_action(self, action: str, index: QModelIndex) -> None:
@@ -461,6 +469,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_new_folder_action(self, index: QModelIndex) -> None:
         result = fileoperations.mkdir(Path(self.model.filePath(index)).parent)
+        if not result.success:
+            QMessageBox.warning(self, "Warning", result.message)
+
+    def _do_new_text_file_action(self, index: QModelIndex) -> None:
+        result = fileoperations.new_txt_file(Path(self.model.filePath(index)).parent)
         if not result.success:
             QMessageBox.warning(self, "Warning", result.message)
 
