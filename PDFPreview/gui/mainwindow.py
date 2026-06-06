@@ -260,6 +260,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         open_with.setIcon(QIcon((IMAGES / "open_with.ico").resolve().as_posix()))
 
         new_menu: QMenu = QMenu("New", menu)
+        new_menu.setIcon(QIcon((IMAGES / "plus.png").resolve().as_posix()))
 
         menu.addMenu(open_with)
         menu.addMenu(new_menu)
