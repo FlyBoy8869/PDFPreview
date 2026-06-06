@@ -200,7 +200,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         bookmark_index: QModelIndex = list_item.bookmark_index
         if not Path(list_item.path).exists():
             QMessageBox.information(self, "Info", f"File no longer exists:\n\n{list_item.path}")
-
             return
 
         is_file: bool = not self.model.isDir(bookmark_index)
