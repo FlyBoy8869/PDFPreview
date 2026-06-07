@@ -281,7 +281,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._add_action("Move", "move", "move.png", menu)
         self._add_action("Rename", "rename", "rename.png", menu)
 
-        icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
+        # icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
+        icon = QIcon((IMAGES / "delete.png").resolve().as_posix())
         self._add_action("Delete", "delete", icon, menu)
 
         if self.model.isDir(index):
