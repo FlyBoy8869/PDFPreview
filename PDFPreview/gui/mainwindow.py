@@ -2,7 +2,7 @@ from contextlib import suppress
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl, Signal
+from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl, Signal, QMimeData
 from PySide6.QtGui import (
     QAction,
     QDragEnterEvent,
@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (
     QInputDialog,
     QMainWindow,
     QMenu,
-    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog
+    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication
 )
 
 # import config.config
@@ -244,7 +244,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_treeview_context_menu_request(self, position) -> None:
         """Creates a dynamic menu based on the file type."""
         index: QModelIndex = self.treeView.indexAt(position)
-        print(f"index points to {self.model.filePath(index)}")
         index_valid: bool = index.isValid()
 
         if not index_valid:
@@ -280,6 +279,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         duplicate = self._add_action("Duplicate", "duplicate", "copy.png", menu)
         self._add_action("Move", "move", "move.png", menu)
         self._add_action("Rename", "rename", "rename.png", menu)
+        self._add_action("Copy", "copy", "", menu)
 
         # icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
         icon = QIcon((IMAGES / "delete.png").resolve().as_posix())
@@ -425,6 +425,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "move": self._do_move_action,
             "new_folder": self._do_new_folder_action,
             "new_text_file": self._do_new_text_file_action,
+            "copy": self._do_copy_action,
         }
 
     def _dispatch_action(self, action: str, index: QModelIndex) -> None:
@@ -436,6 +437,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         path = Path(self.model.filePath(index))
         if path.suffix.lower() == ".pdf":
             fileoperations.open_with_acrobat(self.model.filePath(index))
+
+    def _do_copy_action(self, index: QModelIndex) -> None:
+        mime_data = QMimeData()
+        mime_data.setUrls([QUrl.fromLocalFile(self.model.filePath(index))])
+        self.clipboard = QApplication.clipboard()
+        self.clipboard.setMimeData(mime_data)
 
     def _do_delete_action(self, index: QModelIndex) -> None:
         if self._ask_yes_or_no(self, "Delete", f"Deleting '{self.model.fileName(index)}'.\n\nThis action can not be undone.\nAre you sure?"):
