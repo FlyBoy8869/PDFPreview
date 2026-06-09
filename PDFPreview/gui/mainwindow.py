@@ -279,7 +279,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         duplicate = self._add_action("Duplicate", "duplicate", "copy.png", menu)
         self._add_action("Move", "move", "move.png", menu)
         self._add_action("Rename", "rename", "rename.png", menu)
-        self._add_action("Copy", "copy", "", menu)
+        self._add_action("Copy", "copy", "copy.png", menu)
 
         # icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
         icon = QIcon((IMAGES / "delete.png").resolve().as_posix())
