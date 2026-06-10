@@ -2,7 +2,7 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
-[Unreleased]
+[0.19.0] - 2026-06-09
 
 ### Added
 - Menu option to copy a file to the clipboard.
