@@ -2,7 +2,14 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
-[0.19.0] - 2026-06-09
+## [0.19.1] - 2026-06-10
+
+### Changed
+- icon for delete menu option
+- icon for duplicate menu option
+
+
+## [0.19.0] - 2026-06-09
 
 ### Added
 - Menu option to copy a file to the clipboard.
