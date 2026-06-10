@@ -29,6 +29,7 @@ from PDFPreview.services.bookmark_service import update_bookmark_order, load_boo
 from .ui_mainwindow import Ui_MainWindow
 from PDFPreview.eventfilters.about_eventfilter import AboutDialogFilter
 from PDFPreview.eventfilters.bookmark_eventfilter import BookmarkListEventFilter
+from ..helpers.gui import yes_or_no
 from ..services.recent_service import delete_recent
 
 if TYPE_CHECKING:
@@ -444,12 +445,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.clipboard.setMimeData(mime_data)
 
     def _do_delete_action(self, index: QModelIndex) -> None:
-        if self._ask_yes_or_no(self, "Delete", f"Deleting '{self.model.fileName(index)}'.\n\nThis action can not be undone.\nAre you sure?"):
+        if yes_or_no(self, "Delete", f"Deleting '{self.model.fileName(index)}'.\n\nThis action can not be undone.\nAre you sure?"):
             if self.model.isDir(index):
                 path = Path(self.model.filePath(index))
                 result = fileoperations.delete_folder(path)
                 if not result.success and result.message == "Not Empty":
-                    if self._ask_yes_or_no(self, "Warning", "Folder is not empty. Continue?"):
+                    if yes_or_no(self, "Warning", "Folder is not empty. Continue?"):
                         result = fileoperations.delete_folder(path, recurse=True)
                         if not result.success:
                             QMessageBox.warning(self, "Warning", result.message)
@@ -504,11 +505,3 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_paint_action(self, index: QModelIndex) -> None:
         fileoperations.open_with_mspaint(self.model.filePath(index))
-
-    @staticmethod
-    def _ask_yes_or_no(parent, title: str, message: str) -> bool:
-        return QMessageBox.question(
-            parent,
-            title,
-            message
-        ) == QMessageBox.StandardButton.Yes
