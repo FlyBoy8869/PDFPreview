@@ -272,8 +272,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             self._add_action("MS Paint", "paint", "palette.png", open_with)
 
-        icon = QIcon((IMAGES / "folder.png").resolve().as_posix())
-        self._add_action("Folder", "new_folder", icon, new_menu)
+        self._add_action("Folder", "new_folder", "folder.png", new_menu)
         icon = self.style().standardIcon(QStyle.StandardPixmap.SP_FileIcon)
         self._add_action("Text Document", "new_text_file", icon, new_menu)
 
