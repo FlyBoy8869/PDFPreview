@@ -276,10 +276,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         icon = self.style().standardIcon(QStyle.StandardPixmap.SP_FileIcon)
         self._add_action("Text Document", "new_text_file", icon, new_menu)
 
-        duplicate = self._add_action("Duplicate", "duplicate", "duplicate-64x64.png", menu)
+        duplicate = self._add_action("Duplicate", "duplicate", "duplicate.png", menu)
         self._add_action("Move", "move", "move.png", menu)
         self._add_action("Rename", "rename", "rename.png", menu)
-        self._add_action("Copy", "copy", "copy-to-clipboard-64x64.png", menu)
+        self._add_action("Copy", "copy", "copy-to-clipboard.png", menu)
 
         icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
         self._add_action("Delete", "delete", icon, menu)
