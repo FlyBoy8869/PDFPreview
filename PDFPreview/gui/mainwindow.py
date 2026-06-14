@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (
     QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication
 )
 
-# import config.config
 from config.config import config
 from config.config import SPLASH_FILE, TITLE, IMAGES
 from PDFPreview.gui.dialogs import about
@@ -31,6 +30,8 @@ from PDFPreview.eventfilters.about_eventfilter import AboutDialogFilter
 from PDFPreview.eventfilters.bookmark_eventfilter import BookmarkListEventFilter
 from ..helpers.gui import yes_or_no
 from ..services.recent_service import delete_recent
+
+from PDFPreview.helpers.paths import Paths
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
@@ -71,11 +72,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # NAVIGATION BUTTONS
         self.pbBack.setText("")
         self.pbBack.setToolTip("Back")
-        self.pbBack.setIcon(QIcon((IMAGES / "back-arrow.png").resolve().as_posix()))
+        self.pbBack.setIcon(QIcon(Paths.icon("back-arrow.png")))
 
         self.pb_root.setText("")
         self.pb_root.setToolTip("My Computer")
-        self.pb_root.setIcon(QIcon((IMAGES / "my_computer.png").resolve().as_posix()))
+        self.pb_root.setIcon(QIcon(Paths.icon("my_computer.png")))
 
         self.pbBack.clicked.connect(self.handle_back_button_clicked)
         self.pb_root.clicked.connect(self.handle_root_button_clicked)
@@ -256,10 +257,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         menu: QMenu = QMenu()
 
         open_with: QMenu = QMenu("Open With", menu)
-        open_with.setIcon(QIcon((IMAGES / "open_with.ico").resolve().as_posix()))
+        open_with.setIcon(QIcon(Paths.icon("open_with.png")))
 
         new_menu: QMenu = QMenu("New", menu)
-        new_menu.setIcon(QIcon((IMAGES / "plus.png").resolve().as_posix()))
+        new_menu.setIcon(QIcon(Paths.icon("plus.png")))
 
         menu.addMenu(open_with)
         menu.addMenu(new_menu)
@@ -296,7 +297,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         action = menu.addAction(title)
         action.setObjectName(obj_name)
         if isinstance(icon, str):
-            icon = QIcon((IMAGES / icon).resolve().as_posix())
+            icon = QIcon(Paths.icon(icon))
         action.setIcon(icon)
         return action
 
