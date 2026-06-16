@@ -28,6 +28,7 @@ from PDFPreview.services.bookmark_service import update_bookmark_order, load_boo
 from .ui_mainwindow import Ui_MainWindow
 from PDFPreview.eventfilters.about_eventfilter import AboutDialogFilter
 from PDFPreview.eventfilters.bookmark_eventfilter import BookmarkListEventFilter
+from ..contextmenu import ContextMenu
 from ..helpers.gui import yes_or_no
 from ..services.recent_service import delete_recent
 
@@ -246,51 +247,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_treeview_context_menu_request(self, position) -> None:
         """Creates a dynamic menu based on the file type."""
         index: QModelIndex = self.treeView.indexAt(position)
-        index_valid: bool = index.isValid()
 
-        if not index_valid:
-            print("clicked in the 'dead space'...")
-            return
-
-        suffix = self.model.filePath(index).rsplit(".", 1)[-1].lower()
-
-        menu: QMenu = QMenu()
-
-        open_with: QMenu = QMenu("Open With", menu)
-        open_with.setIcon(QIcon(Paths.icon("open_with.png")))
-
-        new_menu: QMenu = QMenu("New", menu)
-        new_menu.setIcon(QIcon(Paths.icon("plus.png")))
-
-        menu.addMenu(open_with)
-        menu.addMenu(new_menu)
-
-        if suffix in ["pdf"]:
-            self._add_action("Adobe Acrobat", "acrobat", "acrobat-logo.png", open_with)
-
-        self._add_action("Windows Explorer", "explorer", "explorer.png", open_with)
-
-        if self.model.filePath(index).rsplit(".", 1)[-1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
-            self._add_action("MS Paint", "paint", "palette.png", open_with)
-
-        self._add_action("Folder", "new_folder", "folder.png", new_menu)
-        icon = self.style().standardIcon(QStyle.StandardPixmap.SP_FileIcon)
-        self._add_action("Text Document", "new_text_file", icon, new_menu)
-
-        duplicate = self._add_action("Duplicate", "duplicate", "duplicate.png", menu)
-        self._add_action("Move", "move", "move.png", menu)
-        self._add_action("Rename", "rename", "rename.png", menu)
-        self._add_action("Copy", "copy", "copy-to-clipboard.png", menu)
-
-        icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
-        self._add_action("Delete", "delete", icon, menu)
-
-        if self.model.isDir(index):
-            menu.removeAction(duplicate)
-
-        # let's figure out what we're doing... and then do it!
-        if action := menu.exec(self.treeView.viewport().mapToGlobal(position)):
-            self._dispatch_action(action.objectName(), index)
+        context_menu = ContextMenu()
+        if action := context_menu.get_menu_action(
+            Path(self.model.filePath(index)),
+            self.model.isDir(index),
+            index.isValid(),
+            self.treeView.viewport().mapToGlobal(position)
+        ):
+            self._dispatch_action(action, index)
 
     @staticmethod
     def _add_action(title: str, obj_name: str, icon: str | QIcon, menu: QMenu) -> QAction:
