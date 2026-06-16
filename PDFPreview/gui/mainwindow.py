@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (
 )
 
 from config.config import config
-from config.config import SPLASH_FILE, TITLE, IMAGES
+from config.config import SPLASH_FILE, TITLE
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui, recents
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
