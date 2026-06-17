@@ -5,6 +5,7 @@ All notable changes pertinent to the end user of this project will be documented
 ## [Unreleased]
 
 ### Fixed
+- About dialog icon not being displayed.
 - Bug causing the open with adobe acrobat menu entry to not be present.
 
 ## [0.19.1] - 2026-06-10
