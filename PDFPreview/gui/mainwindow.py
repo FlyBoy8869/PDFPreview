@@ -394,8 +394,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         }
 
     def _dispatch_action(self, action: str, index: QModelIndex) -> None:
-        if not index.isValid():
-            return
         self.context_menu_actions[action](index)
 
     def _do_acrobat_action(self, index: QModelIndex) -> None:
@@ -442,12 +440,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 QMessageBox.warning(self, "Warning", result.message)
 
     def _do_new_folder_action(self, index: QModelIndex) -> None:
-        result = fileoperations.mkdir(Path(self.model.filePath(index)).parent)
+        path = Path(self.model.filePath(index)).parent
+        if not index.isValid():
+            path = Path(self.model.filePath(self.treeView.currentIndex()))
+
+        result = fileoperations.mkdir(path)
         if not result.success:
             QMessageBox.warning(self, "Warning", result.message)
 
     def _do_new_text_file_action(self, index: QModelIndex) -> None:
-        result = fileoperations.new_txt_file(Path(self.model.filePath(index)).parent)
+        path = Path(self.model.filePath(index)).parent
+        if not index.isValid():
+            path = Path(self.model.filePath(self.treeView.currentIndex()))
+
+        result = fileoperations.new_txt_file(path)
         if not result.success:
             QMessageBox.warning(self, "Warning", result.message)
 

@@ -4,6 +4,9 @@ All notable changes pertinent to the end user of this project will be documented
 
 ## [Unreleased]
 
+### Added
+- You can now right click the white space of the file browser to show the "New" context menu.
+
 ### Fixed
 - About dialog icon not being displayed.
 - Bug causing the open with adobe acrobat menu entry to not be present.
