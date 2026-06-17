@@ -2,6 +2,11 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Bug causing the open with adobe acrobat menu entry to not be present.
+
 ## [0.19.1] - 2026-06-10
 
 ### Changed

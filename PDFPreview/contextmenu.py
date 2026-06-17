@@ -26,7 +26,7 @@ class ContextMenu:
         menu.addMenu(open_with)
         menu.addMenu(new_menu)
 
-        if suffix in ["pdf"]:
+        if suffix.lower().replace(".", "") in ["pdf"]:
             self._add_action("Adobe Acrobat", "acrobat", "acrobat-logo.png", open_with)
 
         self._add_action("Windows Explorer", "explorer", "explorer.png", open_with)
