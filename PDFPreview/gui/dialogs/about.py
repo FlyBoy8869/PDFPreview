@@ -5,6 +5,7 @@ from PySide6.QtGui import QColor, QPalette, QPixmap
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QLabel, QWidget
 
+from PDFPreview.helpers.paths import Paths
 from config.config import LOGO, TITLE, VERSION
 
 ABOUT_UI_PATH = Path(__file__).resolve().parent / "ui_about.ui"
@@ -33,7 +34,7 @@ def create_about_dialog() -> QWidget:
 
     if logo_label := about_window.findChild(QLabel, "lbl_logo"):
         logo_label.setPixmap(
-            QPixmap(LOGO.as_posix()))
+            QPixmap(Paths.icon("logo.png")))
 
     if version_label := about_window.findChild(QLabel, "lbl_about"):
         version_label.setTextFormat(Qt.TextFormat.RichText)
