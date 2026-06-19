@@ -178,10 +178,10 @@
             <bool>true</bool>
            </property>
            <property name="dragDropMode">
-            <enum>QAbstractItemView::DragDropMode::DragOnly</enum>
+            <enum>QAbstractItemView::DragDropMode::DragDrop</enum>
            </property>
            <property name="defaultDropAction">
-            <enum>Qt::DropAction::CopyAction</enum>
+            <enum>Qt::DropAction::MoveAction</enum>
            </property>
            <property name="alternatingRowColors">
             <bool>true</bool>

@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_mainwindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.2
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -134,8 +134,8 @@ class Ui_MainWindow(object):
         self.treeView.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.treeView.setEditTriggers(QAbstractItemView.EditTrigger.DoubleClicked|QAbstractItemView.EditTrigger.EditKeyPressed)
         self.treeView.setDragEnabled(True)
-        self.treeView.setDragDropMode(QAbstractItemView.DragDropMode.DragOnly)
-        self.treeView.setDefaultDropAction(Qt.DropAction.CopyAction)
+        self.treeView.setDragDropMode(QAbstractItemView.DragDropMode.DragDrop)
+        self.treeView.setDefaultDropAction(Qt.DropAction.MoveAction)
         self.treeView.setAlternatingRowColors(True)
         self.treeView.setIndentation(7)
         self.treeView.setRootIsDecorated(False)

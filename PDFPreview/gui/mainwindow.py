@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
     QFileSystemModel,
     QInputDialog,
     QMainWindow,
-    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication
+    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication, QAbstractItemView
 )
 
 from config.config import config
@@ -148,6 +148,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
         self.treeView.setItemsExpandable(False)
         self.treeView.setRootIsDecorated(False)
+        # self.treeView.acceptDrops()
+        # self.treeView.setDragDropMode(QAbstractItemView.DragDrop)
         self.treeView.installEventFilter(self)
 
         # RECENTS
@@ -256,14 +258,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self._dispatch_action(action, index)
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
-        if source is self.treeView and (
-                event.type() == QEvent.Type.KeyPress
-                and cast("QKeyEvent", event).key() == Qt.Key.Key_Space
-        ):
-            # open selected file when the spacebar is pressed
-            fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
-            event.accept()
-            return True
+        if source is self.treeView:
+            if event.type() == QEvent.Type.KeyPress and cast("QKeyEvent", event).key() == Qt.Key.Key_Space:
+                # open selected file when the spacebar is pressed
+                fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
+                event.accept()
+                return True
+            if event.type() == QEvent.Type.DragMove:
+                print("got a drag enter event on treeview")
+
 
         if source is self.browser:
             if event.type() == QEvent.Type.DragEnter:
