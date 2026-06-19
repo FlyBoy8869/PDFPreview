@@ -438,6 +438,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         result = fileoperations.mkdir(path)
         if not result.success:
+            if "not a directory" in result.message.lower():
+                result = fileoperations.mkdir(path.parent)
+                if result.success:
+                    return
             QMessageBox.warning(self, "Warning", result.message)
 
     def _do_new_text_file_action(self, index: QModelIndex) -> None:
@@ -447,6 +451,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         result = fileoperations.new_txt_file(path)
         if not result.success:
+            if "not a directory" in result.message.lower():
+                result = fileoperations.new_txt_file(path.parent)
+                if result.success:
+                    return
             QMessageBox.warning(self, "Warning", result.message)
 
     def _do_explorer_action(self, index: QModelIndex) -> None:
