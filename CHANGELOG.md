@@ -4,6 +4,9 @@ All notable changes pertinent to the end user of this project will be documented
 
 ## [Unreleased]
 
+### Changed
+- When creating a new folder the naming convention has been changed from "New folder - Copy" etc. to "New folder (1)" when consecutively creating multiple new folders
+
 ### Added
 - Crude Drag and Drop into the folders show in the file browser only.
 - You can now right-click the white space of the file browser to show the "New" context menu.

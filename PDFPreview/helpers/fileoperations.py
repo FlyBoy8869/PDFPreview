@@ -67,7 +67,7 @@ def duplicate_file(path: Path) -> Result:
 
 def mkdir(path: Path) -> Result:
     try:
-        unique_name = get_unique_filename(path / "New folder")
+        unique_name = get_unique_filename(path / "New folder", "")
         Path(unique_name).mkdir(parents=True)
     except (PermissionError, OSError, FileExistsError) as e:
         return Result(False, e.strerror)
