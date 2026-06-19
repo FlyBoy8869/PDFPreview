@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, cast
 
 from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl, Signal, QMimeData
 from PySide6.QtGui import (
-    QAction,
     QDragEnterEvent,
     QDropEvent,
     QKeySequence,
@@ -15,7 +14,6 @@ from PySide6.QtWidgets import (
     QFileSystemModel,
     QInputDialog,
     QMainWindow,
-    QMenu,
     QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication
 )
 
@@ -256,15 +254,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.treeView.viewport().mapToGlobal(position)
         ):
             self._dispatch_action(action, index)
-
-    @staticmethod
-    def _add_action(title: str, obj_name: str, icon: str | QIcon, menu: QMenu) -> QAction:
-        action = menu.addAction(title)
-        action.setObjectName(obj_name)
-        if isinstance(icon, str):
-            icon = QIcon(Paths.icon(icon))
-        action.setIcon(icon)
-        return action
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         if source is self.treeView and (

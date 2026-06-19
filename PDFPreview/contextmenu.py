@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from PySide6.QtCore import QPoint
 from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import QMenu, QStyle, QApplication
 
@@ -7,17 +8,12 @@ from PDFPreview.helpers.paths import Paths
 
 
 class ContextMenu:
-    def get_menu_action(self, path: Path, is_dir: bool, is_valid: bool, position) -> str:
-
-        # if not is_valid:
-        #     print("clicked in the 'dead space'...")
-        #     return ""
-
-        suffix = path.suffix
-
+    def get_menu_action(self, path: Path, is_dir: bool, valid_path: bool, position: QPoint) -> str:
+        suffix = path.suffix.replace(".", "").lower()
         menu: QMenu = QMenu()
 
-        if not is_valid:
+        # handle context menu request when right-clicking in the "dead-space" of the QTreeView
+        if not valid_path:
             new_menu = self._make_new_menu(menu)
             menu.addMenu(new_menu)
             return self.exec(menu, position)
@@ -28,16 +24,7 @@ class ContextMenu:
         new_menu: QMenu = self._make_new_menu(menu)
         menu.addMenu(new_menu)
 
-        duplicate = self._add_action("Duplicate", "duplicate", "duplicate.png", menu)
-        self._add_action("Move", "move", "move.png", menu)
-        self._add_action("Rename", "rename", "rename.png", menu)
-        self._add_action("Copy", "copy", "copy-to-clipboard.png", menu)
-
-        icon = QApplication.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
-        self._add_action("Delete", "delete", icon, menu)
-
-        if is_dir:
-            menu.removeAction(duplicate)
+        menu = self._make_menu_body(menu, is_dir)
 
         return self.exec(menu, position)
 
@@ -45,6 +32,20 @@ class ContextMenu:
     def exec(menu: QMenu, position) -> str:
         action = menu.exec(position)
         return action.objectName() if action is not None else ""
+
+    def _make_menu_body(self, menu: QMenu, is_dir: bool) -> QMenu:
+        duplicate = self._add_action("Duplicate", "duplicate", "duplicate.png", menu)
+        self._add_action("Move", "move", "move.png", menu)
+        self._add_action("Rename", "rename", "rename.png", menu)
+        self._add_action("Copy", "copy", "copy-to-clipboard.png", menu)
+
+        icon = QApplication.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
+        self._add_action("Delete", "delete", "trashcan.png", menu)
+
+        if is_dir:
+            menu.removeAction(duplicate)
+
+        return menu
 
     def _make_new_menu(self, parent: QMenu) -> QMenu:
         menu: QMenu = QMenu("New", parent)
@@ -60,12 +61,12 @@ class ContextMenu:
         menu: QMenu = QMenu("Open With", parent)
         menu.setIcon(QIcon(Paths.icon("open_with.png")))
 
-        if suffix.lower().replace(".", "") in ["pdf"]:
+        if suffix in ["pdf"]:
             self._add_action("Adobe Acrobat", "acrobat", "acrobat-logo.png", menu)
 
         self._add_action("Windows Explorer", "explorer", "explorer.png", menu)
 
-        if suffix.lower().replace(".", "") in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
+        if suffix in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             self._add_action("MS Paint", "paint", "palette.png", menu)
 
         return menu
