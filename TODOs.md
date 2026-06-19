@@ -1,2 +1,2 @@
-- show a busy indicator while the qfilesystemmodel is loading a folder - low priority
+- show a busy indicator while the QFileSystemModel is loading a folder - low priority
 - make batch file to copy CHANGELOG.md to distribution root folder - medium priority

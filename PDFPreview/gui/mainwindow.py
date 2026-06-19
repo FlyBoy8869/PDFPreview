@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
     QFileSystemModel,
     QInputDialog,
     QMainWindow,
-    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication, QAbstractItemView
+    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication,
 )
 
 from config.config import config

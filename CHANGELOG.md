@@ -146,7 +146,7 @@ All notable changes pertinent to the end user of this project will be documented
 
 ### Updated
 
-- Titlebar path tweak
+- Title Bar path tweak
 
 ## [0.12.3] - 2026-03-13
 
@@ -331,7 +331,7 @@ All notable changes pertinent to the end user of this project will be documented
 
 ### Fixed
 
-- Git Tracker Issue #1 - Titlebar Update
+- Git Tracker Issue #1 - Title Bar Update
 
 ## [0.2.1] - 2026-01-23
 
