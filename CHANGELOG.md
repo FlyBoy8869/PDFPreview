@@ -6,7 +6,7 @@ All notable changes pertinent to the end user of this project will be documented
 
 ### Added
 - Crude Drag and Drop into the folders show in the file browser only.
-- You can now right click the white space of the file browser to show the "New" context menu.
+- You can now right-click the white space of the file browser to show the "New" context menu.
 
 ### Fixed
 - Bug which caused an exception when making a new text file or folder when a file was selected and the context menu was requested via right-clicking the white space of the file browser.
