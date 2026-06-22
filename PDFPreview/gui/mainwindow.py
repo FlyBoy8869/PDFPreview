@@ -2,7 +2,7 @@ from contextlib import suppress
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl, Signal, QMimeData, QTimer
+from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl, Signal, QMimeData
 from PySide6.QtGui import (
     QDragEnterEvent,
     QDropEvent,
@@ -219,12 +219,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         parent = bookmark_index.parent()
         while parent.isValid():
-            print(f"expanding {self.model.filePath(parent)}")
             self.treeView.expand(parent)
             parent = parent.parent()
         self.treeView.expand(bookmark_index)
 
-        print(f"scrolling {self.model.filePath(list_item.bookmark_index)} into view")
         self.treeView.scrollTo(self.model.index(list_item.path), QAbstractItemView.ScrollHint.PositionAtTop)
 
         path = Path(
