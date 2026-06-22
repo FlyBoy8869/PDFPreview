@@ -19,10 +19,11 @@ class BookmarkListEventFilter(QObject):
         source = cast("QListWidget", source)
         if event.type() == QEvent.Type.DragEnter:
             event = cast("QDragEnterEvent", event)
-            if (
-                    event.proposedAction() == Qt.DropAction.CopyAction
-                    and event.mimeData().hasText()
-            ):
+            # if (
+            #         event.proposedAction() == Qt.DropAction.CopyAction
+            #         and event.mimeData().hasText()
+            # ):
+            if event.mimeData().hasText():
                 event.acceptProposedAction()
                 return event.isAccepted()
             event.ignore()

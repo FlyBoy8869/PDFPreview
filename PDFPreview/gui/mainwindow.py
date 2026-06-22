@@ -2,7 +2,7 @@ from contextlib import suppress
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl, Signal, QMimeData
+from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl, Signal, QMimeData, QTimer
 from PySide6.QtGui import (
     QDragEnterEvent,
     QDropEvent,
@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
     QFileSystemModel,
     QInputDialog,
     QMainWindow,
-    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication,
+    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication, QAbstractItemView,
 )
 
 from config.config import config
@@ -120,7 +120,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setReadOnly(False)
         self.model.setFilter(file_filters[self.action_hide_files.isChecked()])
-        self.model.setRootPath("")
+        root_index = self.model.setRootPath("")
         self.model.fileRenamed.connect(lambda p, o, n: self.update_title_bar(f"{p}/{n}"))
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
@@ -135,8 +135,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # FILE BROWSER
         self.treeView.setModel(self.model)
+        self.treeView.setItemsExpandable(True)
+        self.treeView.setRootIsDecorated(True)
+        self.treeView.setAutoExpandDelay(0)
         self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
-        self.treeView.setRootIndex(self.model.index(""))
+        self.treeView.setRootIndex(root_index)
+        self.treeView.installEventFilter(self)
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
         self.treeView.currentIndexChanged.connect(self.handle_treeview_current_index_changed)
@@ -146,11 +150,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.customContextMenuRequested.connect(
             self.handle_treeview_context_menu_request,
         )
-        self.treeView.setItemsExpandable(False)
-        self.treeView.setRootIsDecorated(False)
-        # self.treeView.acceptDrops()
-        # self.treeView.setDragDropMode(QAbstractItemView.DragDrop)
-        self.treeView.installEventFilter(self)
 
         # RECENTS
         self.cb_recents.setToolTip("Recents")
@@ -200,7 +199,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.model.setFilter(file_filters[checked])
 
     def handle_bookmark_clicked(self, list_item: VListWidgetItem) -> None:
-        bookmark_index: QModelIndex = list_item.bookmark_index
+        # TODO: Remove index storage in VListWidgetItem and just store the path
+        # bookmark_index: QModelIndex = list_item.bookmark_index
+        bookmark_index = self.model.index(list_item.path, 0)
         if not Path(list_item.path).exists():
             QMessageBox.information(self, "Info", f"File no longer exists:\n\n{list_item.path}")
             return
@@ -209,12 +210,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # it's a file so let's see it (don't want to see directory listings in the browser)
         if is_file:
-            self.view_file(list_item.bookmark_index)
+            self.view_file(bookmark_index)
             bookmark_index = bookmark_index.parent()
 
-        self.treeView.setRootIndex(bookmark_index)
         self.treeView.setCurrentIndex(bookmark_index)
+
         self.treeView.collapseAll()
+
+        parent = bookmark_index.parent()
+        while parent.isValid():
+            print(f"expanding {self.model.filePath(parent)}")
+            self.treeView.expand(parent)
+            parent = parent.parent()
+        self.treeView.expand(bookmark_index)
+
+        print(f"scrolling {self.model.filePath(list_item.bookmark_index)} into view")
+        self.treeView.scrollTo(self.model.index(list_item.path), QAbstractItemView.ScrollHint.PositionAtTop)
 
         path = Path(
             self.model.filePath(list_item.bookmark_index) if is_file else self.model.filePath(bookmark_index)
@@ -230,8 +241,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
 
         qm_index = self.model.index(path).parent()
-        self.treeView.setRootIndex(qm_index)
         self.treeView.setCurrentIndex(qm_index)
+        self.treeView.scrollTo(self.model.index(path), QAbstractItemView.ScrollHint.PositionAtTop)
         self.view_file(self.model.index(path))
 
     def handle_treeview_current_index_changed(self, index: QModelIndex) -> None:
@@ -241,7 +252,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_treeview_double_click(self, index: QModelIndex) -> None:
         if self.model.isDir(index):
-            self.treeView.setRootIndex(index)
+            # self.treeView.setCurrentIndex(index)
+            self.treeView.expand(index)
             self.pathChanged.emit(str(Path(self.model.filePath(index))))
 
     def handle_treeview_context_menu_request(self, position) -> None:
