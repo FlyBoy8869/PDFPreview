@@ -153,6 +153,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # RECENTS
         self.cb_recents.setToolTip("Recents")
+        self.cb_recents.setMouseTracking(True)
         self.cb_recents.activated.connect(self.handle_recents_clicked)
         self.recents_tracker: recents.RecentsManager = recents.RecentsManager(
             self.cb_recents,
@@ -224,7 +225,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pathChanged.emit(str(path))
 
     def handle_recents_clicked(self, index: int) -> None:
-        path = Path(self.recents_tracker.item_data(index)).resolve()
+        # path = Path(self.recents_tracker.item_data(index)).resolve()
+        path = self.recents_tracker[index]
         if not path.exists():
             delete_recent(path.resolve().name)
             self.recents_tracker.remove(path.resolve().name)

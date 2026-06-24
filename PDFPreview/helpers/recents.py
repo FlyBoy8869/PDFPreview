@@ -27,10 +27,13 @@ class RecentsManager:
             self.widget.removeItem(0)
 
         self._add(path)
+
+        # add to database
         register_recent(Path(path).resolve().name, path)
 
     def _add(self, path: str) -> None:
         self.widget.addItem(Path(path).resolve().name, path)
+        self.widget.setItemData(self.widget.count() - 1, str(Path(path)), Qt.ItemDataRole.ToolTipRole)
         self._indexes[path] = True
 
     @Slot()
@@ -39,8 +42,11 @@ class RecentsManager:
         self._indexes = {}
         _clear_recents()
 
-    def item_data(self, index: int) -> str:
-        return self.widget.itemData(index, Qt.ItemDataRole.UserRole)
+    def item_data(self, index: int) -> Path:
+        return Path(self.widget.itemData(index, Qt.ItemDataRole.UserRole)).resolve()
+
+    def __getitem__(self, index: int) -> Path:
+        return Path(self.widget.itemData(index, Qt.ItemDataRole.UserRole)).resolve()
 
     @Slot()
     def remove(self, recent: str) -> None:
