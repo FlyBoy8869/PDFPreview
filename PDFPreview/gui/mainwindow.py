@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
     QFileSystemModel,
     QInputDialog,
     QMainWindow,
-    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication, QAbstractItemView,
+    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication, QAbstractItemView, QListWidgetItem,
 )
 
 from config.config import config
@@ -198,24 +198,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_action_hide_files(self, checked: bool) -> None:  # noqa: FBT001
         self.model.setFilter(file_filters[checked])
 
-    def handle_bookmark_clicked(self, list_item: VListWidgetItem) -> None:
-        # TODO: Remove index storage in VListWidgetItem and just store the path
-        # bookmark_index: QModelIndex = list_item.bookmark_index
-        bookmark_index = self.model.index(list_item.path, 0)
-        if not Path(list_item.path).exists():
-            QMessageBox.information(self, "Info", f"File no longer exists:\n\n{list_item.path}")
+    def handle_bookmark_clicked(self, list_item: QListWidgetItem) -> None:
+        path = Path(list_item.data(Qt.ItemDataRole.UserRole))
+        bookmark_index = self.model.index(str(path), 0)
+
+        if not path.exists():
+            QMessageBox.information(self, "Info", f"File no longer exists:\n\n{str(path)}")
             return
 
-        is_file: bool = not self.model.isDir(bookmark_index)
-
         # it's a file so let's see it (don't want to see directory listings in the browser)
-        if is_file:
+        if path.is_file():
             self.view_file(bookmark_index)
             bookmark_index = bookmark_index.parent()
 
         self.treeView.setCurrentIndex(bookmark_index)
-
-        self.treeView.collapseAll()
 
         parent = bookmark_index.parent()
         while parent.isValid():
@@ -223,11 +219,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             parent = parent.parent()
         self.treeView.expand(bookmark_index)
 
-        self.treeView.scrollTo(self.model.index(list_item.path), QAbstractItemView.ScrollHint.PositionAtTop)
+        self.treeView.scrollTo(self.model.index(str(path)), QAbstractItemView.ScrollHint.PositionAtTop)
 
-        path = Path(
-            self.model.filePath(list_item.bookmark_index) if is_file else self.model.filePath(bookmark_index)
-        )
         self.pathChanged.emit(str(path))
 
     def handle_recents_clicked(self, index: int) -> None:

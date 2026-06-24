@@ -6,7 +6,7 @@ from PySide6.QtCore import Qt
 from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 from PDFPreview.models.bookmark import Bookmark
 
-from PySide6.QtWidgets import QFileSystemModel, QListWidget
+from PySide6.QtWidgets import QFileSystemModel, QListWidget, QListWidgetItem
 
 from PDFPreview.services.bookmark_service import delete_bookmark
 
@@ -17,10 +17,7 @@ def load_bookmarks(bookmarks: list[Bookmark], list_widget: QListWidget, model: Q
             delete_bookmark(bookmark.name)
             continue
 
-        item = VListWidgetItem(
-            bookmark.name,
-            extra=model.index(bookmark.path),
-            path=bookmark.path,
-        )
+        item = QListWidgetItem(bookmark.name)
+        item.setData(Qt.ItemDataRole.UserRole, bookmark.path)
         item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
         list_widget.addItem(item)
