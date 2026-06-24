@@ -1,9 +1,0 @@
-from PySide6.QtCore import QModelIndex
-from PySide6.QtWidgets import QListWidgetItem
-
-
-class VListWidgetItem(QListWidgetItem):
-    def __init__(self, *args, extra: QModelIndex, path: str, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.bookmark_index: QModelIndex = extra
-        self.path: str = path

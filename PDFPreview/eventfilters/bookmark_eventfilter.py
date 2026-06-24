@@ -1,12 +1,11 @@
+from pathlib import Path
 from typing import cast
 
 from PySide6.QtCore import QObject, QEvent, Qt
 from PySide6.QtWidgets import QListWidget, QFileSystemModel, QListWidgetItem
 from PySide6.QtGui import QDragEnterEvent, QKeyEvent
 
-from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 from PDFPreview.services.bookmark_service import register_bookmark, delete_bookmark
-from config.config import PATH_PREFIX
 
 
 class BookmarkListEventFilter(QObject):
@@ -26,9 +25,10 @@ class BookmarkListEventFilter(QObject):
             event.ignore()
 
         if event.type() == QEvent.Type.Drop:
-            path: str = event.mimeData().text().replace(PATH_PREFIX, "")
+            path: str = str(Path.from_uri(event.mimeData().text()))
             favorites_text: str = self.model.fileName(self.model.index(path))
-            item = VListWidgetItem(favorites_text, extra=self.model.index(path), path=path)
+            item  = QListWidgetItem(favorites_text)
+            item.setData(Qt.ItemDataRole.UserRole, path)
             item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
             source.addItem(item)
 

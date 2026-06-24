@@ -3,7 +3,6 @@ from pathlib import Path
 
 from PySide6.QtCore import Qt
 
-from PDFPreview.gui.widgets.listwidget import VListWidgetItem
 from PDFPreview.models.bookmark import Bookmark
 
 from PySide6.QtWidgets import QFileSystemModel, QListWidget, QListWidgetItem
