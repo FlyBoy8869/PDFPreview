@@ -35,8 +35,6 @@ from PDFPreview.helpers.paths import Paths
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
-    from PDFPreview.gui.widgets.listwidget import VListWidgetItem
-
 
 # noinspection PyTypeChecker
 file_filters: dict[bool, QDir.Filter] = {
