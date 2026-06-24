@@ -224,17 +224,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pathChanged.emit(str(path))
 
     def handle_recents_clicked(self, index: int) -> None:
-        path = self.recents_tracker.item_data(index)
-        if not Path(path).exists():
-            delete_recent(Path(path).resolve().name)
-            self.recents_tracker.remove(Path(path).resolve().name)
-            self.statusBar().showMessage(f"Recent not found: {path}", 3000)
+        path = Path(self.recents_tracker.item_data(index)).resolve()
+        if not path.exists():
+            delete_recent(path.resolve().name)
+            self.recents_tracker.remove(path.resolve().name)
+            self.statusBar().showMessage(f"Recent not found: {str(path)}", 3000)
             return
 
-        qm_index = self.model.index(path).parent()
+        qm_index = self.model.index(str(path))
         self.treeView.setCurrentIndex(qm_index)
-        self.treeView.scrollTo(self.model.index(path), QAbstractItemView.ScrollHint.PositionAtTop)
-        self.view_file(self.model.index(path))
+        self.treeView.scrollTo(qm_index, QAbstractItemView.ScrollHint.PositionAtTop)
+        self.view_file(qm_index)
 
     def handle_treeview_current_index_changed(self, index: QModelIndex) -> None:
         if not self.model.isDir(index):
@@ -243,7 +243,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_treeview_double_click(self, index: QModelIndex) -> None:
         if self.model.isDir(index):
-            # self.treeView.setCurrentIndex(index)
             self.treeView.expand(index)
             self.pathChanged.emit(str(Path(self.model.filePath(index))))
 
