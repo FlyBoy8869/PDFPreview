@@ -43,10 +43,10 @@ class RecentsManager:
         _clear_recents()
 
     def item_data(self, index: int) -> Path:
-        return Path(self.widget.itemData(index, Qt.ItemDataRole.UserRole)).resolve()
+        return Path(self.widget.itemData(index, Qt.ItemDataRole.UserRole))
 
     def __getitem__(self, index: int) -> Path:
-        return Path(self.widget.itemData(index, Qt.ItemDataRole.UserRole)).resolve()
+        return Path(self.widget.itemData(index, Qt.ItemDataRole.UserRole))
 
     @Slot()
     def remove(self, recent: str) -> None:
