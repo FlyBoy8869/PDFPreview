@@ -66,17 +66,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.pathChanged.connect(self.update_title_bar)
 
-        # NAVIGATION BUTTONS
-        self.pbBack.setText("")
-        self.pbBack.setToolTip("Back")
-        self.pbBack.setIcon(QIcon(Paths.icon("back-arrow.png")))
-
-        self.pb_root.setText("")
-        self.pb_root.setToolTip("My Computer")
-        self.pb_root.setIcon(QIcon(Paths.icon("my_computer.png")))
-
-        self.pbBack.clicked.connect(self.handle_back_button_clicked)
-        self.pb_root.clicked.connect(self.handle_root_button_clicked)
         # -----------------------------------------------------------
 
         self.help_shortcut = QShortcut(QKeySequence("h"), self)
@@ -169,30 +158,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def close(self) -> bool:
         return super().close()
-
-    def handle_back_button_clicked(self, _) -> None:
-        current_index: QModelIndex = self.treeView.currentIndex()
-
-        if current_index.parent() == self.top_level_index:
-            self.setWindowTitle(f'{TITLE} - "This PC"')
-
-        new_index: QModelIndex = (
-            current_index.parent()
-            if self.model.isDir(current_index)
-            else current_index.parent().parent()
-        )
-
-        self.treeView.setCurrentIndex(new_index)
-        self.treeView.setRootIndex(new_index)
-        self.treeView.collapseAll()
-
-        if new_index != self.top_level_index:
-            self.pathChanged.emit(str(Path(self.model.filePath(new_index))))
-
-    def handle_root_button_clicked(self, _) -> None:
-        self.treeView.setRootIndex(self.top_level_index)
-        self.treeView.setCurrentIndex(self.top_level_index)
-        self.setWindowTitle(f'{TITLE} - "This PC"')
 
     def handle_action_hide_files(self, checked: bool) -> None:  # noqa: FBT001
         self.model.setFilter(file_filters[checked])
