@@ -12,6 +12,7 @@ All notable changes pertinent to the end user of this project will be documented
 - You can now right-click the white space of the file browser to show the "New" context menu.
 
 ### Fixed
+- Bug causing Bookmarks to not be updated properly.
 - Bug which caused an exception when making a new text file or folder when a file was selected and the context menu was requested via right-clicking the white space of the file browser.
 - About dialog icon not being displayed.
 - Bug causing the open with adobe acrobat menu entry to not be present.
