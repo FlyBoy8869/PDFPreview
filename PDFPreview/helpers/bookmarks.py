@@ -10,7 +10,7 @@ from PySide6.QtWidgets import QFileSystemModel, QListWidget, QListWidgetItem
 from PDFPreview.services.bookmark_service import delete_bookmark
 
 
-def load_bookmarks(bookmarks: list[Bookmark], list_widget: QListWidget, model: QFileSystemModel) -> None:
+def load_bookmarks(bookmarks: list[Bookmark], list_widget: QListWidget) -> None:
     for bookmark in bookmarks:
         if not Path(bookmark.path).exists():
             delete_bookmark(bookmark.name)

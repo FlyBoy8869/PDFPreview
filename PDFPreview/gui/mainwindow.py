@@ -305,7 +305,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return super().eventFilter(source, event)
 
     def load_bookmarks(self) -> None:
-        bookmarks.load_bookmarks(load_bookmarks(), self.lw_bookmarks, self.model)
+        bookmarks.load_bookmarks(load_bookmarks(), self.lw_bookmarks)
 
     def load_splash(self) -> None:
         index: QModelIndex = self.model.index(SPLASH_FILE.as_posix())
