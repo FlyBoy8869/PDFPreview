@@ -51,8 +51,8 @@ pdf_toolbar: dict[bool, str] = {
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     # emitted when a file has been loaded in to the viewer
-    fileDeleted: Signal = Signal(str)
     fileLoaded: Signal = Signal(str)
+    fileDeleted: Signal = Signal(str)
     pathChanged: Signal = Signal(str)
 
     def __init__(self):
