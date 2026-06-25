@@ -361,7 +361,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         lw = self.lw_bookmarks
         bookmarks_ = []
         for row in range(lw.count()):
-            bookmarks_.append((lw.item(row).text(), self.model.filePath(lw.item(row).bookmark_index), row))
+            bookmarks_.append((lw.item(row).text(), lw.item(row).data(Qt.ItemDataRole.UserRole), row))
 
         update_bookmark_order(bookmarks_)
 
