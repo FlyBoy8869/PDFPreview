@@ -180,7 +180,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.treeView.expand(parent)
             parent = parent.parent()
         self.treeView.expand(bookmark_index)
-
         self.treeView.scrollTo(self.model.index(str(path)), QAbstractItemView.ScrollHint.PositionAtTop)
 
         self.pathChanged.emit(str(path))
