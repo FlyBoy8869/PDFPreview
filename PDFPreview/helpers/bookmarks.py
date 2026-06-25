@@ -5,7 +5,7 @@ from PySide6.QtCore import Qt
 
 from PDFPreview.models.bookmark import Bookmark
 
-from PySide6.QtWidgets import QFileSystemModel, QListWidget, QListWidgetItem
+from PySide6.QtWidgets import QListWidget, QListWidgetItem
 
 from PDFPreview.services.bookmark_service import delete_bookmark
 
