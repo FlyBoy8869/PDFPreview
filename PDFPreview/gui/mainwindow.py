@@ -168,7 +168,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QMessageBox.information(self, "Info", f"File no longer exists:\n\n{str(path)}")
             return
 
-        # it's a file so let's see it (don't want to see directory listings in the browser)
+        # it's a file so let's see it (don't want to see directory listings in the browser though)
         if path.is_file():
             self.view_file(bookmark_index)
             bookmark_index = bookmark_index.parent()
@@ -185,7 +185,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pathChanged.emit(str(path))
 
     def handle_recents_clicked(self, index: int) -> None:
-        # path = Path(self.recents_tracker.item_data(index)).resolve()
         path = self.recents_tracker[index]
         if not path.exists():
             delete_recent(path.resolve().name)
