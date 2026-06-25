@@ -410,7 +410,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QMessageBox.warning(self, "Warning", result.message)
 
     def _do_new_text_file_action(self, index: QModelIndex) -> None:
-        path = Path(self.model.filePath(index)).parent
+        path = Path(self.model.filePath(index))
+
+        # Did the right-click occur in the "un-populated" area of the QTreeView?
         if not index.isValid():
             path = Path(self.model.filePath(self.treeView.currentIndex()))
 
