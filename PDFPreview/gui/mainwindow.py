@@ -270,6 +270,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def load_bookmarks(self) -> None:
         bookmarks.load_bookmarks(load_bookmarks(), self.lw_bookmarks)
 
+    def _update_bookmarks(self) -> None:
+        lw = self.lw_bookmarks
+        bookmarks_ = []
+        for row in range(lw.count()):
+            bookmarks_.append((lw.item(row).text(), lw.item(row).data(Qt.ItemDataRole.UserRole), row))
+
+        update_bookmark_order(bookmarks_)
+
     def load_splash(self) -> None:
         index: QModelIndex = self.model.index(SPLASH_FILE.as_posix())
         self.view_file(index)
@@ -319,14 +327,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _add_recent(self, path: Path) -> None:
         self.recents_tracker.add(str(path))
-
-    def _update_bookmarks(self) -> None:
-        lw = self.lw_bookmarks
-        bookmarks_ = []
-        for row in range(lw.count()):
-            bookmarks_.append((lw.item(row).text(), lw.item(row).data(Qt.ItemDataRole.UserRole), row))
-
-        update_bookmark_order(bookmarks_)
 
     def _create_and_set_blur_effects(self) -> None:
         widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser, self.statusbar, self.menubar)
