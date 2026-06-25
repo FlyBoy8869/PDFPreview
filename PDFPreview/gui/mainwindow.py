@@ -7,7 +7,7 @@ from PySide6.QtGui import (
     QDragEnterEvent,
     QDropEvent,
     QKeySequence,
-    QShortcut, QIcon,
+    QShortcut,
 )
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import (
@@ -29,8 +29,6 @@ from PDFPreview.eventfilters.bookmark_eventfilter import BookmarkListEventFilter
 from ..contextmenu import ContextMenu
 from ..helpers.gui import yes_or_no
 from ..services.recent_service import delete_recent
-
-from PDFPreview.helpers.paths import Paths
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
