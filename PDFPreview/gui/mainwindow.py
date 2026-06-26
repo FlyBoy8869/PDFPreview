@@ -130,7 +130,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.treeView.header().hideSection(i)
         self.treeView.currentIndexChanged.connect(self.handle_treeview_current_index_changed)
         self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
-        self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
+        # self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(
             self.handle_treeview_context_menu_request,
@@ -202,10 +202,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self._add_recent(Path(self.model.filePath(index)))
         self.view_file(index)
 
-    def handle_treeview_double_click(self, index: QModelIndex) -> None:
-        if self.model.isDir(index):
-            self.treeView.expand(index)
-            self.pathChanged.emit(str(Path(self.model.filePath(index))))
+    # def handle_treeview_double_click(self, index: QModelIndex) -> None:
+    #     if self.model.isDir(index):
+    #         self.treeView.expand(index)
+    #         self.pathChanged.emit(str(Path(self.model.filePath(index))))
 
     def handle_treeview_context_menu_request(self, position) -> None:
         """Creates a dynamic menu based on the file type."""

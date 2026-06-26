@@ -145,7 +145,7 @@
             <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
            </property>
            <property name="editTriggers">
-            <set>QAbstractItemView::EditTrigger::DoubleClicked|QAbstractItemView::EditTrigger::EditKeyPressed</set>
+            <set>QAbstractItemView::EditTrigger::EditKeyPressed</set>
            </property>
            <property name="dragEnabled">
             <bool>true</bool>
@@ -163,7 +163,7 @@
             <number>10</number>
            </property>
            <property name="rootIsDecorated">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="itemsExpandable">
             <bool>false</bool>
