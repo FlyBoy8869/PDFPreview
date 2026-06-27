@@ -195,12 +195,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.view_file(qm_index)
 
     def handle_treeview_current_index_changed(self, index: QModelIndex) -> None:
-        if self.model.filePath(index) == self.previous_path:
-            self.treeView.edit(index)
-            return
-        else:
-            self.previous_path = self.model.filePath(index)
-
         if not self.model.isDir(index):
             self._add_recent(Path(self.model.filePath(index)))
         self.view_file(index)
