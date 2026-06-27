@@ -128,9 +128,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.installEventFilter(self)
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
-        self.treeView.currentIndexChanged.connect(self.handle_treeview_current_index_changed)
         self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
-        # self.treeView.doubleClicked.connect(self.handle_treeview_double_click)
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(
             self.handle_treeview_context_menu_request,
@@ -154,6 +152,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.load_splash()
 
+        self.previous_path: str = self.model.filePath(self.treeView.currentIndex())
+
     def close(self) -> bool:
         return super().close()
 
@@ -168,10 +168,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QMessageBox.information(self, "Info", f"File no longer exists:\n\n{str(path)}")
             return
 
-        # it's a file so let's see it (don't want to see directory listings in the browser though)
-        if path.is_file():
-            self.view_file(bookmark_index)
-            bookmark_index = bookmark_index.parent()
+        self.view_file(bookmark_index)
 
         self.treeView.setCurrentIndex(bookmark_index)
 
@@ -198,14 +195,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.view_file(qm_index)
 
     def handle_treeview_current_index_changed(self, index: QModelIndex) -> None:
+        if self.model.filePath(index) == self.previous_path:
+            self.treeView.edit(index)
+            return
+        else:
+            self.previous_path = self.model.filePath(index)
+
         if not self.model.isDir(index):
             self._add_recent(Path(self.model.filePath(index)))
         self.view_file(index)
-
-    # def handle_treeview_double_click(self, index: QModelIndex) -> None:
-    #     if self.model.isDir(index):
-    #         self.treeView.expand(index)
-    #         self.pathChanged.emit(str(Path(self.model.filePath(index))))
 
     def handle_treeview_context_menu_request(self, position) -> None:
         """Creates a dynamic menu based on the file type."""
@@ -227,9 +225,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
                 event.accept()
                 return True
-            if event.type() == QEvent.Type.DragMove:
-                print("got a drag enter event on treeview")
-
 
         if source is self.browser:
             if event.type() == QEvent.Type.DragEnter:
