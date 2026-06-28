@@ -302,9 +302,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.browser.setUrl(url)
 
-        with suppress(IndexError):
-            if path.suffix.lower() in [".bmp", ".gif", ".jpg", ".jpeg", ".png", ".svg", ".webp"]:
-                self.browser.setZoomFactor(1.00)
+        if path.suffix.lower() in [".bmp", ".gif", ".jpg", ".jpeg", ".png", ".svg", ".webp"]:
+            self.browser.setZoomFactor(1.00)
 
         self.fileLoaded.emit(str(path))
 
