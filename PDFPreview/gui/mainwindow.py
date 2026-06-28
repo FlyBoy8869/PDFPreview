@@ -162,21 +162,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_bookmark_clicked(self, list_item: QListWidgetItem) -> None:
         path = Path(list_item.data(Qt.ItemDataRole.UserRole))
-        bookmark_index = self.model.index(str(path), 0)
+        index = self.model.index(str(path), 0)
 
         if not path.exists():
             QMessageBox.information(self, "Info", f"File no longer exists:\n\n{str(path)}")
             return
 
-        self.view_file(bookmark_index)
+        self.view_file(path)
+        self.treeView.setCurrentIndex(index)
 
-        self.treeView.setCurrentIndex(bookmark_index)
-
-        parent = bookmark_index.parent()
+        parent = index.parent()
         while parent.isValid():
             self.treeView.expand(parent)
             parent = parent.parent()
-        self.treeView.expand(bookmark_index)
+        self.treeView.expand(index)
         self.treeView.scrollTo(self.model.index(str(path)), QAbstractItemView.ScrollHint.PositionAtTop)
 
         self.pathChanged.emit(str(path))
@@ -192,12 +191,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         qm_index = self.model.index(str(path))
         self.treeView.setCurrentIndex(qm_index)
         self.treeView.scrollTo(qm_index, QAbstractItemView.ScrollHint.PositionAtTop)
-        self.view_file(qm_index)
+        self.view_file(path)
 
     def handle_treeview_current_index_changed(self, index: QModelIndex) -> None:
         if not self.model.isDir(index):
             self._add_recent(Path(self.model.filePath(index)))
-        self.view_file(index)
+        self.view_file(Path(self.model.filePath(index)))
 
     def handle_treeview_context_menu_request(self, position) -> None:
         """Creates a dynamic menu based on the file type."""
@@ -237,7 +236,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # handle drops on the preview pane
             if event.type() == QEvent.Type.Drop:
                 path = Path.from_uri(cast("QDropEvent", event).mimeData().urls()[0].toString())
-                new_index: QModelIndex = self.model.index(path.as_posix())
+                new_index: QModelIndex = self.model.index(str(path))
 
                 self.treeView.collapseAll()
                 self.treeView.setCurrentIndex(new_index)
@@ -247,7 +246,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.update_title_bar(str(path))
                 else:
                     self.treeView.setRootIndex(self.model.index(path.parent.as_posix()))
-                    self.view_file(new_index)
+                    self.view_file(path)
 
                 event.accept()
                 return True
@@ -266,8 +265,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         update_bookmark_order(bookmarks_)
 
     def load_splash(self) -> None:
-        index: QModelIndex = self.model.index(SPLASH_FILE.as_posix())
-        self.view_file(index)
+        self.view_file(SPLASH_FILE)
 
     def show_about(self) -> None:
         [effect.setEnabled(True) for effect in self.blur_effects]
@@ -282,35 +280,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.help_save = self.treeView.currentIndex()
             self.load_splash()
         else:
-            self.view_file(self.help_save)
+            self.view_file(Path(self.model.filePath(self.help_save)))
             self.help_save = None
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
         self.HIDE_TOOLBAR = pdf_toolbar[checked]
-        self.view_file(self.treeView.currentIndex())
+        self.view_file(Path(self.model.filePath(self.treeView.currentIndex())))
 
     def update_title_bar(self, path: str) -> None:
         separator = " - " if path else ""
         self.setWindowTitle(f"{TITLE}{separator}{path}")
 
-    def view_file(self, index: QModelIndex) -> None:
+    def view_file(self, path: Path) -> None:
         """Loads the file pointed to by index into the viewing pane."""
         # do not load directories into the viewer i.e., navigable elements
-        if self.model.isDir(index):
+        if path.is_dir():
             return
 
-        file_path = Path(self.model.filePath(index))
-
-        url: QUrl = QUrl.fromLocalFile(str(file_path))
+        url: QUrl = QUrl.fromLocalFile(path)
         url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
 
         self.browser.setUrl(url)
 
         with suppress(IndexError):
-            if file_path.as_posix().rsplit(".", 1)[1].lower() in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
+            if path.suffix.lower() in [".bmp", ".gif", ".jpg", ".jpeg", ".png", ".svg", ".webp"]:
                 self.browser.setZoomFactor(1.00)
 
-        self.fileLoaded.emit(str(file_path))
+        self.fileLoaded.emit(str(path))
 
     def _add_recent(self, path: Path) -> None:
         self.recents_tracker.add(str(path))
