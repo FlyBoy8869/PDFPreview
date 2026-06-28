@@ -238,14 +238,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 path = Path.from_uri(cast("QDropEvent", event).mimeData().urls()[0].toString())
                 new_index: QModelIndex = self.model.index(str(path))
 
-                self.treeView.collapseAll()
                 self.treeView.setCurrentIndex(new_index)
+                self.treeView.scrollTo(new_index, QAbstractItemView.ScrollHint.PositionAtTop)
 
                 if self.model.isDir(new_index):
-                    self.treeView.setRootIndex(self.model.index(path.as_posix()))
                     self.update_title_bar(str(path))
                 else:
-                    self.treeView.setRootIndex(self.model.index(path.parent.as_posix()))
                     self.view_file(path)
 
                 event.accept()
