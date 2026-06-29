@@ -5,6 +5,7 @@ All notable changes pertinent to the end user of this project will be documented
 ## [Unreleased]
 
 ### Changed
+- Replaced the collapse button icon.
 - When a file is clicked on twice in a row (not a double-click) initiate editing process.
 - When creating a new folder the naming convention has been changed from "New folder - Copy" etc. to "New folder (1)" when consecutively creating multiple new folders
 

@@ -6,7 +6,7 @@ from PySide6.QtGui import (
     QDragEnterEvent,
     QDropEvent,
     QKeySequence,
-    QShortcut,
+    QShortcut, QIcon,
 )
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import (
@@ -21,6 +21,7 @@ from config.config import SPLASH_FILE, TITLE
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui, recents
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
+from helpers.paths import Paths
 
 from .ui_mainwindow import Ui_MainWindow
 from PDFPreview.eventfilters.about_eventfilter import AboutDialogFilter
@@ -135,9 +136,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.handle_treeview_context_menu_request,
         )
 
-        #
+        # BUTTONS
         self.pb_collapse_all.setIcon(
-            self.style().standardIcon(QStyle.StandardPixmap.SP_TitleBarShadeButton)
+            QIcon(Paths.icon("collapse.png"))
         )
         self.pb_collapse_all.clicked.connect(self.treeView.collapseAll)
 
