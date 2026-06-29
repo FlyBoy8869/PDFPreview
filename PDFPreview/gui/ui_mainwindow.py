@@ -19,8 +19,9 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QComboBox, QGroupBox,
     QHBoxLayout, QHeaderView, QListWidget, QListWidgetItem,
-    QMainWindow, QMenu, QMenuBar, QSizePolicy,
-    QSplitter, QStatusBar, QVBoxLayout, QWidget)
+    QMainWindow, QMenu, QMenuBar, QPushButton,
+    QSizePolicy, QSpacerItem, QSplitter, QStatusBar,
+    QVBoxLayout, QWidget)
 
 from .widgets.treeview import VTreeView
 
@@ -97,6 +98,15 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QHBoxLayout(self.groupBox)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(3, 3, 3, 3)
+        self.pb_collapse_all = QPushButton(self.groupBox)
+        self.pb_collapse_all.setObjectName(u"pb_collapse_all")
+
+        self.horizontalLayout.addWidget(self.pb_collapse_all)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
+
         self.cb_recents = QComboBox(self.groupBox)
         self.cb_recents.setObjectName(u"cb_recents")
 
@@ -152,7 +162,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1188, 34))
+        self.menubar.setGeometry(QRect(0, 0, 1188, 33))
         self.menuOptions = QMenu(self.menubar)
         self.menuOptions.setObjectName(u"menuOptions")
         self.menuHelp = QMenu(self.menubar)
@@ -185,6 +195,10 @@ class Ui_MainWindow(object):
         self.gb_bookmarks.setTitle(QCoreApplication.translate("MainWindow", u" Bookmarks: ", None))
         self.gb_file_browser.setTitle(QCoreApplication.translate("MainWindow", u" File Browser: ", None))
         self.groupBox.setTitle("")
+#if QT_CONFIG(tooltip)
+        self.pb_collapse_all.setToolTip(QCoreApplication.translate("MainWindow", u"Collapse All", None))
+#endif // QT_CONFIG(tooltip)
+        self.pb_collapse_all.setText("")
         self.menuOptions.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
     # retranslateUi

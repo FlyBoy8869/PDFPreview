@@ -128,10 +128,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
         self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
+        self.treeView.currentIndexChanged.connect(
+            lambda c, p: self.view_file(Path(self.model.filePath(c))))
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(
             self.handle_treeview_context_menu_request,
         )
+
+        #
+        self.pb_collapse_all.setIcon(
+            self.style().standardIcon(QStyle.StandardPixmap.SP_TitleBarShadeButton)
+        )
+        self.pb_collapse_all.clicked.connect(self.treeView.collapseAll)
 
         # RECENTS
         self.cb_recents.setToolTip("Recents")
@@ -212,11 +220,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
         if source is self.treeView:
-            if event.type() == QEvent.Type.KeyPress and cast("QKeyEvent", event).key() == Qt.Key.Key_Space:
-                # open selected file when the spacebar is pressed
-                fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
-                event.accept()
-                return True
+            if event.type() == QEvent.Type.KeyPress:
+                event = cast("QKeyEvent", event)
+                key = event.key()
+
+                if key == Qt.Key.Key_Space:
+                    # open selected file when the spacebar is pressed
+                    fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
+                    event.accept()
+                    return True
 
         if source is self.browser:
             if event.type() == QEvent.Type.DragEnter:
