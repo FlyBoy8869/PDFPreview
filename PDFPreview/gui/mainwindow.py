@@ -20,7 +20,7 @@ from config.config import config
 from config.config import SPLASH_FILE, TITLE
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui
-import recents
+import PDFPreview.recents as recents
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
 from PDFPreview.helpers.paths import Paths
 

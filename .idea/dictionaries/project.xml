@@ -2,10 +2,12 @@
   <dictionary name="project">
     <words>
       <w>cleandist</w>
+      <w>designhistory</w>
       <w>favoriting</w>
       <w>insertversion</w>
       <w>makedeploy</w>
       <w>mspaint</w>
+      <w>walfs</w>
     </words>
   </dictionary>
 </component>

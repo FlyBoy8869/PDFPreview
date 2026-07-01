@@ -8,6 +8,10 @@ ICONS: Path = IMAGES / "Icons"
 
 
 class Paths:
+    DESIGNHISTORY: Path = Path(r"\\walfs02\designhistory$")
+    PROE: Path = Path(r"\\b2srvproe01\server")
+    network_shares_available: bool = DESIGNHISTORY.exists() and PROE.exists()
+
     @classmethod
     def file(cls, file: str) -> str:
         return (FILES / file).resolve().as_posix()
@@ -19,3 +23,13 @@ class Paths:
     @classmethod
     def image(cls, image: str) -> str:
         return (IMAGES / image).resolve().as_posix()
+
+    # @staticmethod
+    # def network_shares_available() -> bool:
+    #     if Paths.DESIGNHISTORY.exists() and Paths.PROE.exists():
+    #         return True
+    #     return False
+
+    @staticmethod
+    def validate_path(path: Path) -> bool:
+        return path.exists()

@@ -8,13 +8,15 @@ from PDFPreview.models.bookmark import Bookmark
 from PySide6.QtWidgets import QListWidget, QListWidgetItem
 
 from PDFPreview.services.bookmark_service import delete_bookmark
+from PDFPreview.helpers.paths import Paths
 
 
 def load_bookmarks(bookmarks: list[Bookmark], list_widget: QListWidget) -> None:
     for bookmark in bookmarks:
-        if not Path(bookmark.path).exists():
-            delete_bookmark(bookmark.name)
-            continue
+        if not Paths.validate_path(Path(bookmark.path)):
+            if Paths.network_shares_available:
+                delete_bookmark(bookmark.name)
+                continue
 
         item = QListWidgetItem(bookmark.name)
         item.setData(Qt.ItemDataRole.UserRole, bookmark.path)

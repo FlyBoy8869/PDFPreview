@@ -8,6 +8,7 @@ import tomllib
 from __version__ import VERSION  # noqa: F401
 
 TITLE = "FileViewer"
+DATABASE_FILE = "database.json"
 
 _OS = "macOS" if "macOS" in platform.platform() else "windows"
 

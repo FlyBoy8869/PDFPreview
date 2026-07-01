@@ -5,11 +5,13 @@ All notable changes pertinent to the end user of this project will be documented
 ## [Unreleased]
 
 ### Changed
+- Bookmarks that refer to files on network shares are no longer deleted when varified if the network share is unavailable.
 - Replaced the collapse button icon.
 - When a file is clicked on twice in a row (not a double-click) initiate editing process.
 - When creating a new folder the naming convention has been changed from "New folder - Copy" etc. to "New folder (1)" when consecutively creating multiple new folders
 
 ### Added
+- Bookmark database is now backed up on program exit.
 - Crude Drag and Drop into the folders show in the file browser only.
 - You can now right-click the white space of the file browser to show the "New" context menu.
 
