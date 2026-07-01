@@ -24,12 +24,6 @@ class Paths:
     def image(cls, image: str) -> str:
         return (IMAGES / image).resolve().as_posix()
 
-    # @staticmethod
-    # def network_shares_available() -> bool:
-    #     if Paths.DESIGNHISTORY.exists() and Paths.PROE.exists():
-    #         return True
-    #     return False
-
     @staticmethod
     def validate_path(path: Path) -> bool:
         return path.exists()
