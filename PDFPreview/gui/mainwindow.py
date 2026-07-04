@@ -225,7 +225,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 key = event.key()
 
                 if key == Qt.Key.Key_Space:
-                    # open selected file when the spacebar is pressed
+                    # open selected file when the space bar is pressed
                     fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
                     event.accept()
                     return True
