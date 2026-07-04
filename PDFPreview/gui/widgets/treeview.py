@@ -13,5 +13,6 @@ class VTreeView(QTreeView):
         current: QModelIndex | QPersistentModelIndex,
         previous: QModelIndex | QPersistentModelIndex,
     ) -> None:
+        result = super().currentChanged(current, previous)
         self.currentIndexChanged.emit(current, previous)
-        return super().currentChanged(current, previous)
+        return result
