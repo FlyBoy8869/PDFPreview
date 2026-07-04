@@ -29,7 +29,6 @@ from PDFPreview.eventfilters.about_eventfilter import AboutDialogFilter
 from PDFPreview.eventfilters.bookmark_eventfilter import BookmarkListEventFilter
 from ..contextmenu import ContextMenu
 from ..helpers.gui import yes_or_no
-from ..services.recent_service import delete_recent
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
@@ -192,7 +191,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def handle_recents_clicked(self, index: int) -> None:
         path = self.recents_tracker[index]
         if not path.exists():
-            delete_recent(path.resolve().name)
             self.recents_tracker.remove(path.resolve().name)
             self.statusBar().showMessage(f"Recent not found: {str(path)}", 3000)
             return

@@ -55,6 +55,7 @@ class RecentsManager:
             widget_text = self.widget.itemText(i).lower()
             if name.lower() == widget_text:
                 self.widget.removeItem(i)
+                delete_recent(name)
                 try:
                     self._indexes.pop(recent)
                 except KeyError:
