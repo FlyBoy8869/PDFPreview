@@ -64,9 +64,16 @@ class RecentsManager:
 
     @Slot()
     def rename(self, path: str, old_name: str, new_name: str) -> None:
-        index = self.widget.findText(old_name)
-        self.widget.setItemText(index, new_name)
-        self.widget.setItemData(index, f"{path}/{new_name}", Qt.ItemDataRole.UserRole)
+        # index = self.widget.findText(old_name)
+        if index := self.find_index_by_path(str(Path(path) / old_name)):
+            self.widget.setItemText(index, new_name)
+            self.widget.setItemData(index, f"{path}/{new_name}", Qt.ItemDataRole.UserRole)
+
+    def find_index_by_path(self, path: str) -> int | None:
+        for index, recent_path in enumerate(self._indexes):
+            if recent_path == path:
+                return index
+        return None
 
     def _load_recents(self) -> None:
         recents = load_recents()

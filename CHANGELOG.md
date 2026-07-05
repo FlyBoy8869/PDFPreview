@@ -16,6 +16,7 @@ All notable changes pertinent to the end user of this project will be documented
 - You can now right-click the white space of the file browser to show the "New" context menu.
 
 ### Fixed
+- Issue where renaming a file that is on the recents list would rename the first item it came to with the name in question.
 - Bug causing a new file to be created one level above the selected location.
 - Bug causing Bookmarks to not be updated properly.
 - Bug which caused an exception when making a new text file or folder when a file was selected and the context menu was requested via right-clicking the white space of the file browser.
