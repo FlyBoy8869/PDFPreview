@@ -20,8 +20,8 @@ from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QComboBox, QGroupBox,
     QHBoxLayout, QHeaderView, QListWidget, QListWidgetItem,
     QMainWindow, QMenu, QMenuBar, QPushButton,
-    QSizePolicy, QSpacerItem, QSplitter, QStatusBar,
-    QVBoxLayout, QWidget)
+    QSizePolicy, QSplitter, QStatusBar, QVBoxLayout,
+    QWidget)
 
 from .widgets.treeview import VTreeView
 
@@ -103,15 +103,12 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.pb_collapse_all)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
-
         self.cb_recents = QComboBox(self.groupBox)
         self.cb_recents.setObjectName(u"cb_recents")
 
         self.horizontalLayout.addWidget(self.cb_recents)
 
+        self.horizontalLayout.setStretch(1, 1)
 
         self.horizontalLayout_2.addWidget(self.groupBox)
 
@@ -162,7 +159,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1188, 33))
+        self.menubar.setGeometry(QRect(0, 0, 1188, 34))
         self.menuOptions = QMenu(self.menubar)
         self.menuOptions.setObjectName(u"menuOptions")
         self.menuHelp = QMenu(self.menubar)
