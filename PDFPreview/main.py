@@ -24,7 +24,7 @@ def main() -> int:
     app.setStyle("Fusion")
 
     window = MainWindow()
-    app.installEventFilter(window)
+    # app.installEventFilter(window)
     window.show()
 
     return app.exec()
