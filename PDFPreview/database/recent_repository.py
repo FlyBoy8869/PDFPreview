@@ -18,8 +18,8 @@ def get_recents() -> list[Document]:
     return recents_table.all()
 
 
-def delete_recent(name: str) -> None:
-    recents_table.remove(RecentQuery.name == name)
+def delete_recent(path: str) -> None:
+    recents_table.remove(RecentQuery.path == path)
 
 
 def truncate_recents() -> None:

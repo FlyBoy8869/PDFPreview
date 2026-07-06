@@ -16,6 +16,7 @@ All notable changes pertinent to the end user of this project will be documented
 - You can now right-click the white space of the file browser to show the "New" context menu.
 
 ### Fixed
+- Issue where the filename in a recent tooltip text was not being updated properly.
 - Issue where renaming a file that is on the recents list would rename the first item it came to with the name in question.
 - Bug causing a new file to be created one level above the selected location.
 - Bug causing Bookmarks to not be updated properly.

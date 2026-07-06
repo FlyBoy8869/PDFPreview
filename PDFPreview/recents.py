@@ -22,8 +22,8 @@ class RecentsManager:
             return
 
         if self.widget.count() >= self.limit:
-            item = self.widget.itemText(0)
-            delete_recent(item)
+            # item = self.widget.itemText(0)
+            delete_recent(path)
             self.widget.removeItem(0)
 
         self._add(path)
@@ -55,7 +55,7 @@ class RecentsManager:
             widget_text = self.widget.itemText(i).lower()
             if name.lower() == widget_text:
                 self.widget.removeItem(i)
-                delete_recent(name)
+                delete_recent(recent)
                 try:
                     self._indexes.pop(recent)
                 except KeyError:
@@ -67,11 +67,17 @@ class RecentsManager:
         # index = self.widget.findText(old_name)
         if index := self.find_index_by_path(str(Path(path) / old_name)):
             self.widget.setItemText(index, new_name)
-            self.widget.setItemData(index, f"{path}/{new_name}", Qt.ItemDataRole.UserRole)
+            self.widget.setItemData(index, f"{path}/{new_name}", Qt.ItemDataRole.ToolTipRole)
+            self._indexes.pop(str(Path(path) / old_name))
+            self._indexes[str(Path(path) / new_name)] = True
+            delete_recent(str(Path(path) / old_name))
 
     def find_index_by_path(self, path: str) -> int | None:
+        print(f"searching for {path}")
         for index, recent_path in enumerate(self._indexes):
+            print(f"checking against {recent_path}")
             if recent_path == path:
+                print(f"call joy")
                 return index
         return None
 

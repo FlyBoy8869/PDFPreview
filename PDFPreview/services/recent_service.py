@@ -10,8 +10,8 @@ def clear_recents() -> None:
     truncate_recents()
 
 
-def delete_recent(name: str) -> None:
-    _delete_recent(name)
+def delete_recent(path: str) -> None:
+    _delete_recent(path)
 
 
 def load_recents() -> list[Recent]:
