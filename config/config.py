@@ -41,3 +41,4 @@ with (_config_path / "config.toml").open(
     config: dict[str, Any] = tomllib.load(config_file)
 
 ADOBE_ACROBAT_PATH = config["paths"]["acrobat"]
+WALLPAPER = IMAGES / "wallpaper.png"

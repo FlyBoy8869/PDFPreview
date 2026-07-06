@@ -10,6 +10,7 @@ ICONS: Path = IMAGES / "Icons"
 class Paths:
     DESIGNHISTORY: Path = Path(r"\\walfs02\designhistory$")
     PROE: Path = Path(r"\\b2srvproe01\server")
+    WALLPAPER: Path =  IMAGES / "wallpaper.png"
     network_shares_available: bool = DESIGNHISTORY.exists() and PROE.exists()
 
     @classmethod

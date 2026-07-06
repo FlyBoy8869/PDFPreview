@@ -219,6 +219,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self._dispatch_action(action, index)
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
+        if event.type() == QEvent.Type.KeyPress:
+            key_event = cast("QKeyEvent", event)
+            key = key_event.key()
+            if key == Qt.Key.Key_AsciiTilde:
+                if self.splitter_2.sizes()[0] == 0:
+                    self.splitter_2.setSizes([25, 75])
+                else:
+                    self.splitter_2.setSizes([0, 100])
+                    self.view_file(Paths.WALLPAPER)
+                key_event.accept()
+                return True
+
         if source is self.treeView:
             if event.type() == QEvent.Type.KeyPress:
                 event = cast("QKeyEvent", event)
@@ -229,6 +241,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
                     event.accept()
                     return True
+
+                # if key == Qt.Key.Key_AsciiTilde:
+                #     self.splitter_2.setSizes([0, 100])
+                #     self.view_file(Paths.WALLPAPER)
+                #     event.accept()
+                #     return True
 
         if source is self.browser:
             if event.type() == QEvent.Type.DragEnter:

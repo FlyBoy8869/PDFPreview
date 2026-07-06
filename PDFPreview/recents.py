@@ -71,6 +71,7 @@ class RecentsManager:
             self._indexes.pop(str(Path(path) / old_name))
             self._indexes[str(Path(path) / new_name)] = True
             delete_recent(str(Path(path) / old_name))
+            register_recent((Path(path) / new_name).resolve().name, str(Path(path) / new_name))
 
     def find_index_by_path(self, path: str) -> int | None:
         print(f"searching for {path}")
