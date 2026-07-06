@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['app.py'],
+    ['app.pyw'],
     pathex=[],
     binaries=[],
     datas=[('PDFPreview\\gui\\dialogs\\ui_about.ui', 'PDFPreview\\gui\\dialogs\\'), ('Resources', '.\\Resources')],
