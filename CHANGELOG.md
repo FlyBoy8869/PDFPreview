@@ -2,7 +2,7 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
-## [Unreleased]
+## [0.20.0]
 
 ### Changed
 - Bookmarks that refer to files on network shares are no longer deleted when varified if the network share is unavailable.
