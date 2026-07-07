@@ -61,7 +61,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowTitle(f"{TITLE}")
 
         self.splitter_2_state = None
-        self.splitter_2.splitterMoved.connect(lambda p, i: print(f"pos: {p}, index: {i}"))
 
         self._create_and_set_blur_effects()
 
