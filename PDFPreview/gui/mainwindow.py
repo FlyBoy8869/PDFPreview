@@ -60,6 +60,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle(f"{TITLE}")
 
+        self.splitter_2_state = None
+        self.splitter_2.splitterMoved.connect(lambda p, i: print(f"pos: {p}, index: {i}"))
+
         self._create_and_set_blur_effects()
 
         self.pathChanged.connect(self.update_title_bar)
@@ -294,8 +297,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def show_wallpaper(self) -> None:
         if self.splitter_2.sizes()[0] == 0:
-            self.splitter_2.setSizes([25, 75])
+            self.splitter_2.restoreState(self.splitter_2_state)
         else:
+            self.splitter_2_state = self.splitter_2.saveState()
             self.splitter_2.setSizes([0, 100])
             self.view_file(Paths.WALLPAPER)
 
