@@ -10,10 +10,10 @@ from __version__ import VERSION  # noqa: F401
 TITLE = "FileViewer"
 DATABASE_FILE = "database.json"
 
-_OS = "macOS" if "macOS" in platform.platform() else "windows"
+OS = "macOS" if "macOS" in platform.platform() else "Windows"
 
 PATH_PREFIX: Literal["file://", "file:///"] = (
-    "file://" if _OS == "macOS" else "file:///"
+    "file://" if OS == "macOS" else "file:///"
 )
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -25,7 +25,7 @@ SPLASH_FILE: Path = FILES / "FileViewerSplash.html"
 IMAGES = RESOURCES / "Images"
 LOGO: Path = IMAGES / "logo.png"
 
-if _OS == "macOS":
+if OS == "macOS":
     _config_path = Path(os.path.expanduser(Path("~/Library/Preferences/FileViewer")))
     DATABASE_PATH = Path(os.path.expanduser(Path("~/Library/Application Support/FileViewer")))
 else:

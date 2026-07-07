@@ -25,8 +25,8 @@ from PDFPreview.services.bookmark_service import update_bookmark_order, load_boo
 from PDFPreview.helpers.paths import Paths
 
 from .ui_mainwindow import Ui_MainWindow
-from PDFPreview.eventfilters.about_eventfilter import AboutDialogFilter
-from PDFPreview.eventfilters.bookmark_eventfilter import BookmarkListEventFilter
+from PDFPreview.eventfilters.about_filter import AboutDialogFilter
+from PDFPreview.eventfilters.bookmark_filter import BookmarkListEventFilter
 from ..contextmenu import ContextMenu
 from ..helpers.gui import yes_or_no
 
@@ -219,18 +219,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self._dispatch_action(action, index)
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
-        if event.type() == QEvent.Type.KeyPress:
-            key_event = cast("QKeyEvent", event)
-            key = key_event.key()
-            if key == Qt.Key.Key_AsciiTilde:
-                if self.splitter_2.sizes()[0] == 0:
-                    self.splitter_2.setSizes([25, 75])
-                else:
-                    self.splitter_2.setSizes([0, 100])
-                    self.view_file(Paths.WALLPAPER)
-                key_event.accept()
-                return True
-
         if source is self.treeView:
             if event.type() == QEvent.Type.KeyPress:
                 event = cast("QKeyEvent", event)
@@ -241,12 +229,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
                     event.accept()
                     return True
-
-                # if key == Qt.Key.Key_AsciiTilde:
-                #     self.splitter_2.setSizes([0, 100])
-                #     self.view_file(Paths.WALLPAPER)
-                #     event.accept()
-                #     return True
 
         if source is self.browser:
             if event.type() == QEvent.Type.DragEnter:
@@ -309,6 +291,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.view_file(Path(self.model.filePath(self.help_save)))
             self.help_save = None
+
+    def show_wallpaper(self) -> None:
+        if self.splitter_2.sizes()[0] == 0:
+            self.splitter_2.setSizes([25, 75])
+        else:
+            self.splitter_2.setSizes([0, 100])
+            self.view_file(Paths.WALLPAPER)
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
         self.HIDE_TOOLBAR = pdf_toolbar[checked]
