@@ -7,7 +7,6 @@ from .gui import MainWindow
 from .database.db import db
 
 from config.config import DATABASE_FILE, DATABASE_PATH
-from PDFPreview.eventfilters.global_filter import GlobalEventFilter
 
 
 def cleanup():
@@ -25,10 +24,6 @@ def main() -> int:
     app.setStyle("Fusion")
 
     window = MainWindow()
-
-    global_filter = GlobalEventFilter(window.show_wallpaper)
-    app.installEventFilter(global_filter)
-
     window.show()
 
     return app.exec()
