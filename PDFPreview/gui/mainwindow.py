@@ -72,7 +72,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.help_shortcut.activated.connect(self.show_help)
         self.help_save: QModelIndex | None = None
 
-        self.wallpaper_shortcut = QShortcut(QKeySequence("Ctrl+W"), self)
+        self.wallpaper_shortcut = QShortcut(QKeySequence("Ctrl+`"), self)
         self.wallpaper_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
         self.wallpaper_shortcut.activated.connect(self.show_wallpaper)
 
