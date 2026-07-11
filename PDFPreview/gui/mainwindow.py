@@ -56,7 +56,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle(f"{TITLE}")
 
-        self.splitter_2_state = None
+        self.main_splitter_state = None
 
         self._create_and_set_blur_effects((self.gb_bookmarks, self.gb_file_browser, self.viewer, self.statusbar, self.menubar))
 
@@ -68,7 +68,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.help_shortcut.activated.connect(self.show_help)
         self.help_save: QModelIndex | None = None
 
-        self.wallpaper_shortcut = QShortcut(QKeySequence("Ctrl+`"), self)
+        self.wallpaper_shortcut = QShortcut(QKeySequence("Meta+`"), self)
         self.wallpaper_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
         self.wallpaper_shortcut.activated.connect(self.show_wallpaper)
 
@@ -289,11 +289,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.help_save = None
 
     def show_wallpaper(self) -> None:
-        if self.splitter_2.sizes()[0] == 0:
-            self.splitter_2.restoreState(self.splitter_2_state)
+        if self.main_splitter.sizes()[0] == 0:
+            self.main_splitter.restoreState(self.main_splitter_state)
         else:
-            self.splitter_2_state = self.splitter_2.saveState()
-            self.splitter_2.setSizes([0, 100])
+            self.main_splitter_state = self.main_splitter.saveState()
+            self.main_splitter.setSizes([0, 100])
             self.viewer_manager.view_file(Paths.WALLPAPER)
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
