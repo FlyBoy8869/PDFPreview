@@ -22,8 +22,8 @@ from PDFPreview.helpers import bookmarks, fileoperations, gui
 import PDFPreview.recents as recents
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
 from PDFPreview.helpers.paths import Paths
-import effects
-from viewer import ViewerManager
+import PDFPreview.effects as effects
+from PDFPreview.viewer import ViewerManager
 
 from .ui_mainwindow import Ui_MainWindow
 from PDFPreview.eventfilters.about_filter import AboutDialogFilter
@@ -48,7 +48,6 @@ file_filters: dict[bool, QDir.Filter] = {
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     # emitted when a file has been loaded in to the viewer
-    fileLoaded: Signal = Signal(str)
     fileDeleted: Signal = Signal(str)
     pathChanged: Signal = Signal(str)
 
