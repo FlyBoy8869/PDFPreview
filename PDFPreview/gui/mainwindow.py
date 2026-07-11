@@ -113,14 +113,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # FILE BROWSER
         self.treeView.setModel(self.model)
-        self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
         self.treeView.installEventFilter(self)
-        self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
 
         self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
         self.treeView.expanded.connect(lambda index: self.update_title_bar(self.model.filePath(index)))
         self.treeView.currentIndexChanged.connect(
-            lambda c, p: self.viewer_manager.view_file(Path(self.model.filePath(c))))
+            lambda c, p: self.viewer_manager.view_file(Path(self.model.filePath(c)))
+        )
+
+        self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(
             self.handle_treeview_context_menu_request,
         )
