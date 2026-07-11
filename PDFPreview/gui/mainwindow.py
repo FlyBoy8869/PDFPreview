@@ -44,11 +44,6 @@ file_filters: dict[bool, QDir.Filter] = {
            | QDir.Filter.NoDotAndDotDot,
 }
 
-# pdf_toolbar: dict[bool, str] = {
-#     True: "toolbar=0",
-#     False: "",
-# }
-
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     # emitted when a file has been loaded in to the viewer
