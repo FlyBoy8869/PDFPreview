@@ -126,7 +126,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
         self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
-        self.treeView.expanded.connect(lambda i: self.update_title_bar(self.model.filePath(i)))
+        self.treeView.expanded.connect(lambda index: self.update_title_bar(self.model.filePath(index)))
         self.treeView.currentIndexChanged.connect(
             lambda c, p: self.viewer_manager.view_file(Path(self.model.filePath(c))))
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
