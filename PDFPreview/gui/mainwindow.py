@@ -113,22 +113,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # FILE BROWSER
         self.treeView.setModel(self.model)
-        self.treeView.setItemsExpandable(True)
-        self.treeView.setRootIsDecorated(True)
-        self.treeView.setAutoExpandDelay(0)
         self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
-        self.treeView.setRootIndex(root_index)
         self.treeView.installEventFilter(self)
-        for i in range(1, 4):
-            self.treeView.header().hideSection(i)
+        self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+
         self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
         self.treeView.expanded.connect(lambda index: self.update_title_bar(self.model.filePath(index)))
         self.treeView.currentIndexChanged.connect(
             lambda c, p: self.viewer_manager.view_file(Path(self.model.filePath(c))))
-        self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(
             self.handle_treeview_context_menu_request,
         )
+
+        for i in range(1, 4):
+            self.treeView.header().hideSection(i)
+
+        self.treeView.setRootIndex(root_index)
 
         # BUTTONS
         self.pb_collapse_all.setIcon(

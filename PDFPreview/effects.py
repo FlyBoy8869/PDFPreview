@@ -16,4 +16,3 @@ def set_blur_effects(widgets: tuple, blur_effects: list[QGraphicsBlurEffect], ra
     for widget, effect in zip(widgets, blur_effects):
         effect.setBlurRadius(radius)
         widget.setGraphicsEffect(effect)
-
