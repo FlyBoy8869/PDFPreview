@@ -18,6 +18,8 @@ class ViewerManager(QObject):
     def __init__(self, viewer: QWebEngineView):
         super().__init__()
         self.browser = viewer
+
+        # this string gets appended to the url to show or hide the PDF viewer toolbar
         self.hide_toolbar: str = ""
 
         self.browser.page().settings().setAttribute(

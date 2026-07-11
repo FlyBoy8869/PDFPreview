@@ -78,13 +78,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_event_filter = AboutDialogFilter(self.about_window)
         self.about_window.installEventFilter(self.about_event_filter)
         self.about_event_filter.window_closing.connect(
-            lambda: [effect.setEnabled(False) for effect in self.blur_effects]
+            lambda: effects.disable_effect(self.blur_effects)
         )
         self.actionAbout.setIcon(
             self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation)
         )
 
-        # this string gets appended to the url to show or hide the PDF viewer toolbar
+        # Hide toolbar menu action
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
         self.action_hide_files.toggled.connect(self.handle_action_hide_files)
         self.actionAbout.triggered.connect(self.show_about)
