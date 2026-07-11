@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
     QFileSystemModel,
     QInputDialog,
     QMainWindow,
-    QMessageBox, QStyle, QGraphicsBlurEffect, QFileDialog, QApplication, QAbstractItemView, QListWidgetItem,
+    QMessageBox, QStyle, QFileDialog, QApplication, QAbstractItemView, QListWidgetItem
 )
 
 from config.config import config
@@ -22,6 +22,7 @@ from PDFPreview.helpers import bookmarks, fileoperations, gui
 import PDFPreview.recents as recents
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
 from PDFPreview.helpers.paths import Paths
+import effects
 from viewer import ViewerManager
 
 from .ui_mainwindow import Ui_MainWindow
@@ -58,7 +59,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.splitter_2_state = None
 
-        self._create_and_set_blur_effects()
+        self._create_and_set_blur_effects((self.gb_bookmarks, self.gb_file_browser, self.viewer, self.statusbar, self.menubar))
 
         self.pathChanged.connect(self.update_title_bar)
 
@@ -270,6 +271,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.viewer_manager.view_file(SPLASH_FILE)
 
     def show_about(self) -> None:
+        # noinspection PyNoneFunctionAssignment
         [effect.setEnabled(True) for effect in self.blur_effects]
 
         self.about_window.move(
@@ -304,14 +306,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _add_recent(self, path: Path) -> None:
         self.recents_manager.add(str(path))
 
-    def _create_and_set_blur_effects(self) -> None:
-        widgets = (self.gb_bookmarks, self.gb_file_browser, self.viewer, self.statusbar, self.menubar)
-        self.blur_effects = [QGraphicsBlurEffect(widget) for widget in widgets]
-        [(effect.setBlurRadius(7), effect.setEnabled(False)) for effect in self.blur_effects]
-        [widget.setGraphicsEffect(effect) for widget, effect in zip(widgets, self.blur_effects)]
+    def _create_and_set_blur_effects(self, widgets) -> None:
+        self.blur_effects = effects.create_blur_effects(widgets)
+        effects.set_blur_effects(widgets, self.blur_effects, 7)
 
     # Context Menu Actions
-
     def _create_context_menu_dispatch_table(self) -> dict:
         return {
             "acrobat": self._do_acrobat_action,
