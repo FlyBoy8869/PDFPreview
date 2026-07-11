@@ -143,16 +143,16 @@ class Ui_MainWindow(object):
 
         self.splitter.addWidget(self.gb_file_browser)
         self.splitter_2.addWidget(self.splitter)
-        self.browser = QWebEngineView(self.splitter_2)
-        self.browser.setObjectName(u"browser")
+        self.viewer = QWebEngineView(self.splitter_2)
+        self.viewer.setObjectName(u"viewer")
         sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy3.setHorizontalStretch(1)
         sizePolicy3.setVerticalStretch(1)
-        sizePolicy3.setHeightForWidth(self.browser.sizePolicy().hasHeightForWidth())
-        self.browser.setSizePolicy(sizePolicy3)
-        self.browser.setStyleSheet(u"")
-        self.browser.setUrl(QUrl(u"about:blank"))
-        self.splitter_2.addWidget(self.browser)
+        sizePolicy3.setHeightForWidth(self.viewer.sizePolicy().hasHeightForWidth())
+        self.viewer.setSizePolicy(sizePolicy3)
+        self.viewer.setStyleSheet(u"")
+        self.viewer.setUrl(QUrl(u"about:blank"))
+        self.splitter_2.addWidget(self.viewer)
 
         self.horizontalLayout_3.addWidget(self.splitter_2)
 

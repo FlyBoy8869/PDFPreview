@@ -8,7 +8,6 @@ from PySide6.QtGui import (
     QKeySequence,
     QShortcut, QIcon,
 )
-from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWidgets import (
     QFileSystemModel,
     QInputDialog,
@@ -23,6 +22,7 @@ from PDFPreview.helpers import bookmarks, fileoperations, gui
 import PDFPreview.recents as recents
 from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
 from PDFPreview.helpers.paths import Paths
+from viewer import ViewerManager
 
 from .ui_mainwindow import Ui_MainWindow
 from PDFPreview.eventfilters.about_filter import AboutDialogFilter
@@ -43,10 +43,11 @@ file_filters: dict[bool, QDir.Filter] = {
            | QDir.Filter.Hidden
            | QDir.Filter.NoDotAndDotDot,
 }
-pdf_toolbar: dict[bool, str] = {
-    True: "toolbar=0",
-    False: "",
-}
+
+# pdf_toolbar: dict[bool, str] = {
+#     True: "toolbar=0",
+#     False: "",
+# }
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -88,24 +89,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
 
         # this string gets appended to the url to show or hide the PDF viewer toolbar
-        self.HIDE_TOOLBAR = ""
-
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
         self.action_hide_files.toggled.connect(self.handle_action_hide_files)
         self.actionAbout.triggered.connect(self.show_about)
 
         # FILE VIEWER
-        # must have in order for PDF viewing to work
-        self.browser.page().settings().setAttribute(
-            QWebEngineSettings.WebAttribute.PluginsEnabled,
-            True,
-        )
-        self.browser.page().settings().setAttribute(
-            QWebEngineSettings.WebAttribute.PdfViewerEnabled,
-            True,
-        )
-        self.browser.installEventFilter(self)
-        self.fileLoaded.connect(self.update_title_bar)
+        self.viewer.installEventFilter(self)
+        self.viewer_manager = ViewerManager(self.viewer)
+        self.viewer_manager.fileLoaded.connect(self.update_title_bar)
 
         # WINDOW INTO THE FILE SYSTEM
         self.model: QFileSystemModel = QFileSystemModel()
@@ -135,8 +126,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for i in range(1, 4):
             self.treeView.header().hideSection(i)
         self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
+        self.treeView.expanded.connect(lambda i: self.update_title_bar(self.model.filePath(i)))
         self.treeView.currentIndexChanged.connect(
-            lambda c, p: self.view_file(Path(self.model.filePath(c))))
+            lambda c, p: self.viewer_manager.view_file(Path(self.model.filePath(c))))
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(
             self.handle_treeview_context_menu_request,
@@ -152,13 +144,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.cb_recents.setToolTip("Recents")
         self.cb_recents.setMouseTracking(True)
         self.cb_recents.activated.connect(self.handle_recents_clicked)
-        self.recents_tracker: recents.RecentsManager = recents.RecentsManager(
+        self.recents_manager: recents.RecentsManager = recents.RecentsManager(
             self.cb_recents,
             config["general"]["recents_limit"]
         )
-        self.fileDeleted.connect(self.recents_tracker.remove)
-        self.model.fileRenamed.connect(self.recents_tracker.rename)
-        self.actionClear_Recents.triggered.connect(self.recents_tracker.clear_recents)
+        self.fileDeleted.connect(self.recents_manager.remove)
+        self.model.fileRenamed.connect(self.recents_manager.rename)
+        self.actionClear_Recents.triggered.connect(self.recents_manager.clear_recents)
 
         self.load_bookmarks()
 
@@ -182,7 +174,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QMessageBox.information(self, "Info", f"File no longer exists:\n\n{str(path)}")
             return
 
-        self.view_file(path)
+        self.viewer_manager.view_file(path)
         self.treeView.setCurrentIndex(index)
 
         parent = index.parent()
@@ -195,21 +187,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pathChanged.emit(str(path))
 
     def handle_recents_clicked(self, index: int) -> None:
-        path = self.recents_tracker[index]
+        path = self.recents_manager[index]
         if not path.exists():
-            self.recents_tracker.remove(path.resolve().name)
+            self.recents_manager.remove(path.resolve().name)
             self.statusBar().showMessage(f"Recent not found: {str(path)}", 3000)
             return
 
         qm_index = self.model.index(str(path))
         self.treeView.setCurrentIndex(qm_index)
         self.treeView.scrollTo(qm_index, QAbstractItemView.ScrollHint.PositionAtTop)
-        self.view_file(path)
+        self.viewer_manager.view_file(path)
 
     def handle_treeview_current_index_changed(self, index: QModelIndex) -> None:
         if not self.model.isDir(index):
             self._add_recent(Path(self.model.filePath(index)))
-        self.view_file(Path(self.model.filePath(index)))
+        self.viewer_manager.view_file(Path(self.model.filePath(index)))
 
     def handle_treeview_context_menu_request(self, position) -> None:
         """Creates a dynamic menu based on the file type."""
@@ -236,7 +228,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     event.accept()
                     return True
 
-        if source is self.browser:
+        if source is self.viewer:
             if event.type() == QEvent.Type.DragEnter:
                 event = cast("QDragEnterEvent", event)
 
@@ -261,7 +253,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if self.model.isDir(new_index):
                     self.update_title_bar(str(path))
                 else:
-                    self.view_file(path)
+                    self.viewer_manager.view_file(path)
 
                 event.accept()
                 return True
@@ -280,7 +272,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         update_bookmark_order(bookmarks_)
 
     def load_splash(self) -> None:
-        self.view_file(SPLASH_FILE)
+        self.viewer_manager.view_file(SPLASH_FILE)
 
     def show_about(self) -> None:
         [effect.setEnabled(True) for effect in self.blur_effects]
@@ -295,7 +287,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.help_save = self.treeView.currentIndex()
             self.load_splash()
         else:
-            self.view_file(Path(self.model.filePath(self.help_save)))
+            self.viewer_manager.view_file(Path(self.model.filePath(self.help_save)))
             self.help_save = None
 
     def show_wallpaper(self) -> None:
@@ -304,37 +296,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.splitter_2_state = self.splitter_2.saveState()
             self.splitter_2.setSizes([0, 100])
-            self.view_file(Paths.WALLPAPER)
+            self.viewer_manager.view_file(Paths.WALLPAPER)
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
-        self.HIDE_TOOLBAR = pdf_toolbar[checked]
-        self.view_file(Path(self.model.filePath(self.treeView.currentIndex())))
+        self.viewer_manager.toggle_toolbar(checked)
+        self.viewer_manager.view_file(Path(self.model.filePath(self.treeView.currentIndex())))
 
     def update_title_bar(self, path: str) -> None:
         separator = " - " if path else ""
         self.setWindowTitle(f"{TITLE}{separator}{path}")
 
-    def view_file(self, path: Path) -> None:
-        """Loads the file pointed to by index into the viewing pane."""
-        # do not load directories into the viewer i.e., navigable elements
-        if path.is_dir():
-            return
-
-        url: QUrl = QUrl.fromLocalFile(path)
-        url.setFragment(f"{self.HIDE_TOOLBAR}&navpanes=0")
-
-        self.browser.setUrl(url)
-
-        if path.suffix.lower() in [".bmp", ".gif", ".jpg", ".jpeg", ".png", ".svg", ".webp"]:
-            self.browser.setZoomFactor(1.00)
-
-        self.fileLoaded.emit(str(path))
-
     def _add_recent(self, path: Path) -> None:
-        self.recents_tracker.add(str(path))
+        self.recents_manager.add(str(path))
 
     def _create_and_set_blur_effects(self) -> None:
-        widgets = (self.gb_bookmarks, self.gb_file_browser, self.browser, self.statusbar, self.menubar)
+        widgets = (self.gb_bookmarks, self.gb_file_browser, self.viewer, self.statusbar, self.menubar)
         self.blur_effects = [QGraphicsBlurEffect(widget) for widget in widgets]
         [(effect.setBlurRadius(7), effect.setEnabled(False)) for effect in self.blur_effects]
         [widget.setGraphicsEffect(effect) for widget, effect in zip(widgets, self.blur_effects)]

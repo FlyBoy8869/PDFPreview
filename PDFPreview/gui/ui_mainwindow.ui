@@ -201,7 +201,7 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QWebEngineView" name="browser">
+      <widget class="QWebEngineView" name="viewer">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>1</horstretch>
