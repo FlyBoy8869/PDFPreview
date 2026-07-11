@@ -364,6 +364,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not result.success:
             QMessageBox.warning(self, "Warning", result.message)
 
+    def _do_explorer_action(self, index: QModelIndex) -> None:
+        fileoperations.open_file_location(self.model.filePath(index))
+
     def _do_move_action(self, index: QModelIndex) -> None:
         if folder := QFileDialog.getExistingDirectory(self):
             source_path = Path(self.model.filePath(index))
@@ -399,8 +402,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     return
             QMessageBox.warning(self, "Warning", result.message)
 
-    def _do_explorer_action(self, index: QModelIndex) -> None:
-        fileoperations.open_file_location(self.model.filePath(index))
+    def _do_paint_action(self, index: QModelIndex) -> None:
+        fileoperations.open_with_mspaint(self.model.filePath(index))
 
     def _do_rename_action(self, index: QModelIndex) -> None:
         # TODO: Look into filing a bug report about the return value of this method.
@@ -415,6 +418,3 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.update_title_bar(self.model.filePath(self.treeView.currentIndex()))
             else:
                 QMessageBox.warning(self, "Rename Failed", f"{result.message}\n\nUnable to rename this file.")
-
-    def _do_paint_action(self, index: QModelIndex) -> None:
-        fileoperations.open_with_mspaint(self.model.filePath(index))
