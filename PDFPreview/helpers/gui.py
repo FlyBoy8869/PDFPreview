@@ -22,7 +22,7 @@ def yes_or_no(parent: QWidget, title: str, message: str, kind: MessageType = Mes
     return message_type_dispatch_table[kind](parent, title, message)
 
 
-def _yes_or_no(parent, title: str, message: str) -> bool:
+def _default_yes_or_no(parent, title: str, message: str) -> bool:
     """Display the QMessageBox.question dialog and returns a True or False value based on response.
 
     FYI, Windows does not automatically play the warning sound. Need to use winsound.
@@ -32,7 +32,6 @@ def _yes_or_no(parent, title: str, message: str) -> bool:
         title,
         message
     ) == QMessageBox.StandardButton.Yes
-
 
 
 def _warning_yes_no(parent, title: str, message: str) -> bool:
@@ -49,6 +48,6 @@ def _warning_yes_no(parent, title: str, message: str) -> bool:
 
 
 message_type_dispatch_table = {
-    MessageType.QUESTION: _yes_or_no,
+    MessageType.QUESTION: _default_yes_or_no,
     MessageType.WARNING: _warning_yes_no,
 }
