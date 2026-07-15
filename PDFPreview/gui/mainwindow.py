@@ -30,7 +30,7 @@ from .ui_mainwindow import Ui_MainWindow
 from PDFPreview.eventfilters.about_filter import AboutDialogFilter
 from PDFPreview.eventfilters.bookmark_filter import BookmarkListEventFilter
 from ..contextmenu import ContextMenu
-from ..helpers.gui import yes_or_no
+from ..helpers.gui import yes_or_no, MessageType
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
@@ -348,7 +348,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 path = Path(self.model.filePath(index))
                 result = fileoperations.delete_folder(path)
                 if not result.success and result.message == "Not Empty":
-                    if yes_or_no(self, "Warning", "Folder is not empty. Continue?"):
+                    if yes_or_no(self, "Warning", "Folder is not empty. Continue?", MessageType.WARNING):
                         result = fileoperations.delete_folder(path, recurse=True)
                         if not result.success:
                             QMessageBox.warning(self, "Warning", result.message)
@@ -381,15 +381,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         path = Path(self.model.filePath(index))
         path = path.parent if not path.is_dir() else path
 
+        # Did the right-click occur in the "un-populated" area of the QTreeView?
         if not index.isValid():
             path = Path(self.model.filePath(self.treeView.currentIndex()))
 
         result = fileoperations.mkdir(path)
         if not result.success:
-            if "not a directory" in result.message.lower():
-                result = fileoperations.mkdir(path.parent)
-                if result.success:
-                    return
             QMessageBox.warning(self, "Warning", result.message)
 
     def _do_new_text_file_action(self, index: QModelIndex) -> None:
@@ -402,10 +399,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         result = fileoperations.new_txt_file(path)
         if not result.success:
-            if "not a directory" in result.message.lower():
-                result = fileoperations.new_txt_file(path.parent)
-                if result.success:
-                    return
             QMessageBox.warning(self, "Warning", result.message)
 
     def _do_paint_action(self, index: QModelIndex) -> None:
