@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QMessageBox, QStyle, QFileDialog, QApplication, QAbstractItemView, QListWidgetItem
 )
+import winsound
 
 from config.config import config
 from config.config import SPLASH_FILE, TITLE
@@ -327,6 +328,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         }
 
     def _dispatch_action(self, action: str, index: QModelIndex) -> None:
+        winsound.MessageBeep(winsound.MB_OK)
         self.context_menu_actions[action](index)
 
     def _do_acrobat_action(self, index: QModelIndex) -> None:

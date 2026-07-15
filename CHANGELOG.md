@@ -5,6 +5,7 @@ All notable changes pertinent to the end user of this project will be documented
 ## [0.20.0]
 
 ### Changed
+- Play default Windows dialog appearance sound when showing a dialog.
 - Bookmarks that refer to files on network shares are no longer deleted when varified if the network share is unavailable.
 - Replaced the collapse button icon.
 - When a file is clicked on twice in a row (not a double-click) initiate editing process.
