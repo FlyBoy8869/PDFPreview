@@ -5,6 +5,7 @@ All notable changes pertinent to the end user of this project will be documented
 ## [0.20.0]
 
 ### Changed
+- Change placement behavour of new file and folder creation.
 - Play default Windows dialog appearance sound when showing a dialog.
 - Bookmarks that refer to files on network shares are no longer deleted when varified if the network share is unavailable.
 - Replaced the collapse button icon.

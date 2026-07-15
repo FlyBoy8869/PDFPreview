@@ -378,7 +378,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 QMessageBox.warning(self, "Warning", result.message)
 
     def _do_new_folder_action(self, index: QModelIndex) -> None:
-        path = Path(self.model.filePath(index)).parent
+        path = Path(self.model.filePath(index))
+        path = path.parent if not path.is_dir() else path
+
         if not index.isValid():
             path = Path(self.model.filePath(self.treeView.currentIndex()))
 
@@ -392,6 +394,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_new_text_file_action(self, index: QModelIndex) -> None:
         path = Path(self.model.filePath(index))
+        path = path if path.is_dir() else path.parent
 
         # Did the right-click occur in the "un-populated" area of the QTreeView?
         if not index.isValid():
