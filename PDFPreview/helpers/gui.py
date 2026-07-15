@@ -18,10 +18,15 @@ def center_window_on_parent(*, parent: QWidget, child: QWidget) -> QPoint:
 
 
 def yes_or_no(parent: QWidget, title: str, message: str, kind: MessageType = MessageType.QUESTION) -> bool:
+    """Displays the specified QMessageBox dialog and returns True or False based on response."""
     return message_type_dispatch_table[kind](parent, title, message)
 
 
 def _yes_or_no(parent, title: str, message: str) -> bool:
+    """Display the QMessageBox.question dialog and returns a True or False value based on response.
+
+    FYI, Windows does not automatically play the warning sound. Need to use winsound.
+    """
     return QMessageBox.question(
         parent,
         title,
@@ -31,7 +36,7 @@ def _yes_or_no(parent, title: str, message: str) -> bool:
 
 
 def _warning_yes_no(parent, title: str, message: str) -> bool:
-    """Display a warning message, returning True or False
+    """Display the QMessageBox.warning dialog and returns a True or False value based on response.
 
     FYI, Windows automatically plays the warning sound. No need to use winsound.
     """
