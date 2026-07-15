@@ -14,8 +14,8 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QMessageBox, QStyle, QFileDialog, QApplication, QAbstractItemView, QListWidgetItem
 )
-import winsound
 
+import PDFPreview.helpers.sound as sound
 from config.config import config
 from config.config import SPLASH_FILE, TITLE
 from PDFPreview.gui.dialogs import about
@@ -328,7 +328,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         }
 
     def _dispatch_action(self, action: str, index: QModelIndex) -> None:
-        winsound.MessageBeep(winsound.MB_OK)
+        sound.message_beep(sound.dialog_sound)
         self.context_menu_actions[action](index)
 
     def _do_acrobat_action(self, index: QModelIndex) -> None:
