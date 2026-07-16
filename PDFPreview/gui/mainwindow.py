@@ -61,17 +61,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._create_and_set_blur_effects(
             (self.gb_bookmarks, self.gb_file_browser, self.viewer, self.statusbar, self.menubar))
 
-        self.pathChanged.connect(self.update_title_bar)
+        self.pathChanged.connect(self._update_title_bar)
 
         # -----------------------------------------------------------
 
         self.help_shortcut = QShortcut(QKeySequence("h"), self)
-        self.help_shortcut.activated.connect(self.show_help)
+        self.help_shortcut.activated.connect(self._show_help)
         self.help_save: QModelIndex | None = None
 
         self.wallpaper_shortcut = QShortcut(QKeySequence("Meta+`"), self)
         self.wallpaper_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
-        self.wallpaper_shortcut.activated.connect(self.show_wallpaper)
+        self.wallpaper_shortcut.activated.connect(self._show_wallpaper)
 
         # ABOUT WINDOW
         self.about_window = about.create_about_dialog()
@@ -87,19 +87,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Hide toolbar menu action
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
         self.action_hide_files.toggled.connect(self.handle_action_hide_files)
-        self.actionAbout.triggered.connect(self.show_about)
+        self.actionAbout.triggered.connect(self._show_about)
 
         # FILE VIEWER
         self.viewer.installEventFilter(self)
         self.viewer_manager = ViewerManager(self.viewer)
-        self.viewer_manager.fileLoaded.connect(self.update_title_bar)
+        self.viewer_manager.fileLoaded.connect(self._update_title_bar)
 
         # WINDOW INTO THE FILE SYSTEM
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setReadOnly(False)
         self.model.setFilter(file_filters[self.action_hide_files.isChecked()])
         root_index = self.model.setRootPath("")
-        self.model.fileRenamed.connect(lambda p, o, n: self.update_title_bar(f"{p}/{n}"))
+        self.model.fileRenamed.connect(lambda p, o, n: self._update_title_bar(f"{p}/{n}"))
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
 
         # BOOKMARKS
@@ -117,7 +117,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.sortByColumn(0, Qt.SortOrder.AscendingOrder)
 
         self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
-        self.treeView.expanded.connect(lambda index: self.update_title_bar(self.model.filePath(index)))
+        self.treeView.expanded.connect(lambda index: self._update_title_bar(self.model.filePath(index)))
         self.treeView.currentIndexChanged.connect(
             lambda c, p: self.viewer_manager.view_file(Path(self.model.filePath(c)))
         )
@@ -150,11 +150,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.model.fileRenamed.connect(self.recents_manager.rename)
         self.actionClear_Recents.triggered.connect(self.recents_manager.clear_recents)
 
-        self.load_bookmarks()
+        self._load_bookmarks()
 
         self.context_menu_actions = self._create_context_menu_dispatch_table()
 
-        self.load_splash()
+        self._show_splash()
 
         self.previous_path: str = self.model.filePath(self.treeView.currentIndex())
 
@@ -249,7 +249,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.treeView.scrollTo(new_index, QAbstractItemView.ScrollHint.PositionAtTop)
 
                 if self.model.isDir(new_index):
-                    self.update_title_bar(str(path))
+                    self._update_title_bar(str(path))
                 else:
                     self.viewer_manager.view_file(path)
 
@@ -258,21 +258,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         return super().eventFilter(source, event)
 
-    def load_bookmarks(self) -> None:
+    def _add_recent(self, path: Path) -> None:
+        self.recents_manager.add(str(path))
+
+    def _create_and_set_blur_effects(self, widgets) -> None:
+        self.blur_effects = effects.create_blur_effects(widgets)
+        effects.set_blur_effects(widgets, self.blur_effects, 7)
+
+    def _load_bookmarks(self) -> None:
         bookmarks.load_bookmarks(load_bookmarks(), self.lw_bookmarks)
 
-    def _update_bookmarks(self) -> None:
-        lw = self.lw_bookmarks
-        bookmarks_ = []
-        for row in range(lw.count()):
-            bookmarks_.append((lw.item(row).text(), lw.item(row).data(Qt.ItemDataRole.UserRole), row))
-
-        update_bookmark_order(bookmarks_)
-
-    def load_splash(self) -> None:
-        self.viewer_manager.view_file(SPLASH_FILE)
-
-    def show_about(self) -> None:
+    def _show_about(self) -> None:
         effects.enable_effects(self.blur_effects)
 
         self.about_window.move(
@@ -280,15 +276,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
         self.about_window.show()
 
-    def show_help(self) -> None:
+    def _show_help(self) -> None:
         if self.help_save is None:
             self.help_save = self.treeView.currentIndex()
-            self.load_splash()
+            self._show_splash()
         else:
             self.viewer_manager.view_file(Path(self.model.filePath(self.help_save)))
             self.help_save = None
 
-    def show_wallpaper(self) -> None:
+    def _show_splash(self) -> None:
+        self.viewer_manager.view_file(SPLASH_FILE)
+
+    def _show_wallpaper(self) -> None:
         if self.main_splitter.sizes()[0] == 0:
             self.main_splitter.restoreState(self.main_splitter_state)
         else:
@@ -300,16 +299,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.viewer_manager.toggle_toolbar(checked)
         self.viewer_manager.view_file(Path(self.model.filePath(self.treeView.currentIndex())))
 
-    def update_title_bar(self, path: str) -> None:
+    def _update_bookmarks(self) -> None:
+        lw = self.lw_bookmarks
+        bookmarks_ = []
+        for row in range(lw.count()):
+            bookmarks_.append((lw.item(row).text(), lw.item(row).data(Qt.ItemDataRole.UserRole), row))
+
+        update_bookmark_order(bookmarks_)
+
+    def _update_title_bar(self, path: str) -> None:
         separator = " - " if path else ""
         self.setWindowTitle(f"{TITLE}{separator}{path}")
-
-    def _add_recent(self, path: Path) -> None:
-        self.recents_manager.add(str(path))
-
-    def _create_and_set_blur_effects(self, widgets) -> None:
-        self.blur_effects = effects.create_blur_effects(widgets)
-        effects.set_blur_effects(widgets, self.blur_effects, 7)
 
     # Context Menu Actions
     def _create_context_menu_dispatch_table(self) -> dict:
@@ -414,6 +414,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )[0]:
             result = fileoperations.rename_file(self.model, index, new_name)
             if result.success:
-                self.update_title_bar(self.model.filePath(self.treeView.currentIndex()))
+                self._update_title_bar(self.model.filePath(self.treeView.currentIndex()))
             else:
                 QMessageBox.warning(self, "Rename Failed", f"{result.message}\n\nUnable to rename this file.")
