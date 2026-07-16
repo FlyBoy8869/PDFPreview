@@ -35,7 +35,6 @@ from ..helpers.gui import yes_or_no, MessageType
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
 
-
 # noinspection PyTypeChecker
 file_filters: dict[bool, QDir.Filter] = {
     True: QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot,
@@ -59,7 +58,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.main_splitter_state = None
 
-        self._create_and_set_blur_effects((self.gb_bookmarks, self.gb_file_browser, self.viewer, self.statusbar, self.menubar))
+        self._create_and_set_blur_effects(
+            (self.gb_bookmarks, self.gb_file_browser, self.viewer, self.statusbar, self.menubar))
 
         self.pathChanged.connect(self.update_title_bar)
 
@@ -78,7 +78,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_event_filter = AboutDialogFilter(self.about_window)
         self.about_window.installEventFilter(self.about_event_filter)
         self.about_event_filter.window_closing.connect(
-            lambda: effects.disable_effect(self.blur_effects)
+            lambda: effects.disable_effects(self.blur_effects)
         )
         self.actionAbout.setIcon(
             self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation)
@@ -207,10 +207,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         context_menu = ContextMenu()
         if action := context_menu.get_menu_action(
-            Path(self.model.filePath(index)),
-            self.model.isDir(index),
-            index.isValid(),
-            self.treeView.viewport().mapToGlobal(position)
+                Path(self.model.filePath(index)),
+                self.model.isDir(index),
+                index.isValid(),
+                self.treeView.viewport().mapToGlobal(position)
         ):
             self._dispatch_action(action, index)
 
@@ -273,8 +273,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.viewer_manager.view_file(SPLASH_FILE)
 
     def show_about(self) -> None:
-        # noinspection PyNoneFunctionAssignment
-        [effect.setEnabled(True) for effect in self.blur_effects]
+        effects.enable_effects(self.blur_effects)
 
         self.about_window.move(
             gui.center_window_on_parent(parent=self, child=self.about_window),
@@ -343,7 +342,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.clipboard.setMimeData(mime_data)
 
     def _do_delete_action(self, index: QModelIndex) -> None:
-        if yes_or_no(self, "Delete", f"Deleting '{self.model.fileName(index)}'.\n\nThis action can not be undone.\nAre you sure?"):
+        if yes_or_no(self, "Delete",
+                     f"Deleting '{self.model.fileName(index)}'.\n\nThis action can not be undone.\nAre you sure?"):
             if self.model.isDir(index):
                 path = Path(self.model.filePath(index))
                 result = fileoperations.delete_folder(path)

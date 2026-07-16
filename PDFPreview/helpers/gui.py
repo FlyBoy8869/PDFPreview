@@ -1,5 +1,5 @@
 # helpers.gui.py
-from enum import Enum, StrEnum
+from enum import Enum
 
 from PySide6.QtWidgets import QWidget, QMessageBox
 from PySide6.QtCore import QPoint
