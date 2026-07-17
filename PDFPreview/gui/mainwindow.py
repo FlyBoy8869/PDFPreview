@@ -175,12 +175,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.viewer_manager.view_file(path)
         self.treeView.setCurrentIndex(index)
 
+        self.treeView.collapseAll()
         parent = index.parent()
         while parent.isValid():
             self.treeView.expand(parent)
             parent = parent.parent()
-        self.treeView.expand(index)
         self.treeView.scrollTo(self.model.index(str(path)), QAbstractItemView.ScrollHint.PositionAtTop)
+        self.treeView.expand(index)
 
         self.pathChanged.emit(str(path))
 
