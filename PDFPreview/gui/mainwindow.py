@@ -248,10 +248,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.treeView.setCurrentIndex(new_index)
                 self.treeView.scrollTo(new_index, QAbstractItemView.ScrollHint.PositionAtTop)
 
-                if self.model.isDir(new_index):
-                    self._update_title_bar(str(path))
-                else:
-                    self.viewer_manager.view_file(path)
+                self._update_title_bar(str(path))
+                self.viewer_manager.view_file(path)
 
                 event.accept()
                 return True
