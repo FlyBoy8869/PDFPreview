@@ -17,7 +17,7 @@ def center_window_on_parent(*, parent: QWidget, child: QWidget) -> QPoint:
     )
 
 
-def yes_or_no(parent: QWidget, title: str, message: str, kind: MessageType = MessageType.QUESTION) -> bool:
+def ask_yes_or_no(parent: QWidget | None, title: str, message: str, kind: MessageType = MessageType.QUESTION) -> bool:
     """Displays the specified QMessageBox dialog and returns True or False based on response."""
     return message_type_dispatch_table[kind](parent, title, message)
 

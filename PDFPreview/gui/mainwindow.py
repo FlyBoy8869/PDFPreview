@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, QUrl, Signal, QMimeData
+from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, Signal
 from PySide6.QtGui import (
     QDragEnterEvent,
     QDropEvent,
@@ -10,12 +10,12 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import (
     QFileSystemModel,
-    QInputDialog,
     QMainWindow,
-    QMessageBox, QStyle, QFileDialog, QApplication, QAbstractItemView, QListWidgetItem
+    QMessageBox, QStyle, QApplication, QAbstractItemView, QListWidgetItem
 )
 
 import PDFPreview.helpers.sound as sound
+import contextmenuactions
 from config.config import config
 from config.config import SPLASH_FILE, TITLE
 from PDFPreview.gui.dialogs import about
@@ -30,7 +30,6 @@ from .ui_mainwindow import Ui_MainWindow
 from PDFPreview.eventfilters.about_filter import AboutDialogFilter
 from PDFPreview.eventfilters.bookmark_filter import BookmarkListEventFilter
 from ..contextmenu import ContextMenu
-from ..helpers.gui import yes_or_no, MessageType
 
 if TYPE_CHECKING:
     from PySide6.QtGui import QKeyEvent
@@ -146,13 +145,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.cb_recents,
             config["general"]["recents_limit"]
         )
-        self.fileDeleted.connect(self.recents_manager.remove)
+        # self.fileDeleted.connect(self.recents_manager.remove)
         self.model.fileRenamed.connect(self.recents_manager.rename)
         self.actionClear_Recents.triggered.connect(self.recents_manager.clear_recents)
 
         self._load_bookmarks()
 
-        self.context_menu_actions = self._create_context_menu_dispatch_table()
+        self.context_menu_actions_dispatch_table = self._create_context_menu_dispatch_table()
+        self.context_menu_actions = contextmenuactions.ContextMenuActions()
+        self.context_menu_actions.fileDeleted.connect(self.recents_manager.remove)
 
         self._show_splash()
 
@@ -327,92 +328,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _dispatch_action(self, action: str, index: QModelIndex) -> None:
         sound.message_beep(sound.dialog_sound)
-        self.context_menu_actions[action](index)
+        self.context_menu_actions_dispatch_table[action](Path(self.model.filePath(index)))
 
-    def _do_acrobat_action(self, index: QModelIndex) -> None:
-        path = Path(self.model.filePath(index))
-        if path.suffix.lower() == ".pdf":
-            fileoperations.open_with_acrobat(self.model.filePath(index))
+    def _do_acrobat_action(self, path: Path) -> None:
+        self.context_menu_actions.do_acrobat_action(path)
 
-    def _do_copy_action(self, index: QModelIndex) -> None:
-        mime_data = QMimeData()
-        mime_data.setUrls([QUrl.fromLocalFile(self.model.filePath(index))])
-        self.clipboard = QApplication.clipboard()
-        self.clipboard.setMimeData(mime_data)
+    def _do_copy_action(self, path: Path) -> None:
+        self.context_menu_actions.do_copy_action(path, QApplication.clipboard())
 
-    def _do_delete_action(self, index: QModelIndex) -> None:
-        if yes_or_no(self, "Delete",
-                     f"Deleting '{self.model.fileName(index)}'.\n\nThis action can not be undone.\nAre you sure?"):
-            if self.model.isDir(index):
-                path = Path(self.model.filePath(index))
-                result = fileoperations.delete_folder(path)
-                if not result.success and result.message == "Not Empty":
-                    if yes_or_no(self, "Warning", "Folder is not empty. Continue?", MessageType.WARNING):
-                        result = fileoperations.delete_folder(path, recurse=True)
-                        if not result.success:
-                            QMessageBox.warning(self, "Warning", result.message)
-                elif not result.success:
-                    QMessageBox.warning(self, "Warning", result.message)
-                return
+    def _do_delete_action(self, path: Path) -> None:
+        self.context_menu_actions.do_delete_action(path)
 
-            result = fileoperations.delete_file(Path(self.model.filePath(index)))
-            if not result.success:
-                QMessageBox.warning(self, "Warning", result.message)
-                return
-            self.fileDeleted.emit(self.model.filePath(index))
+    def _do_duplicate_action(self, path: Path) -> None:
+        self.context_menu_actions.do_duplicate_action(path)
 
-    def _do_duplicate_action(self, index: QModelIndex) -> None:
-        result = fileoperations.duplicate_file(Path(self.model.filePath(index)))
-        if not result.success:
-            QMessageBox.warning(self, "Warning", result.message)
+    def _do_explorer_action(self, path: Path) -> None:
+        self.context_menu_actions.do_explorer_action(path)
 
-    def _do_explorer_action(self, index: QModelIndex) -> None:
-        fileoperations.open_file_location(self.model.filePath(index))
+    def _do_move_action(self, path: Path) -> None:
+        self.context_menu_actions.do_move_action(path)
 
-    def _do_move_action(self, index: QModelIndex) -> None:
-        if folder := QFileDialog.getExistingDirectory(self):
-            source_path = Path(self.model.filePath(index))
-            result = fileoperations.move_file(source_path, Path(folder) / source_path.name)
-            if not result.success:
-                QMessageBox.warning(self, "Warning", result.message)
-
-    def _do_new_folder_action(self, index: QModelIndex) -> None:
-        path = Path(self.model.filePath(index))
+    def _do_new_folder_action(self, path: Path) -> None:
+        # Did the right-click occur in the "un-populated" area of the QTreeView?
+        if not self.model.index(str(path)).isValid():
+            path = Path(self.model.filePath(self.treeView.currentIndex()))
         path = path.parent if not path.is_dir() else path
+        self.context_menu_actions.do_new_folder_action(path)
 
+    def _do_new_text_file_action(self, path: Path) -> None:
         # Did the right-click occur in the "un-populated" area of the QTreeView?
-        if not index.isValid():
+        if not self.model.index(str(path)).isValid():
             path = Path(self.model.filePath(self.treeView.currentIndex()))
-
-        result = fileoperations.mkdir(path)
-        if not result.success:
-            QMessageBox.warning(self, "Warning", result.message)
-
-    def _do_new_text_file_action(self, index: QModelIndex) -> None:
-        path = Path(self.model.filePath(index))
         path = path if path.is_dir() else path.parent
+        self.context_menu_actions.do_new_text_file_action(path)
 
-        # Did the right-click occur in the "un-populated" area of the QTreeView?
-        if not index.isValid():
-            path = Path(self.model.filePath(self.treeView.currentIndex()))
+    def _do_paint_action(self, path: Path) -> None:
+        self.context_menu_actions.do_paint_action(path)
 
-        result = fileoperations.new_txt_file(path)
-        if not result.success:
-            QMessageBox.warning(self, "Warning", result.message)
-
-    def _do_paint_action(self, index: QModelIndex) -> None:
-        fileoperations.open_with_mspaint(self.model.filePath(index))
-
-    def _do_rename_action(self, index: QModelIndex) -> None:
-        # TODO: Look into filing a bug report about the return value of this method.
-        if new_name := QInputDialog.getText(
-                self,
-                "Rename File",
-                "Enter a new name for this file:",
-                text=index.data(),
-        )[0]:
-            result = fileoperations.rename_file(self.model, index, new_name)
-            if result.success:
-                self._update_title_bar(self.model.filePath(self.treeView.currentIndex()))
-            else:
-                QMessageBox.warning(self, "Rename Failed", f"{result.message}\n\nUnable to rename this file.")
+    def _do_rename_action(self, path: Path) -> None:
+        self.context_menu_actions.do_rename_action(path, self.model)
