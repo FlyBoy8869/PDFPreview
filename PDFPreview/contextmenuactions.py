@@ -4,8 +4,8 @@ from PySide6.QtCore import QMimeData, QUrl, QObject, Signal
 from PySide6.QtGui import QClipboard
 from PySide6.QtWidgets import QInputDialog, QMessageBox, QFileDialog, QFileSystemModel
 
-from helpers import fileoperations
-from helpers.gui import ask_yes_or_no, MessageType
+from .helpers import fileoperations
+from .helpers.gui import ask_yes_or_no, MessageType
 
 
 class ContextMenuActions(QObject):
@@ -22,7 +22,7 @@ class ContextMenuActions(QObject):
 
     def do_delete_action(self, path: Path) -> None:
         if ask_yes_or_no(None, "Delete",
-                     f"Deleting '{path}'.\n\nThis action can not be undone.\nAre you sure?"):
+                         f"Deleting '{path}'.\n\nThis action can not be undone.\nAre you sure?"):
             if path.is_dir():
                 self._delete_folder(path)
             else:
@@ -99,4 +99,3 @@ class ContextMenuActions(QObject):
         else:
             QMessageBox.warning(None, "Warning", result.message)
         return False
-
