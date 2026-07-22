@@ -74,11 +74,8 @@ class RecentsManager:
             register_recent((Path(path) / new_name).resolve().name, str(Path(path) / new_name))
 
     def find_index_by_path(self, path: str) -> int | None:
-        print(f"searching for {path}")
         for index, recent_path in enumerate(self._indexes):
-            print(f"checking against {recent_path}")
             if recent_path == path:
-                print(f"call joy")
                 return index
         return None
 
