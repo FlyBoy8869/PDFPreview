@@ -80,14 +80,17 @@ class RecentsManager:
         return None
 
     def _load_recents(self) -> None:
-        recents = load_recents()
-
-        while len(recents) > self.limit:
-            r = recents.pop(0)
-            delete_recent(r.name)
+        recents = self._trim_to_limit(load_recents())
 
         for recent in recents:
             if not Path(recent.path).exists():
                 delete_recent(recent.name)
                 continue
             self._add(recent.path)
+
+    def _trim_to_limit(self, recents: list) -> list:
+        while len(recents) > self.limit:
+            r = recents.pop(0)
+            delete_recent(r.name)
+
+        return recents
