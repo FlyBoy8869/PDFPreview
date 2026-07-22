@@ -7,6 +7,7 @@ from PDFPreview.services.recent_service import (
     register_recent, load_recents, delete_recent,
     clear_recents as _clear_recents
 )
+from helpers.paths import Paths
 
 
 class RecentsManager:
@@ -64,7 +65,6 @@ class RecentsManager:
 
     @Slot()
     def rename(self, path: str, old_name: str, new_name: str) -> None:
-        # index = self.widget.findText(old_name)
         if index := self.find_index_by_path(str(Path(path) / old_name)):
             self.widget.setItemText(index, new_name)
             self.widget.setItemData(index, f"{path}/{new_name}", Qt.ItemDataRole.ToolTipRole)
@@ -83,7 +83,7 @@ class RecentsManager:
         recents = self._trim_to_limit(load_recents())
 
         for recent in recents:
-            if not Path(recent.path).exists():
+            if not Path(recent.path).exists() and Paths.network_shares_available:
                 delete_recent(recent.name)
                 continue
             self._add(recent.path)
