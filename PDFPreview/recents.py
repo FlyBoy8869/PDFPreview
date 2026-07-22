@@ -82,11 +82,9 @@ class RecentsManager:
     def _load_recents(self) -> None:
         recents = load_recents()
 
-        if len(recents) > self.limit:
-            remove_count = len(recents) - self.limit - 1
-            for i in range(remove_count):
-                r = recents.pop(0)
-                delete_recent(r.name)
+        while len(recents) > self.limit:
+            r = recents.pop(0)
+            delete_recent(r.name)
 
         for recent in recents:
             if not Path(recent.path).exists():
