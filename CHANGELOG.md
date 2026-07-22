@@ -2,57 +2,77 @@
 
 All notable changes pertinent to the end user of this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- The number of tracked recents exceeding the configured amount.
+
 ## [0.20.0]
 
 ### Changed
+
 - Change placement behavour of new file and folder creation.
 - Play default Windows dialog appearance sound when showing a dialog.
-- Bookmarks that refer to files on network shares are no longer deleted when varified if the network share is unavailable.
+- Bookmarks that refer to files on network shares are no longer deleted when varified if the network share is
+  unavailable.
 - Replaced the collapse button icon.
 - When a file is clicked on twice in a row (not a double-click) initiate editing process.
-- When creating a new folder the naming convention has been changed from "New folder - Copy" etc. to "New folder (1)" when consecutively creating multiple new folders
+- When creating a new folder the naming convention has been changed from "New folder - Copy" etc. to "New folder (1)"
+  when consecutively creating multiple new folders
 
 ### Added
+
 - Bookmark database is now backed up on program exit.
 - Crude Drag and Drop into the folders show in the file browser only.
 - You can now right-click the white space of the file browser to show the "New" context menu.
 
 ### Fixed
+
 - Issue where the filename in a recent tooltip text was not being updated properly.
-- Issue where renaming a file that is on the recents list would rename the first item it came to with the name in question.
+- Issue where renaming a file that is on the recents list would rename the first item it came to with the name in
+  question.
 - Bug causing a new file to be created one level above the selected location.
 - Bug causing Bookmarks to not be updated properly.
-- Bug which caused an exception when making a new text file or folder when a file was selected and the context menu was requested via right-clicking the white space of the file browser.
+- Bug which caused an exception when making a new text file or folder when a file was selected and the context menu was
+  requested via right-clicking the white space of the file browser.
 - About dialog icon not being displayed.
 - Bug causing the open with adobe acrobat menu entry to not be present.
 
 ## [0.19.1] - 2026-06-10
 
 ### Changed
+
 - icon for delete menu option
 - icon for duplicate menu option
-
 
 ## [0.19.0] - 2026-06-09
 
 ### Added
+
 - Menu option to copy a file to the clipboard.
 
 ## [0.18.0] - 2026-06-05
 
 ### Added
+
 - Context menu option to create a new folder.
 - File name to the file deletion confirmation dialog.
 
 ### Changed
+
 - Changed the behavior for folder deletion to warn of non-empty folders and get confirmation.
 
 ## [0.17.2] - 2026-06-01
 
 ### Fixed
-- When the application starts, bookmarks and recents are now validated to make sure their targets exist and get removed otherwise.
-- While the application is running, clicking a bookmark which has been deleted outside the application will pop a dialog informing the user that the file the bookmark was pointing to is now non-existent.
-- Recents are now removed from the list and no action will be taken if its target has been deleted outside the application.
+
+- When the application starts, bookmarks and recents are now validated to make sure their targets exist and get removed
+  otherwise.
+- While the application is running, clicking a bookmark which has been deleted outside the application will pop a dialog
+  informing the user that the file the bookmark was pointing to is now non-existent.
+- Recents are now removed from the list and no action will be taken if its target has been deleted outside the
+  application.
 
 ## [0.17.1] - 2026-05-28
 
