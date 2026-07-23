@@ -2,7 +2,6 @@
 # handles the CRUD operations
 
 from tinydb import Query
-from tinydb.table import Document
 
 from .db import db
 
@@ -14,7 +13,7 @@ def create_recent(recent_dict: dict):
     return recents_table.insert(recent_dict)
 
 
-def get_recents() -> list[Document]:
+def get_recents() -> list[dict[str, str]]:
     return recents_table.all()
 
 
