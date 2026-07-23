@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, Signal
+from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, Signal, QByteArray
 from PySide6.QtGui import (
     QDragEnterEvent,
     QDropEvent,
@@ -55,7 +55,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle(f"{TITLE}")
 
-        self.main_splitter_state = None
+        self.main_splitter_state: QByteArray
 
         self._create_and_set_blur_effects(
             (self.gb_bookmarks, self.gb_file_browser, self.viewer, self.statusbar, self.menubar))
