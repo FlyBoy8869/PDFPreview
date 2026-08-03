@@ -118,7 +118,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.treeView.clicked.connect(self.handle_treeview_current_index_changed)
         self.treeView.expanded.connect(lambda index: self._update_title_bar(self.model.filePath(index)))
         self.treeView.currentIndexChanged.connect(
-            lambda c, p: self.viewer_manager.view_file(Path(self.model.filePath(c)))
+            lambda c, p: self.viewer_manager.preview_file(Path(self.model.filePath(c)))
         )
 
         self.treeView.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
@@ -173,7 +173,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QMessageBox.information(self, "Info", f"File no longer exists:\n\n{str(path)}")
             return
 
-        self.viewer_manager.view_file(path)
+        self.viewer_manager.preview_file(path)
         self.treeView.setCurrentIndex(index)
 
         self.treeView.collapseAll()
@@ -196,12 +196,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         qm_index = self.model.index(str(path))
         self.treeView.setCurrentIndex(qm_index)
         self.treeView.scrollTo(qm_index, QAbstractItemView.ScrollHint.PositionAtTop)
-        self.viewer_manager.view_file(path)
+        self.viewer_manager.preview_file(path)
 
     def handle_treeview_current_index_changed(self, index: QModelIndex) -> None:
         if not self.model.isDir(index):
             self._add_recent(Path(self.model.filePath(index)))
-        self.viewer_manager.view_file(Path(self.model.filePath(index)))
+        self.viewer_manager.preview_file(Path(self.model.filePath(index)))
 
     def handle_treeview_context_menu_request(self, position) -> None:
         """Creates a dynamic menu based on the file type."""
@@ -251,7 +251,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.treeView.scrollTo(new_index, QAbstractItemView.ScrollHint.PositionAtTop)
 
                 self._update_title_bar(str(path))
-                self.viewer_manager.view_file(path)
+                self.viewer_manager.preview_file(path)
 
                 event.accept()
                 return True
@@ -281,11 +281,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.help_save = self.treeView.currentIndex()
             self._show_splash()
         else:
-            self.viewer_manager.view_file(Path(self.model.filePath(self.help_save)))
+            self.viewer_manager.preview_file(Path(self.model.filePath(self.help_save)))
             self.help_save = None
 
     def _show_splash(self) -> None:
-        self.viewer_manager.view_file(SPLASH_FILE)
+        self.viewer_manager.preview_file(SPLASH_FILE)
 
     def _show_wallpaper(self) -> None:
         if self.main_splitter.sizes()[0] == 0:
@@ -293,11 +293,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.main_splitter_state = self.main_splitter.saveState()
             self.main_splitter.setSizes([0, 100])
-            self.viewer_manager.view_file(Paths.WALLPAPER)
+            self.viewer_manager.preview_file(Paths.WALLPAPER)
 
     def toggle_toolbar(self, checked: bool) -> None:  # noqa: FBT001
         self.viewer_manager.toggle_toolbar(checked)
-        self.viewer_manager.view_file(Path(self.model.filePath(self.treeView.currentIndex())))
+        self.viewer_manager.preview_file(Path(self.model.filePath(self.treeView.currentIndex())))
 
     def _update_bookmarks(self) -> None:
         lw = self.lw_bookmarks

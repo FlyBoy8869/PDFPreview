@@ -31,7 +31,7 @@ class ViewerManager(QObject):
             True,
         )
 
-    def view_file(self, path: Path):
+    def preview_file(self, path: Path):
         """Loads the file pointed to by index into the viewing pane."""
         # do not load directories into the viewer i.e., navigable elements
         if path.is_dir():
