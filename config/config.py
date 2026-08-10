@@ -44,3 +44,21 @@ config["OS"] = OS
 
 ADOBE_ACROBAT_PATH = config["paths"]["acrobat"]
 WALLPAPER = IMAGES / "wallpaper.png"
+
+__all__ = [
+    "VERSION",
+    "TITLE",
+    "DATABASE_FILE",
+    "DATABASE_PATH",
+    "OS",
+    "PATH_PREFIX",
+    "ROOT",
+    "RESOURCES",
+    "FILES",
+    "SPLASH_FILE",
+    "IMAGES",
+    "LOGO",
+    "ADOBE_ACROBAT_PATH",
+    "WALLPAPER",
+    "config"
+]

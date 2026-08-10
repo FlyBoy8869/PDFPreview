@@ -16,8 +16,7 @@ from PySide6.QtWidgets import (
 
 import PDFPreview.helpers.sound as sound
 import PDFPreview.contextmenuactions as contextmenuactions
-from config.config import config
-from config.config import SPLASH_FILE, TITLE
+from config import config, SPLASH_FILE, TITLE
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui
 import PDFPreview.recents as recents

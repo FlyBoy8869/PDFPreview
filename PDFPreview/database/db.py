@@ -1,5 +1,5 @@
 from tinydb import TinyDB
 
-from config import config
+from config import DATABASE_PATH
 
-db = TinyDB(config.DATABASE_PATH / "database.json", indent=4)
+db = TinyDB(DATABASE_PATH / "database.json", indent=4)

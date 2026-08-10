@@ -17,8 +17,7 @@ from pathvalidate import ValidationError, validate_filename
 from PySide6.QtCore import QModelIndex, Qt, QUrl, QDir
 from PySide6.QtWidgets import QFileSystemModel
 
-from config.config import ADOBE_ACROBAT_PATH
-
+from config import ADOBE_ACROBAT_PATH
 
 Result = namedtuple("Result", ["success", "message"])
 
