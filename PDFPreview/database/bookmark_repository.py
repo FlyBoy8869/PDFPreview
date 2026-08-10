@@ -6,6 +6,13 @@ from tinydb.table import Document
 
 from .db import db
 
+__all__ = [
+    "create_bookmark",
+    "get_bookmarks",
+    "truncate_bookmarks",
+    "delete_bookmark",
+]
+
 bookmarks_table = db.table(name="bookmarks")
 BookmarkQuery = Query()
 
@@ -24,3 +31,5 @@ def truncate_bookmarks() -> None:
 
 def delete_bookmark(name: str) -> None:
     bookmarks_table.remove(BookmarkQuery.name == name)
+
+

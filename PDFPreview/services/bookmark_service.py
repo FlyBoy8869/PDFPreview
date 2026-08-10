@@ -1,9 +1,9 @@
 # services.bookmark_service.py
 # Business logic layer that uses repositories
 
-from PDFPreview.database.bookmark_repository import create_bookmark, get_bookmarks, truncate_bookmarks, \
+from PDFPreview.database import create_bookmark, get_bookmarks, truncate_bookmarks, \
     delete_bookmark as _delete_bookmark
-from PDFPreview.models.bookmark import Bookmark
+from PDFPreview.models import Bookmark
 
 
 def delete_bookmark(name: str) -> None:

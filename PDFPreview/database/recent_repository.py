@@ -6,6 +6,8 @@ from tinydb.table import Document
 
 from .db import db
 
+__all__ = ["create_recent", "get_recents", "delete_recent", "truncate_recents"]
+
 recents_table = db.table(name="recents")
 RecentQuery = Query()
 
