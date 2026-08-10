@@ -16,13 +16,14 @@ PATH_PREFIX: Literal["file://", "file:///"] = (
     "file://" if OS == "macOS" else "file:///"
 )
 
-ROOT = Path(__file__).resolve().parent.parent
-RESOURCES = ROOT / "Resources"
+ROOT: Path = Path(__file__).resolve().parent.parent
+RESOURCES: Path = ROOT / "Resources"
 
-FILES = RESOURCES / "Files"
+FILES: Path = RESOURCES / "Files"
 SPLASH_FILE: Path = FILES / "FileViewerSplash.html"
 
-IMAGES = RESOURCES / "Images"
+IMAGES: Path = RESOURCES / "Images"
+ICONS: Path = IMAGES / "Icons"
 LOGO: Path = IMAGES / "logo.png"
 
 if OS == "macOS":
@@ -57,6 +58,7 @@ __all__ = [
     "FILES",
     "SPLASH_FILE",
     "IMAGES",
+    "ICONS",
     "LOGO",
     "ADOBE_ACROBAT_PATH",
     "WALLPAPER",

@@ -5,6 +5,8 @@ from PDFPreview.database import create_bookmark, get_bookmarks, truncate_bookmar
     delete_bookmark as _delete_bookmark
 from PDFPreview.models import Bookmark
 
+__all__ = ["delete_bookmark", "load_bookmarks", "register_bookmark", "update_bookmark_order"]
+
 
 def delete_bookmark(name: str) -> None:
     _delete_bookmark(name)

@@ -1,10 +1,5 @@
 from pathlib import Path
-
-BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
-RESOURCES: Path = BASE_DIR / "Resources"
-FILES: Path = RESOURCES / "Files"
-IMAGES: Path = RESOURCES / "Images"
-ICONS: Path = IMAGES / "Icons"
+from config import FILES, IMAGES, ICONS
 
 
 class Paths:
