@@ -20,7 +20,7 @@ from config import config, SPLASH_FILE, TITLE
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui
 import PDFPreview.recents as recents
-from PDFPreview.services.bookmark_service import update_bookmark_order, load_bookmarks
+from PDFPreview.services.bookmark_services import update_bookmark_order, load_bookmarks
 from PDFPreview.helpers.paths import Paths
 import PDFPreview.effects as effects
 from PDFPreview.viewer import ViewerManager

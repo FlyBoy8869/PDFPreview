@@ -3,10 +3,7 @@ from pathlib import Path
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QComboBox
 
-from .services.recent_service import (
-    register_recent, load_recents, delete_recent,
-    clear_recents as _clear_recents
-)
+import PDFPreview.services.recent_services as recent_services
 from .helpers.paths import Paths
 
 
@@ -23,13 +20,13 @@ class RecentsManager:
             return
 
         if self.widget.count() >= self.limit:
-            delete_recent(path)
+            recent_services.delete_recent(path)
             self.widget.removeItem(0)
 
         self._add(path)
 
         # add to database
-        register_recent(Path(path).resolve().name, path)
+        recent_services.register_recent(Path(path).resolve().name, path)
 
     def _add(self, path: str) -> None:
         self.widget.addItem(Path(path).resolve().name, path)
@@ -40,7 +37,7 @@ class RecentsManager:
     def clear_recents(self) -> None:
         self.widget.clear()
         self._indexes = {}
-        _clear_recents()
+        recent_services.clear_recents()
 
     def item_data(self, index: int) -> Path:
         return Path(self.widget.itemData(index, Qt.ItemDataRole.UserRole))
@@ -55,7 +52,7 @@ class RecentsManager:
             widget_text = self.widget.itemText(i).lower()
             if name.lower() == widget_text:
                 self.widget.removeItem(i)
-                delete_recent(recent)
+                recent_services.delete_recent(recent)
                 try:
                     self._indexes.pop(recent)
                 except KeyError:
@@ -69,8 +66,8 @@ class RecentsManager:
             self.widget.setItemData(index, f"{path}/{new_name}", Qt.ItemDataRole.ToolTipRole)
             self._indexes.pop(str(Path(path) / old_name))
             self._indexes[str(Path(path) / new_name)] = True
-            delete_recent(str(Path(path) / old_name))
-            register_recent((Path(path) / new_name).resolve().name, str(Path(path) / new_name))
+            recent_services.delete_recent(str(Path(path) / old_name))
+            recent_services.register_recent((Path(path) / new_name).resolve().name, str(Path(path) / new_name))
 
     def find_index_by_path(self, path: str) -> int | None:
         for index, recent_path in enumerate(self._indexes):
@@ -79,17 +76,17 @@ class RecentsManager:
         return None
 
     def _load_recents(self) -> None:
-        recents = self._trim_to_limit(load_recents())
+        recents = self._trim_to_limit(recent_services.load_recents())
 
         for recent in recents:
             if not Path(recent.path).exists() and Paths.network_shares_available:
-                delete_recent(recent.name)
+                recent_services.delete_recent(recent.name)
                 continue
             self._add(recent.path)
 
     def _trim_to_limit(self, recents: list) -> list:
         while len(recents) > self.limit:
             r = recents.pop(0)
-            delete_recent(r.name)
+            recent_services.delete_recent(r.name)
 
         return recents

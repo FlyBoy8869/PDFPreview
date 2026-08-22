@@ -1,4 +1,4 @@
-# services.recent_service.py
+# services.recent_services.py
 # Business logic layer that uses repositories
 
 import PDFPreview.database.recent_repository as recent_repository

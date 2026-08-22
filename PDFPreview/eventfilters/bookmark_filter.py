@@ -5,7 +5,7 @@ from PySide6.QtCore import QObject, QEvent, Qt
 from PySide6.QtWidgets import QListWidget, QFileSystemModel, QListWidgetItem
 from PySide6.QtGui import QDragEnterEvent, QKeyEvent
 
-from PDFPreview.services.bookmark_service import register_bookmark, delete_bookmark
+from PDFPreview.services.bookmark_services import register_bookmark, delete_bookmark
 
 
 class BookmarkListEventFilter(QObject):
