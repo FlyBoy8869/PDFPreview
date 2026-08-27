@@ -49,8 +49,8 @@ WALLPAPER = IMAGES / "wallpaper.png"
 __all__ = [
     "VERSION",
     "TITLE",
+    "SUPPORT_PATH",
     "DATABASE_FILE",
-    "DATABASE_PATH",
     "OS",
     "PATH_PREFIX",
     "ROOT",
