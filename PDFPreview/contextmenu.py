@@ -34,7 +34,7 @@ class ContextMenu:
         return action.objectName() if action is not None else ""
 
     def _make_menu_body(self, menu: QMenu, is_dir: bool) -> QMenu:
-        self._add_action("Collapse Folder", "collapse_folder", "collapse_folder.png", menu)
+        self._add_action("Collapse Folder", "collapse_folder", "collapse.png", menu)
         duplicate = self._add_action("Duplicate", "duplicate", "duplicate.png", menu)
         self._add_action("Move", "move", "move.png", menu)
         self._add_action("Rename", "rename", "rename.png", menu)
