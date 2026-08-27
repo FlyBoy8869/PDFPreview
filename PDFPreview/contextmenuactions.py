@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from PySide6.QtCore import QMimeData, QUrl, QObject, Signal
+from PySide6.QtCore import QMimeData, QUrl, QObject, Signal, QModelIndex
 from PySide6.QtGui import QClipboard
 from PySide6.QtWidgets import QInputDialog, QMessageBox, QFileDialog, QFileSystemModel
 
@@ -19,6 +19,22 @@ class ContextMenuActions(QObject):
         mime_data = QMimeData()
         mime_data.setUrls([QUrl.fromLocalFile(str(path))])
         clipboard.setMimeData(mime_data)
+
+    def do_collapse_folder_action(self, tree_view, index: QModelIndex) -> None:
+        if not index.isValid():
+            return
+
+        model = tree_view.model()
+        if not index.isValid():
+            return
+
+        # Loop through all children rows of this folder index
+        for row in range(model.rowCount(index)):
+            child_index = model.index(row, 0, index)
+            self.do_collapse_folder_action(tree_view, child_index)
+
+        # Collapse the current folder after its children are collapsed
+        tree_view.collapse(index)
 
     def do_delete_action(self, path: Path) -> None:
         if ask_yes_or_no(None, "Delete",

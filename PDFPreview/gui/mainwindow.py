@@ -323,6 +323,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "new_folder": self._do_new_folder_action,
             "new_text_file": self._do_new_text_file_action,
             "copy": self._do_copy_action,
+            "collapse_folder": self._do_collapse_folder_action,
         }
 
     def _dispatch_action(self, action: str, index: QModelIndex) -> None:
@@ -334,6 +335,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_copy_action(self, path: Path) -> None:
         self.context_menu_actions.do_copy_action(path, QApplication.clipboard())
+
+    def _do_collapse_folder_action(self, path: Path) -> None:
+        print(f"collapsing folder: {path}")
+        self.context_menu_actions.do_collapse_folder_action(self.treeView, self.treeView.currentIndex())
 
     def _do_delete_action(self, path: Path) -> None:
         self.context_menu_actions.do_delete_action(path)

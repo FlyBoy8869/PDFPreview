@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "docx2pdf>=0.1.8",
     "loguru>=0.7.3",
     "pathvalidate>=3.3.1",
     "pyside6>=6.11.1",

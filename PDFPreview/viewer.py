@@ -1,8 +1,11 @@
 from pathlib import Path
 
+import docx2pdf
 from PySide6.QtCore import QObject, Signal, QUrl
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWebEngineWidgets import QWebEngineView
+
+from config.config import SUPPORT_PATH
 
 pdf_toolbar: dict[bool, str] = {
     True: "toolbar=0",
@@ -37,7 +40,12 @@ class ViewerManager(QObject):
         if path.is_dir():
             return
 
-        url: QUrl = QUrl.fromLocalFile(path)
+        if path.suffix.lower() in [".docx"]:
+            print(f"{path = }")
+            docx2pdf.convert(str(path), str(SUPPORT_PATH / "preview.pdf"))
+            url = QUrl.fromLocalFile(str(SUPPORT_PATH / "preview.pdf"))
+        else:
+            url: QUrl = QUrl.fromLocalFile(path)
         url.setFragment(f"{self.hide_toolbar}&navpanes=0")
 
         self.browser.setUrl(url)

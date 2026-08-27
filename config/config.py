@@ -28,13 +28,13 @@ LOGO: Path = IMAGES / "logo.png"
 
 if OS == "macOS":
     _config_path = Path(os.path.expanduser(Path("~/Library/Preferences/FileViewer")))
-    DATABASE_PATH = Path(os.path.expanduser(Path("~/Library/Application Support/FileViewer")))
+    SUPPORT_PATH = Path(os.path.expanduser(Path("~/Library/Application Support/FileViewer")))
 else:
     _config_path = Path(os.path.expandvars(Path("%APPDATA%/FileViewer")))
-    DATABASE_PATH = Path(os.path.expandvars(Path("%APPDATA%/FileViewer")))
+    SUPPORT_PATH = Path(os.path.expandvars(Path("%APPDATA%/FileViewer")))
 
-if not DATABASE_PATH.exists():
-    DATABASE_PATH.mkdir(parents=True)
+if not SUPPORT_PATH.exists():
+    SUPPORT_PATH.mkdir(parents=True)
 
 with (_config_path / "config.toml").open(
         mode="rb",

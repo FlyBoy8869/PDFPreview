@@ -23,6 +23,7 @@ All notable changes pertinent to the end user of this project will be documented
 
 ### Added
 
+- Collapse Folder context menu action to collapse the selected folder.
 - Bookmark database is now backed up on program exit.
 - Crude Drag and Drop into the folders show in the file browser only.
 - You can now right-click the white space of the file browser to show the "New" context menu.
@@ -151,8 +152,7 @@ All notable changes pertinent to the end user of this project will be documented
 ### Changed
 
 - Relocated database.json to %APPDATA%\Local\FileViewer to avoid the need to keep manually copying it from one release
-  folder to
-  the next
+  folder to the next
 
 ## [0.13.1] - 2026-03-16
 
@@ -385,8 +385,7 @@ All notable changes pertinent to the end user of this project will be documented
 
 ### Changed
 
-- Default support for a wider range of file types.
-  Non-previewable file hiding removed.
+- Default support for a wider range of file types. Non-previewable file hiding removed.
 
 ## [0.1.6] 2026-01-16
 
