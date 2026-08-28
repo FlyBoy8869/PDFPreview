@@ -83,13 +83,13 @@ def move_file(src: Path, dest: Path) -> Result:
     return Result(True, "")
 
 
-def new_txt_file(path: Path) -> Result:
+def new_txt_file(path: Path, text: str = "") -> Result:
     unique_name = get_unique_filename(path / "text.txt", "")
     new_file = Path(unique_name)
     try:
         new_file.touch()
         with new_file.open(mode="w") as out_file:
-            out_file.write("This is a text file created by PDFPreview a.k.a, FileViewer.\n")
+            out_file.write(f"{text}")
 
     except (PermissionError, OSError) as e:
         return Result(False, e.strerror)

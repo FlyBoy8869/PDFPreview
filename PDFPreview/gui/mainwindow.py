@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (
 
 import PDFPreview.helpers.sound as sound
 import PDFPreview.contextmenuactions as contextmenuactions
-from config import config, SPLASH_FILE, TITLE
+from config import config, SPLASH_FILE, TITLE, NEW_TEXT_FILE_TEXT
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui
 import PDFPreview.recents as recents
@@ -364,7 +364,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.model.index(str(path)).isValid():
             path = Path(self.model.filePath(self.treeView.currentIndex()))
         path = path if path.is_dir() else path.parent
-        self.context_menu_actions.do_new_text_file_action(path)
+        self.context_menu_actions.do_new_text_file_action(path, NEW_TEXT_FILE_TEXT)
 
     def _do_paint_action(self, path: Path) -> None:
         self.context_menu_actions.do_paint_action(path)

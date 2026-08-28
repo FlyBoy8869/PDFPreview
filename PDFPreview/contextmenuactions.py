@@ -67,10 +67,10 @@ class ContextMenuActions(QObject):
         if not result.success:
             QMessageBox.warning(None, "Warning", result.message)
 
-    def do_new_text_file_action(self, path: Path) -> None:
+    def do_new_text_file_action(self, path: Path, text: str = "") -> None:
         path = path if path.is_dir() else path.parent
 
-        result = fileoperations.new_txt_file(path)
+        result = fileoperations.new_txt_file(path, text)
         if not result.success:
             QMessageBox.warning(None, "Warning", result.message)
 

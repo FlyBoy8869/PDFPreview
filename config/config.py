@@ -43,24 +43,26 @@ with (_config_path / "config.toml").open(
 
 config["OS"] = OS
 
+NEW_TEXT_FILE_TEXT = config["general"]["new_text_file_text"]
 ADOBE_ACROBAT_PATH = config["paths"]["acrobat"]
 WALLPAPER = IMAGES / "wallpaper.png"
 
 __all__ = [
-    "VERSION",
-    "TITLE",
-    "SUPPORT_PATH",
+    "config",
+    "ADOBE_ACROBAT_PATH",
     "DATABASE_FILE",
+    "FILES",
+    "ICONS",
+    "IMAGES",
+    "LOGO",
+    "NEW_TEXT_FILE_TEXT",
     "OS",
     "PATH_PREFIX",
-    "ROOT",
     "RESOURCES",
-    "FILES",
+    "ROOT",
     "SPLASH_FILE",
-    "IMAGES",
-    "ICONS",
-    "LOGO",
-    "ADOBE_ACROBAT_PATH",
+    "SUPPORT_PATH",
+    "TITLE",
+    "VERSION",
     "WALLPAPER",
-    "config"
 ]
