@@ -5,6 +5,7 @@ from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import QMenu, QStyle, QApplication
 
 from PDFPreview.helpers.paths import Paths
+from PDFPreview.constants import Icons
 
 
 class ContextMenu:
@@ -34,14 +35,14 @@ class ContextMenu:
         return action.objectName() if action is not None else ""
 
     def _make_menu_body(self, menu: QMenu, is_dir: bool) -> QMenu:
-        self._add_action("Collapse Folder", "collapse_folder", "collapse.png", menu)
-        duplicate = self._add_action("Duplicate", "duplicate", "duplicate.png", menu)
-        self._add_action("Move", "move", "move.png", menu)
-        self._add_action("Rename", "rename", "rename.png", menu)
-        self._add_action("Copy", "copy", "copy-to-clipboard.png", menu)
+        self._add_action("Collapse Folder", "collapse_folder", Icons.COLLAPSE, menu)
+        duplicate = self._add_action("Duplicate", "duplicate", Icons.DUPLICATE, menu)
+        self._add_action("Move", "move", Icons.MOVE, menu)
+        self._add_action("Rename", "rename", Icons.RENAME, menu)
+        self._add_action("Copy", "copy", Icons.COPY_TO_CLIPBOARD, menu)
 
-        icon = QApplication.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
-        self._add_action("Delete", "delete", "trashcan.png", menu)
+        # icon = QApplication.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
+        self._add_action("Delete", "delete", Icons.TRASHCAN, menu)
 
         if is_dir:
             menu.removeAction(duplicate)
@@ -50,9 +51,9 @@ class ContextMenu:
 
     def _make_new_menu(self, parent: QMenu) -> QMenu:
         menu: QMenu = QMenu("New", parent)
-        menu.setIcon(QIcon(Paths.icon("plus.png")))
+        menu.setIcon(QIcon(Paths.icon(Icons.PLUS)))
 
-        self._add_action("Folder", "new_folder", "folder.png", menu)
+        self._add_action("Folder", "new_folder", Icons.FOLDER, menu)
         icon = QApplication.style().standardIcon(QStyle.StandardPixmap.SP_FileIcon)
         self._add_action("Text Document", "new_text_file", icon, menu)
 
@@ -60,15 +61,15 @@ class ContextMenu:
 
     def _make_open_with_menu(self, parent: QMenu, suffix: str) -> QMenu:
         menu: QMenu = QMenu("Open With", parent)
-        menu.setIcon(QIcon(Paths.icon("open_with.png")))
+        menu.setIcon(QIcon(Paths.icon(Icons.OPEN_WITH)))
 
         if suffix in ["pdf"]:
-            self._add_action("Adobe Acrobat", "acrobat", "acrobat-logo.png", menu)
+            self._add_action("Adobe Acrobat", "acrobat", Icons.ACROBAT_LOGO, menu)
 
-        self._add_action("Windows Explorer", "explorer", "explorer.png", menu)
+        self._add_action("Windows Explorer", "explorer", Icons.EXPLORER, menu)
 
         if suffix in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
-            self._add_action("MS Paint", "paint", "palette.png", menu)
+            self._add_action("MS Paint", "paint", Icons.PALETTE, menu)
 
         return menu
 
