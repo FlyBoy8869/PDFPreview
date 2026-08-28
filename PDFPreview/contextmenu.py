@@ -41,7 +41,6 @@ class ContextMenu:
         self._add_action("Rename", "rename", Icons.RENAME, menu)
         self._add_action("Copy", "copy", Icons.COPY_TO_CLIPBOARD, menu)
 
-        # icon = QApplication.style().standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton)
         self._add_action("Delete", "delete", Icons.TRASHCAN, menu)
 
         if is_dir:
@@ -54,8 +53,7 @@ class ContextMenu:
         menu.setIcon(QIcon(Paths.icon(Icons.PLUS)))
 
         self._add_action("Folder", "new_folder", Icons.FOLDER, menu)
-        icon = QApplication.style().standardIcon(QStyle.StandardPixmap.SP_FileIcon)
-        self._add_action("Text Document", "new_text_file", icon, menu)
+        self._add_action("Text Document", "new_text_file", Icons.NEW_TEXT, menu)
 
         return menu
 

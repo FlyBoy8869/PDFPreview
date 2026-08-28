@@ -1,7 +1,5 @@
 from enum import StrEnum
 
-from PySide6.QtWidgets import QApplication, QStyle
-
 
 class Icons(StrEnum):
     ACROBAT_LOGO = "acrobat_logo.png"
@@ -11,6 +9,7 @@ class Icons(StrEnum):
     EXPLORER = "explorer.png"
     FOLDER = "folder.png"
     MOVE = "move.png"
+    NEW_TEXT = "new_text_file.webp"
     OPEN_WITH = "open_with.png"
     PALETTE = "palette.png"
     PLUS = "plus.png"
