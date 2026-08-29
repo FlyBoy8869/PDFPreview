@@ -31,7 +31,7 @@ def delete_file(path: Path) -> Result:
     return Result(True, "")
 
 
-def delete_folder(path: Path, recurse: bool = False) -> Result:
+def delete_folder(path: Path) -> Result:
     try:
         folder = QDir(path)
         success = folder.removeRecursively()

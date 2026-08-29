@@ -118,6 +118,6 @@ class ContextMenuActions(QObject):
             return fileoperations.delete_folder(path)
         else:
             if ask_yes_or_no(None, "Warning", "Folder is not empty. Continue?", MessageType.WARNING):
-                return fileoperations.delete_folder(path, recurse=True)
+                return fileoperations.delete_folder(path)
 
             return fileoperations.Result(success=True, message="")
