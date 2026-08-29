@@ -116,8 +116,9 @@ class ContextMenuActions(QObject):
 
         if model.rowCount(index) == 0:
             return fileoperations.delete_folder(path)
-        else:
-            if ask_yes_or_no(None, "Warning", "Folder is not empty. Continue?", MessageType.WARNING):
-                return fileoperations.delete_folder(path)
 
+        if not ask_yes_or_no(None, "Warning", "Folder is not empty. Continue?", MessageType.WARNING):
             return fileoperations.Result(success=True, message="")
+
+        return fileoperations.delete_folder(path)
+
