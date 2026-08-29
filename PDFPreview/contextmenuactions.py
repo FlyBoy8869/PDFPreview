@@ -23,7 +23,7 @@ class ContextMenuActions(QObject):
     def do_collapse_folder_action(self, tree_view, index: QModelIndex) -> None:
         """Recursively collapse all child folders."""
 
-        if not index.isValid():
+        if not index.isValid() or not tree_view.isExpanded(index):
             return
 
         model = tree_view.model()
