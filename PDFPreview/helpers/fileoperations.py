@@ -32,16 +32,6 @@ def delete_file(path: Path) -> Result:
 
 
 def delete_folder(path: Path, recurse: bool = False) -> Result:
-    # def has_files() -> bool:
-    #     try:
-    #         next(path.glob("*"))
-    #         return True
-    #     except StopIteration:
-    #         return False
-    #
-    # if has_files() and not recurse:
-    #     return Result(False, "Not Empty")
-
     try:
         folder = QDir(path)
         success = folder.removeRecursively()
