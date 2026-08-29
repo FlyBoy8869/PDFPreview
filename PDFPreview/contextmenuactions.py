@@ -21,14 +21,14 @@ class ContextMenuActions(QObject):
         clipboard.setMimeData(mime_data)
 
     def do_collapse_folder_action(self, tree_view, index: QModelIndex) -> None:
+        """Recursively collapse all child folders."""
+
         if not index.isValid():
             return
 
         model = tree_view.model()
-        if not index.isValid():
-            return
 
-        # Loop through all children rows of this folder index
+        # Loop through all child rows of this folder index
         for row in range(model.rowCount(index)):
             child_index = model.index(row, 0, index)
             self.do_collapse_folder_action(tree_view, child_index)
