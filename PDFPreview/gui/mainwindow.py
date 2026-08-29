@@ -337,7 +337,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.context_menu_actions.do_copy_action(path, QApplication.clipboard())
 
     def _do_collapse_folder_action(self, path: Path) -> None:
-        print(f"collapsing folder: {path}")
         self.context_menu_actions.do_collapse_folder_action(self.treeView, self.treeView.currentIndex())
 
     def _do_delete_action(self, path: Path) -> None:
