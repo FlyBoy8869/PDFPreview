@@ -102,7 +102,7 @@ class ContextMenuActions(QObject):
             return True
 
         # what went wrong, folder not empty?
-        if result.message == "Not Empty":
+        if result.message.casefold() == "not empty":
             if ask_yes_or_no(None, "Warning", "Folder is not empty. Continue?", MessageType.WARNING):
                 # retry, recursively deleting everything inside the folder
                 result = fileoperations.delete_folder(path, recurse=True)
