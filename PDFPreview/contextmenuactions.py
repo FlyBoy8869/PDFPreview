@@ -2,7 +2,7 @@ from pathlib import Path
 
 from PySide6.QtCore import QMimeData, QUrl, QObject, Signal, QModelIndex
 from PySide6.QtGui import QClipboard
-from PySide6.QtWidgets import QInputDialog, QMessageBox, QFileDialog, QFileSystemModel
+from PySide6.QtWidgets import QInputDialog, QMessageBox, QFileDialog, QFileSystemModel, QTreeView
 
 from .helpers import fileoperations
 from .helpers.gui import ask_yes_or_no, MessageType
@@ -20,7 +20,7 @@ class ContextMenuActions(QObject):
         mime_data.setUrls([QUrl.fromLocalFile(str(path))])
         clipboard.setMimeData(mime_data)
 
-    def do_collapse_folder_action(self, tree_view, index: QModelIndex) -> None:
+    def do_collapse_folder_action(self, tree_view: QTreeView, index: QModelIndex) -> None:
         """Recursively collapse all child folders."""
 
         if not index.isValid() or not tree_view.isExpanded(index):
