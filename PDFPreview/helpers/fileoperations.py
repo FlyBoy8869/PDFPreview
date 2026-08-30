@@ -32,14 +32,15 @@ def delete_file(path: Path) -> Result:
 
 
 def delete_folder(path: Path) -> Result:
-    try:
-        folder = QDir(path)
-        success = folder.removeRecursively()
-        if not success:
-            # need to get reason for failure since QDir.removeRecursively doesn't give one
+    folder = QDir(path)
+    result = folder.removeRecursively()
+
+    if not result:
+        # need to get reason for failure since QDir.removeRecursively doesn't give one
+        try:
             path.rmdir()
-    except (PermissionError, OSError) as e:
-        return Result(False, e.strerror)
+        except (PermissionError, OSError) as e:
+            return Result(False, e.strerror)
 
     return Result(True, "")
 

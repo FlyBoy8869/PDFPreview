@@ -121,4 +121,3 @@ class ContextMenuActions(QObject):
             return fileoperations.Result(success=True, message="")
 
         return fileoperations.delete_folder(path)
-
