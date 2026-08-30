@@ -130,7 +130,7 @@ class Ui_MainWindow(object):
         self.treeView.setDefaultDropAction(Qt.DropAction.MoveAction)
         self.treeView.setAlternatingRowColors(True)
         self.treeView.setAutoExpandDelay(0)
-        self.treeView.setIndentation(10)
+        self.treeView.setIndentation(20)
         self.treeView.setRootIsDecorated(True)
         self.treeView.setItemsExpandable(True)
         self.treeView.setSortingEnabled(True)
