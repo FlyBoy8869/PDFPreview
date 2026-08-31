@@ -11,7 +11,7 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import (
     QFileSystemModel,
     QMainWindow,
-    QMessageBox, QStyle, QApplication, QAbstractItemView, QListWidgetItem
+    QMessageBox, QStyle, QApplication, QAbstractItemView, QListWidgetItem, QSlider, QWidgetAction
 )
 
 import PDFPreview.helpers.sound as sound
@@ -53,6 +53,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle(f"{TITLE}")
+        self._setup_indent_slider()
 
         self.main_splitter_state: QByteArray
 
@@ -370,3 +371,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_rename_action(self, path: Path) -> None:
         self.context_menu_actions.do_rename_action(path, self.model)
+
+    def _setup_indent_slider(self) -> None:
+        self.indent_slider_action = QWidgetAction(self)
+
+        self.indent_slider = QSlider(Qt.Orientation.Horizontal)
+        self.indent_slider.setMinimum(5)
+        self.indent_slider.setMaximum(50)
+        self.indent_slider.setSingleStep(1)
+        self.indent_slider.valueChanged.connect(self._update_tree_view_indentation)
+
+        self.indent_slider_action.setDefaultWidget(self.indent_slider)
+        self.menuAdjust_Indent.addAction(self.indent_slider_action)
+
+    def _update_tree_view_indentation(self, value: int) -> None:
+        self.treeView.setIndentation(value)
+        self.statusbar.showMessage(f"Indentation: {value}", 2000)

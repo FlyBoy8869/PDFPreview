@@ -170,7 +170,7 @@
             <bool>true</bool>
            </property>
            <property name="autoExpandDelay">
-            <number>0</number>
+            <number>3000</number>
            </property>
            <property name="indentation">
             <number>20</number>
@@ -230,16 +230,23 @@
      <x>0</x>
      <y>0</y>
      <width>1188</width>
-     <height>30</height>
+     <height>33</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
      <string>Options</string>
     </property>
+    <widget class="QMenu" name="menuAdjust_Indent">
+     <property name="title">
+      <string>Adjust Indent</string>
+     </property>
+     <addaction name="actionIndent"/>
+    </widget>
     <addaction name="actionClear_Recents"/>
     <addaction name="action_hide_files"/>
     <addaction name="actionHide_Toolbar"/>
+    <addaction name="menuAdjust_Indent"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -288,6 +295,16 @@
   <action name="actionClear_Recents">
    <property name="text">
     <string>Clear Recents</string>
+   </property>
+  </action>
+  <action name="action_adjust_indent">
+   <property name="text">
+    <string>Adjust Indent</string>
+   </property>
+  </action>
+  <action name="actionIndent">
+   <property name="text">
+    <string>Indent</string>
    </property>
   </action>
  </widget>

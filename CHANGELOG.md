@@ -4,6 +4,11 @@ All notable changes pertinent to the end user of this project will be documented
 
 ## [Unreleased]
 
+### Added
+
+- Menu option to adjust the indent of the folder listing.
+- Collapse Folder context menu action to collapse the selected folder.
+
 ### Fixed
 
 - The number of tracked recents exceeding the configured amount.
@@ -23,7 +28,6 @@ All notable changes pertinent to the end user of this project will be documented
 
 ### Added
 
-- Collapse Folder context menu action to collapse the selected folder.
 - Bookmark database is now backed up on program exit.
 - Crude Drag and Drop into the folders show in the file browser only.
 - You can now right-click the white space of the file browser to show the "New" context menu.
