@@ -256,6 +256,7 @@
       <string>Indent</string>
      </property>
      <addaction name="actionAdjust"/>
+     <addaction name="actionReset"/>
     </widget>
     <addaction name="menuIndent"/>
    </widget>
@@ -303,11 +304,6 @@
     <string>Clear Recents</string>
    </property>
   </action>
-  <action name="action_adjust_indent">
-   <property name="text">
-    <string>Adjust Indent</string>
-   </property>
-  </action>
   <action name="actionIndent">
    <property name="text">
     <string>Indent</string>
@@ -316,6 +312,11 @@
   <action name="actionAdjust">
    <property name="text">
     <string>Adjust</string>
+   </property>
+  </action>
+  <action name="actionReset">
+   <property name="text">
+    <string>Reset</string>
    </property>
   </action>
  </widget>
