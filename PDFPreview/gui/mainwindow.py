@@ -382,7 +382,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.indent_slider.valueChanged.connect(self._update_tree_view_indentation)
 
         self.indent_slider_action.setDefaultWidget(self.indent_slider)
-        self.menuAdjust_Indent.addAction(self.indent_slider_action)
+        self.menuIndent.addAction(self.indent_slider_action)
 
     def _update_tree_view_indentation(self, value: int) -> None:
         self.treeView.setIndentation(value)

@@ -237,16 +237,9 @@
     <property name="title">
      <string>Options</string>
     </property>
-    <widget class="QMenu" name="menuAdjust_Indent">
-     <property name="title">
-      <string>Adjust Indent</string>
-     </property>
-     <addaction name="actionIndent"/>
-    </widget>
     <addaction name="actionClear_Recents"/>
     <addaction name="action_hide_files"/>
     <addaction name="actionHide_Toolbar"/>
-    <addaction name="menuAdjust_Indent"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -254,7 +247,20 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <widget class="QMenu" name="menuIndent">
+     <property name="title">
+      <string>Indent</string>
+     </property>
+     <addaction name="actionAdjust"/>
+    </widget>
+    <addaction name="menuIndent"/>
+   </widget>
    <addaction name="menuOptions"/>
+   <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -305,6 +311,11 @@
   <action name="actionIndent">
    <property name="text">
     <string>Indent</string>
+   </property>
+  </action>
+  <action name="actionAdjust">
+   <property name="text">
+    <string>Adjust</string>
    </property>
   </action>
  </widget>
