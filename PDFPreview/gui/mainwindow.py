@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, Signal, QByteArray, QSize
+from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, Signal, QByteArray
 from PySide6.QtGui import (
     QDragEnterEvent,
     QDropEvent,
@@ -11,7 +11,7 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import (
     QFileSystemModel,
     QMainWindow,
-    QMessageBox, QStyle, QApplication, QAbstractItemView, QListWidgetItem, QSlider, QWidgetAction, QToolBar, QLabel
+    QMessageBox, QStyle, QApplication, QAbstractItemView, QListWidgetItem, QSlider, QToolBar, QLabel
 )
 
 import PDFPreview.helpers.sound as sound
