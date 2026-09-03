@@ -378,8 +378,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.context_menu_actions.do_rename_action(path, self.model)
 
     def _setup_indent_slider(self) -> None:
-        # self.indent_slider_action = QWidgetAction(self)
-
         label = QLabel("  Indent:", self)
         self.toolbar.addWidget(label)
 
@@ -390,11 +388,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.indent_slider.setSingleStep(1)
         self.indent_slider.setTickInterval(5)
         self.indent_slider.setTickPosition(QSlider.TickPosition.TicksAbove)
-        self.indent_slider.setFixedWidth(150)
+        self.indent_slider.setFixedWidth(100)
         self.indent_slider.valueChanged.connect(self._update_tree_view_indentation)
-
-        # self.indent_slider_action.setDefaultWidget(self.indent_slider)
-        # self.menuIndent.addAction(self.indent_slider_action)
 
         self.actionReset.triggered.connect(lambda c: self.indent_slider.setValue(20))
 
