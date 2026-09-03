@@ -45,7 +45,6 @@ file_filters: dict[bool, QDir.Filter] = {
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    # emitted when a file has been loaded in to the viewer
     fileDeleted: Signal = Signal(str)
     pathChanged: Signal = Signal(str)
 
