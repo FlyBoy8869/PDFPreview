@@ -166,7 +166,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1188, 33))
+        self.menubar.setGeometry(QRect(0, 0, 1188, 30))
         self.menuOptions = QMenu(self.menubar)
         self.menuOptions.setObjectName(u"menuOptions")
         self.menuHelp = QMenu(self.menubar)
@@ -188,7 +188,6 @@ class Ui_MainWindow(object):
         self.menuOptions.addAction(self.actionHide_Toolbar)
         self.menuHelp.addAction(self.actionAbout)
         self.menuView.addAction(self.menuIndent.menuAction())
-        self.menuIndent.addAction(self.actionAdjust)
         self.menuIndent.addAction(self.actionReset)
 
         self.retranslateUi(MainWindow)

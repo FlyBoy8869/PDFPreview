@@ -230,7 +230,7 @@
      <x>0</x>
      <y>0</y>
      <width>1188</width>
-     <height>33</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
@@ -255,7 +255,6 @@
      <property name="title">
       <string>Indent</string>
      </property>
-     <addaction name="actionAdjust"/>
      <addaction name="actionReset"/>
     </widget>
     <addaction name="menuIndent"/>

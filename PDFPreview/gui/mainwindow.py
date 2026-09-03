@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, Signal, QByteArray
+from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, Signal, QByteArray, QSize
 from PySide6.QtGui import (
     QDragEnterEvent,
     QDropEvent,
@@ -11,7 +11,7 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import (
     QFileSystemModel,
     QMainWindow,
-    QMessageBox, QStyle, QApplication, QAbstractItemView, QListWidgetItem, QSlider, QWidgetAction
+    QMessageBox, QStyle, QApplication, QAbstractItemView, QListWidgetItem, QSlider, QWidgetAction, QToolBar, QLabel
 )
 
 import PDFPreview.helpers.sound as sound
@@ -53,6 +53,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle(f"{TITLE}")
+
+        self.toolbar = QToolBar("Main Toolbar")
+        self.toolbar.setMovable(False)
+        self.addToolBar(self.toolbar)
+
         self._setup_indent_slider()
 
         self.main_splitter_state: QByteArray
@@ -373,20 +378,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.context_menu_actions.do_rename_action(path, self.model)
 
     def _setup_indent_slider(self) -> None:
-        self.indent_slider_action = QWidgetAction(self)
+        # self.indent_slider_action = QWidgetAction(self)
+
+        label = QLabel("  Indent:", self)
+        self.toolbar.addWidget(label)
 
         self.indent_slider = QSlider(Qt.Orientation.Horizontal)
         self.indent_slider.setMinimum(5)
         self.indent_slider.setMaximum(50)
+        self.indent_slider.setValue(20)
         self.indent_slider.setSingleStep(1)
+        self.indent_slider.setTickInterval(5)
+        self.indent_slider.setTickPosition(QSlider.TickPosition.TicksAbove)
+        self.indent_slider.setFixedWidth(150)
         self.indent_slider.valueChanged.connect(self._update_tree_view_indentation)
 
-        self.indent_slider_action.setDefaultWidget(self.indent_slider)
-        self.menuIndent.addAction(self.indent_slider_action)
+        # self.indent_slider_action.setDefaultWidget(self.indent_slider)
+        # self.menuIndent.addAction(self.indent_slider_action)
 
-        self.menuIndent.removeAction(self.actionReset)
-        self.menuIndent.insertAction(self.actionAdjust, self.actionReset)
         self.actionReset.triggered.connect(lambda c: self.indent_slider.setValue(20))
+
+        self.toolbar.addWidget(self.indent_slider)
 
     def _update_tree_view_indentation(self, value: int) -> None:
         self.treeView.setIndentation(value)
