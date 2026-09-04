@@ -43,6 +43,13 @@ file_filters: dict[bool, QDir.Filter] = {
            | QDir.Filter.NoDotAndDotDot,
 }
 
+INDENT_MIN = 5
+INDENT_MAX = 50
+INDENT_DEFAULT = 20
+INDENT_STEP = 1
+INDENT_TICK_INTERVAL = 5
+INDENT_TOOL_WIDTH = 100
+
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     fileDeleted: Signal = Signal(str)
@@ -381,16 +388,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.toolbar.addWidget(label)
 
         self.indent_slider = QSlider(Qt.Orientation.Horizontal)
-        self.indent_slider.setMinimum(5)
-        self.indent_slider.setMaximum(50)
-        self.indent_slider.setValue(20)
-        self.indent_slider.setSingleStep(1)
-        self.indent_slider.setTickInterval(5)
+        self.indent_slider.setMinimum(INDENT_MIN)
+        self.indent_slider.setMaximum(INDENT_MAX)
+        self.indent_slider.setValue(INDENT_DEFAULT)
+        self.indent_slider.setSingleStep(INDENT_STEP)
+        self.indent_slider.setTickInterval(INDENT_TICK_INTERVAL)
         self.indent_slider.setTickPosition(QSlider.TickPosition.TicksAbove)
-        self.indent_slider.setFixedWidth(100)
+        self.indent_slider.setFixedWidth(INDENT_TOOL_WIDTH)
         self.indent_slider.valueChanged.connect(self._update_tree_view_indentation)
 
-        self.actionReset.triggered.connect(lambda c: self.indent_slider.setValue(20))
+        self.actionReset.triggered.connect(lambda c: self.indent_slider.setValue(INDENT_DEFAULT))
 
         self.toolbar.addWidget(self.indent_slider)
 
