@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
 
 import PDFPreview.helpers.sound as sound
 import PDFPreview.contextmenuactions as contextmenuactions
+import constants
 from config import config, SPLASH_FILE, TITLE, NEW_TEXT_FILE_TEXT
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui
@@ -42,13 +43,6 @@ file_filters: dict[bool, QDir.Filter] = {
            | QDir.Filter.Hidden
            | QDir.Filter.NoDotAndDotDot,
 }
-
-INDENT_MIN = 5
-INDENT_MAX = 50
-INDENT_DEFAULT = 20
-INDENT_STEP = 1
-INDENT_TICK_INTERVAL = 5
-INDENT_TOOL_WIDTH = 100
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -388,16 +382,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.toolbar.addWidget(label)
 
         self.indent_slider = QSlider(Qt.Orientation.Horizontal)
-        self.indent_slider.setMinimum(INDENT_MIN)
-        self.indent_slider.setMaximum(INDENT_MAX)
-        self.indent_slider.setValue(INDENT_DEFAULT)
-        self.indent_slider.setSingleStep(INDENT_STEP)
-        self.indent_slider.setTickInterval(INDENT_TICK_INTERVAL)
+        self.indent_slider.setMinimum(constants.Indent.INDENT_MIN)
+        self.indent_slider.setMaximum(constants.Indent.INDENT_MAX)
+        self.indent_slider.setValue(constants.Indent.INDENT_DEFAULT)
+        self.indent_slider.setSingleStep(constants.Indent.INDENT_STEP)
+        self.indent_slider.setTickInterval(constants.Indent.INDENT_TICK_INTERVAL)
         self.indent_slider.setTickPosition(QSlider.TickPosition.TicksAbove)
-        self.indent_slider.setFixedWidth(INDENT_TOOL_WIDTH)
+        self.indent_slider.setFixedWidth(constants.Indent.INDENT_TOOL_WIDTH)
         self.indent_slider.valueChanged.connect(self._update_tree_view_indentation)
 
-        self.actionReset.triggered.connect(lambda c: self.indent_slider.setValue(INDENT_DEFAULT))
+        self.actionReset.triggered.connect(lambda c: self.indent_slider.setValue(constants.Indent.INDENT_DEFAULT))
 
         self.toolbar.addWidget(self.indent_slider)
 

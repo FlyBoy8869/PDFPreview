@@ -1,4 +1,4 @@
-from enum import StrEnum
+from enum import IntEnum, StrEnum
 
 
 class Icons(StrEnum):
@@ -15,3 +15,12 @@ class Icons(StrEnum):
     PLUS = "plus.png"
     RENAME = "rename.png"
     TRASHCAN = "trashcan.png"
+
+
+class Indent(IntEnum):
+    INDENT_MIN = 5
+    INDENT_MAX = 50
+    INDENT_DEFAULT = 20
+    INDENT_STEP = 1
+    INDENT_TICK_INTERVAL = 5
+    INDENT_TOOL_WIDTH = 100
