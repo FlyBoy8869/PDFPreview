@@ -233,6 +233,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     event.accept()
                     return True
 
+                if key == Qt.Key.Key_Delete:
+                    print(f"deleting {self.model.filePath(self.treeView.currentIndex())}")
+                    self._do_delete_action(Path(self.model.filePath(self.treeView.currentIndex())))
+                    return True
+
         if source is self.viewer:
             if event.type() == QEvent.Type.DragEnter:
                 event = cast("QDragEnterEvent", event)
