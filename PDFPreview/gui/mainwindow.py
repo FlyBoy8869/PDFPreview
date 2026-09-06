@@ -77,6 +77,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.wallpaper_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
         self.wallpaper_shortcut.activated.connect(self._show_wallpaper)
 
+        self.delete_shortcut = QShortcut(QKeySequence("Delete"), self)
+        self.delete_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
+        self.delete_shortcut.activated.connect(lambda: self._do_delete_action(Path(self.model.filePath(self.treeView.currentIndex()))))
+
+        self.open_with_default_shortcut = QShortcut(QKeySequence("Space"), self)
+        self.open_with_default_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
+        self.open_with_default_shortcut.activated.connect(lambda: fileoperations.open_file(self.model.filePath(self.treeView.currentIndex())))
+
         # ABOUT WINDOW
         self.about_window = about.create_about_dialog()
         self.about_event_filter = AboutDialogFilter(self.about_window)
@@ -100,6 +108,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # WINDOW INTO THE FILE SYSTEM
         self.model: QFileSystemModel = QFileSystemModel()
+        self.model.setOption(QFileSystemModel.Option.DontUseCustomDirectoryIcons)
         self.model.setReadOnly(False)
         self.model.setFilter(file_filters[self.action_hide_files.isChecked()])
         root_index = self.model.setRootPath("")
@@ -222,22 +231,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self._dispatch_action(action, index)
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
-        if source is self.treeView:
-            if event.type() == QEvent.Type.KeyPress:
-                event = cast("QKeyEvent", event)
-                key = event.key()
-
-                if key == Qt.Key.Key_Space:
-                    # open selected file when the space bar is pressed
-                    fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
-                    event.accept()
-                    return True
-
-                if key == Qt.Key.Key_Delete:
-                    print(f"deleting {self.model.filePath(self.treeView.currentIndex())}")
-                    self._do_delete_action(Path(self.model.filePath(self.treeView.currentIndex())))
-                    return True
-
         if source is self.viewer:
             if event.type() == QEvent.Type.DragEnter:
                 event = cast("QDragEnterEvent", event)
