@@ -61,12 +61,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.main_splitter_state: QByteArray
 
         self._create_and_set_blur_effects(
-            (self.gb_bookmarks, self.gb_file_browser, self.viewer, self.statusbar, self.menubar))
+            (self.gb_bookmarks, self.gb_file_browser, self.viewer, self.statusbar, self.menubar, self.toolbar))
 
         self.pathChanged.connect(self._update_title_bar)
 
         # -----------------------------------------------------------
 
+        # APPLICATION GLOBAL SHORTCUTS
         self.help_shortcut = QShortcut(QKeySequence("h"), self)
         self.help_shortcut.activated.connect(self._show_help)
         self.help_save: QModelIndex | None = None
