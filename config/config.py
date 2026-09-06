@@ -25,6 +25,7 @@ HELP_PAGE: Path = FILES / "FileViewerSplash.html"
 IMAGES: Path = RESOURCES / "Images"
 ICONS: Path = IMAGES / "Icons"
 LOGO: Path = IMAGES / "logo.png"
+WALLPAPER = IMAGES / "wallpaper.png"
 
 if OS == "macOS":
     _config_path = Path(os.path.expanduser(Path("~/Library/Preferences/FileViewer")))
@@ -45,7 +46,6 @@ config["OS"] = OS
 
 NEW_TEXT_FILE_TEXT = config["general"]["new_text_file_text"]
 ADOBE_ACROBAT_PATH = config["paths"]["acrobat"]
-WALLPAPER = IMAGES / "wallpaper.png"
 
 __all__ = [
     "config",
