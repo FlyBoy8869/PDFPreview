@@ -20,7 +20,7 @@ ROOT: Path = Path(__file__).resolve().parent.parent
 RESOURCES: Path = ROOT / "Resources"
 
 FILES: Path = RESOURCES / "Files"
-SPLASH_FILE: Path = FILES / "FileViewerSplash.html"
+HELP_PAGE: Path = FILES / "FileViewerSplash.html"
 
 IMAGES: Path = RESOURCES / "Images"
 ICONS: Path = IMAGES / "Icons"
@@ -60,7 +60,7 @@ __all__ = [
     "PATH_PREFIX",
     "RESOURCES",
     "ROOT",
-    "SPLASH_FILE",
+    "HELP_PAGE",
     "SUPPORT_PATH",
     "TITLE",
     "VERSION",

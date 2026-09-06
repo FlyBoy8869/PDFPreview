@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
 import PDFPreview.helpers.sound as sound
 import PDFPreview.contextmenuactions as contextmenuactions
 import PDFPreview.constants as constants
-from config import config, SPLASH_FILE, TITLE, NEW_TEXT_FILE_TEXT
+from config import config, TITLE, NEW_TEXT_FILE_TEXT, WALLPAPER
 from PDFPreview.gui.dialogs import about
 from PDFPreview.helpers import bookmarks, fileoperations, gui
 import PDFPreview.recents as recents
@@ -287,7 +287,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.help_save = None
 
     def _show_splash(self) -> None:
-        self.viewer_manager.preview_file(SPLASH_FILE)
+        self.viewer_manager.preview_file(WALLPAPER)
 
     def _show_wallpaper(self) -> None:
         if self.main_splitter.sizes()[0] == 0:
