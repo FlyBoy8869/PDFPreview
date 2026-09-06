@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, cast
+from typing import cast
 
 from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, Signal, QByteArray
 from PySide6.QtGui import (
@@ -31,8 +31,6 @@ from PDFPreview.eventfilters.about_filter import AboutDialogFilter
 from PDFPreview.eventfilters.bookmark_filter import BookmarkListEventFilter
 from ..contextmenu import ContextMenu
 
-if TYPE_CHECKING:
-    from PySide6.QtGui import QKeyEvent
 
 # noinspection PyTypeChecker
 file_filters: dict[bool, QDir.Filter] = {
