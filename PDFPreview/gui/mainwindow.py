@@ -98,7 +98,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionAbout.triggered.connect(self._show_about)
 
         # FILE VIEWER
-        # self.viewer.installEventFilter(self)
         self.viewer_manager = ViewerManager(self.viewer)
         self.viewer_manager.fileLoaded.connect(self._update_title_bar)
 
