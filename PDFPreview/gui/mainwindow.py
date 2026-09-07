@@ -1,10 +1,7 @@
 from pathlib import Path
-from typing import cast
 
-from PySide6.QtCore import QDir, QEvent, QModelIndex, QObject, Qt, Signal, QByteArray
+from PySide6.QtCore import QDir, QModelIndex, Qt, Signal, QByteArray
 from PySide6.QtGui import (
-    QDragEnterEvent,
-    QDropEvent,
     QKeySequence,
     QShortcut, QIcon,
 )
