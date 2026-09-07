@@ -75,11 +75,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.delete_shortcut = QShortcut(QKeySequence("Delete"), self)
         self.delete_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
-        self.delete_shortcut.activated.connect(lambda: self._do_delete_action(Path(self.model.filePath(self.treeView.currentIndex()))))
+        self.delete_shortcut.activated.connect(
+            lambda: self._do_delete_action(Path(self.model.filePath(self.treeView.currentIndex())))
+        )
 
         self.open_with_default_shortcut = QShortcut(QKeySequence("Space"), self)
         self.open_with_default_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
-        self.open_with_default_shortcut.activated.connect(lambda: fileoperations.open_file(self.model.filePath(self.treeView.currentIndex())))
+        self.open_with_default_shortcut.activated.connect(
+            lambda: fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
+        )
 
         # ABOUT WINDOW
         self.about_window = about.create_about_dialog()
