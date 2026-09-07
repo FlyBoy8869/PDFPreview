@@ -30,7 +30,7 @@ from .ui_mainwindow import Ui_MainWindow
 from PDFPreview.eventfilters.about_filter import AboutDialogFilter
 from PDFPreview.eventfilters.bookmark_filter import BookmarkListEventFilter
 from ..contextmenu import ContextMenu
-
+from ..eventfilters.viewer_filter import ViewerFilter
 
 # noinspection PyTypeChecker
 file_filters: dict[bool, QDir.Filter] = {
@@ -101,7 +101,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionAbout.triggered.connect(self._show_about)
 
         # FILE VIEWER
-        self.viewer.installEventFilter(self)
+        # self.viewer.installEventFilter(self)
         self.viewer_manager = ViewerManager(self.viewer)
         self.viewer_manager.fileLoaded.connect(self._update_title_bar)
 
@@ -113,6 +113,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         root_index = self.model.setRootPath("")
         self.model.fileRenamed.connect(lambda p, o, n: self._update_title_bar(f"{p}/{n}"))
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
+
+        self.viewer_event_filter = ViewerFilter(self.model, self.treeView, self.viewer_manager)
+        self.viewer.installEventFilter(self.viewer_event_filter)
 
         # BOOKMARKS
         self.lw_bookmarks_event_filter: BookmarkListEventFilter = (
@@ -228,37 +231,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.treeView.viewport().mapToGlobal(position)
         ):
             self._dispatch_action(action, index)
-
-    def eventFilter(self, source: QObject, event: QEvent) -> bool:  # noqa: N802
-        if source is self.viewer:
-            if event.type() == QEvent.Type.DragEnter:
-                event = cast("QDragEnterEvent", event)
-
-                # allow drops if they have urls attached
-                if (
-                        event.proposedAction() == Qt.DropAction.CopyAction
-                        and event.mimeData().hasUrls()
-                ):
-                    event.acceptProposedAction()
-                    return True
-
-                return source.eventFilter(source, event)
-
-            # handle drops on the preview pane
-            if event.type() == QEvent.Type.Drop:
-                path = Path.from_uri(cast("QDropEvent", event).mimeData().urls()[0].toString())
-                new_index: QModelIndex = self.model.index(str(path))
-
-                self.treeView.setCurrentIndex(new_index)
-                self.treeView.scrollTo(new_index, QAbstractItemView.ScrollHint.PositionAtTop)
-
-                self._update_title_bar(str(path))
-                self.viewer_manager.preview_file(path)
-
-                event.accept()
-                return True
-
-        return super().eventFilter(source, event)
 
     def _add_recent(self, path: Path) -> None:
         self.recents_manager.add(str(path))
