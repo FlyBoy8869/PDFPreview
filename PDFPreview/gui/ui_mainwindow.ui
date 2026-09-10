@@ -230,7 +230,7 @@
      <x>0</x>
      <y>0</y>
      <width>1188</width>
-     <height>33</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
@@ -289,13 +289,13 @@
   </action>
   <action name="action_hide_files">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
-    <string>Hide Files</string>
+    <string>Show Files</string>
    </property>
   </action>
   <action name="actionClear_Recents">

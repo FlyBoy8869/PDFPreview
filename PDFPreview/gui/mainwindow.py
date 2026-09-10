@@ -8,7 +8,8 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import (
     QFileSystemModel,
     QMainWindow,
-    QMessageBox, QStyle, QApplication, QAbstractItemView, QListWidgetItem, QSlider, QToolBar, QLabel
+    QMessageBox, QStyle, QApplication, QAbstractItemView, QListWidgetItem, QSlider, QToolBar, QLabel, QToolButton,
+    QPushButton
 )
 
 import PDFPreview.helpers.sound as sound
@@ -30,9 +31,9 @@ from ..contextmenu import ContextMenu
 from ..eventfilters.viewer_filter import ViewerFilter
 
 # noinspection PyTypeChecker
-file_filters: dict[bool, QDir.Filter] = {
-    True: QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot,
-    False: QDir.Filter.AllDirs
+file_filters: dict[str, QDir.Filter] = {
+    "hide": QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot,
+    "show": QDir.Filter.AllDirs
            | QDir.Filter.AllEntries
            | QDir.Filter.Drives
            | QDir.Filter.Hidden
@@ -53,7 +54,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.toolbar.setMovable(False)
         self.addToolBar(self.toolbar)
 
-        self._setup_indent_slider()
+        self._setup_toolbar()
 
         self.main_splitter_state: QByteArray
 
@@ -98,7 +99,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Hide toolbar menu action
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
-        self.action_hide_files.toggled.connect(self.handle_action_hide_files)
+        self.action_hide_files.triggered.connect(self.handle_action_hide_files)
         self.actionAbout.triggered.connect(self._show_about)
 
         # FILE VIEWER
@@ -107,9 +108,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # WINDOW INTO THE FILE SYSTEM
         self.model: QFileSystemModel = QFileSystemModel()
-        self.model.setOption(QFileSystemModel.Option.DontUseCustomDirectoryIcons)
+        self.model.setOption(QFileSystemModel.Option.DontUseCustomDirectoryIcons, on=True)
         self.model.setReadOnly(False)
-        self.model.setFilter(file_filters[self.action_hide_files.isChecked()])
+        self.model.setFilter(file_filters["hide"])
         root_index = self.model.setRootPath("")
         self.model.fileRenamed.connect(lambda p, o, n: self._update_title_bar(f"{p}/{n}"))
         self.top_level_index: QModelIndex = self.model.index(self.model.rootPath())
@@ -178,8 +179,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def close(self) -> bool:
         return super().close()
 
-    def handle_action_hide_files(self, checked: bool) -> None:  # noqa: FBT001
-        self.model.setFilter(file_filters[checked])
+    def handle_action_hide_files(self, _: bool) -> None:  # noqa: FBT001
+        if self.action_hide_files.text().casefold() == "hide files":
+            self.model.setFilter(file_filters["hide"])
+            self.action_hide_files.setText("Show Files")
+        else:
+            self.model.setFilter(file_filters["show"])
+            self.action_hide_files.setText("Hide Files")
 
     def handle_bookmark_clicked(self, list_item: QListWidgetItem) -> None:
         path = Path(list_item.data(Qt.ItemDataRole.UserRole))
@@ -346,7 +352,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _do_rename_action(self, path: Path) -> None:
         self.context_menu_actions.do_rename_action(path, self.model)
 
-    def _setup_indent_slider(self) -> None:
+    def _setup_toolbar(self) -> None:
         label = QLabel("  Indent:", self)
         self.toolbar.addWidget(label)
 
@@ -359,10 +365,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.indent_slider.setTickPosition(QSlider.TickPosition.TicksAbove)
         self.indent_slider.setFixedWidth(constants.Indent.INDENT_TOOL_WIDTH)
         self.indent_slider.valueChanged.connect(self._update_tree_view_indentation)
+        self.toolbar.addWidget(self.indent_slider)
 
         self.actionReset.triggered.connect(lambda c: self.indent_slider.setValue(constants.Indent.INDENT_DEFAULT))
 
-        self.toolbar.addWidget(self.indent_slider)
+        self.toolbar.addSeparator()
+
+        self.toolbar.addAction(self.action_hide_files)
 
     def _update_tree_view_indentation(self, value: int) -> None:
         self.treeView.setIndentation(value)
