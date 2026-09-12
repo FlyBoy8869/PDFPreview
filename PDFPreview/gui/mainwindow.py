@@ -372,15 +372,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.indent_slider.setTickInterval(constants.Indent.INDENT_TICK_INTERVAL)
         self.indent_slider.setTickPosition(QSlider.TickPosition.TicksAbove)
         self.indent_slider.setFixedWidth(constants.Indent.INDENT_TOOL_WIDTH)
-        self.indent_slider.valueChanged.connect(self._update_tree_view_indentation)
+
+        self.indent_slider.valueChanged.connect(self.treeView.setIndentation)
+        self.indent_slider.valueChanged.connect(
+            lambda value: self.statusbar.showMessage(f"Indentation: {value}", 2000)
+        )
+
         self.toolbar.addWidget(self.indent_slider)
 
         self.actionReset.triggered.connect(lambda c: self.indent_slider.setValue(constants.Indent.INDENT_DEFAULT))
 
         self.toolbar.addSeparator()
+
         self.toolbar.addAction(self.action_collapse_all)
         self.toolbar.addAction(self.action_hide_files)
-
-    def _update_tree_view_indentation(self, value: int) -> None:
-        self.treeView.setIndentation(value)
-        self.statusbar.showMessage(f"Indentation: {value}", 2000)
