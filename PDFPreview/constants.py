@@ -8,12 +8,14 @@ class Icons(StrEnum):
     DUPLICATE = "duplicate.png"
     EXPLORER = "explorer.png"
     FOLDER = "folder.png"
+    HIDE_FILES = "hide_files.png"
     MOVE = "move.png"
     NEW_TEXT = "new_text_file.webp"
     OPEN_WITH = "open_with.png"
     PALETTE = "palette.png"
     PLUS = "plus.png"
     RENAME = "rename.png"
+    SHOW_FILES = "show_files.png"
     TRASHCAN = "trashcan.png"
 
 
