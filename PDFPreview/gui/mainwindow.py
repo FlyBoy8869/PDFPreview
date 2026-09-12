@@ -150,14 +150,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.treeView.setRootIndex(root_index)
 
-        # BUTTONS
-        self.pb_collapse_all.setIcon(
-            QIcon(Paths.icon("collapse.png"))
-        )
-        # self.pb_collapse_all.clicked.connect(self.treeView.collapseAll)
-        self.pb_collapse_all.addAction(self.action_collapse_all)
-        self.pb_collapse_all.clicked.connect(self.action_collapse_all.trigger)
-
         # RECENTS
         self.cb_recents.setToolTip("Recents")
         self.cb_recents.setMouseTracking(True)
