@@ -26,3 +26,8 @@ class Indent(IntEnum):
     INDENT_STEP = 1
     INDENT_TICK_INTERVAL = 5
     INDENT_TOOL_WIDTH = 100
+
+
+class FileViewMode(StrEnum):
+    HIDE = "hide"
+    SHOW = "show"

@@ -179,11 +179,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_action_hide_files(self, _: bool) -> None:  # noqa: FBT001
         if self.action_hide_files.text().casefold() == "hide files":
-            self.model.setFilter(file_filters["hide"])
+            # self.model.setFilter(file_filters["hide"])
+            self.model.setFilter(file_filters[constants.FileViewMode.HIDE])
             self.action_hide_files.setText("Show Files")
             self.action_hide_files.setIcon(QIcon(Paths.icon(constants.Icons.SHOW_FILES)))
         else:
-            self.model.setFilter(file_filters["show"])
+            self.model.setFilter(file_filters[constants.FileViewMode.SHOW])
             self.action_hide_files.setText("Hide Files")
             self.action_hide_files.setIcon(QIcon(Paths.icon(constants.Icons.HIDE_FILES)))
 
