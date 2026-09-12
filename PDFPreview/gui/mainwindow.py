@@ -3,7 +3,7 @@ from pathlib import Path
 from PySide6.QtCore import QDir, QModelIndex, Qt, Signal, QByteArray
 from PySide6.QtGui import (
     QKeySequence,
-    QShortcut, QIcon,
+    QShortcut, QIcon, QAction,
 )
 from PySide6.QtWidgets import (
     QFileSystemModel,
@@ -53,8 +53,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.toolbar.setMovable(False)
         self.addToolBar(self.toolbar)
 
-        self._setup_toolbar()
-
         self.main_splitter_state: QByteArray
 
         self._create_and_set_blur_effects(
@@ -63,6 +61,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pathChanged.connect(self._update_title_bar)
 
         # -----------------------------------------------------------
+
+        # ACTIONS
+        self.action_collapse_all = QAction("Collapse All", self, icon=QIcon(Paths.icon(constants.Icons.COLLAPSE)))
+        self.action_collapse_all.triggered.connect(self.treeView.collapseAll)
 
         # APPLICATION GLOBAL SHORTCUTS
         self.help_shortcut = QShortcut(QKeySequence("h"), self)
@@ -152,7 +154,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pb_collapse_all.setIcon(
             QIcon(Paths.icon("collapse.png"))
         )
-        self.pb_collapse_all.clicked.connect(self.treeView.collapseAll)
+        # self.pb_collapse_all.clicked.connect(self.treeView.collapseAll)
+        self.pb_collapse_all.addAction(self.action_collapse_all)
+        self.pb_collapse_all.clicked.connect(self.action_collapse_all.trigger)
 
         # RECENTS
         self.cb_recents.setToolTip("Recents")
@@ -171,6 +175,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.context_menu_actions_dispatch_table = self._create_context_menu_dispatch_table()
         self.context_menu_actions = contextmenuactions.ContextMenuActions()
         self.context_menu_actions.fileDeleted.connect(self.recents_manager.remove)
+
+        self._setup_toolbar()
 
         self._show_splash()
 
@@ -372,8 +378,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionReset.triggered.connect(lambda c: self.indent_slider.setValue(constants.Indent.INDENT_DEFAULT))
 
         self.toolbar.addSeparator()
-
-        # self.action_hide_files.setIcon(QIcon(Paths.icon("show_files.png")))
+        self.toolbar.addAction(self.action_collapse_all)
         self.toolbar.addAction(self.action_hide_files)
 
     def _update_tree_view_indentation(self, value: int) -> None:

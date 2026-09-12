@@ -6,6 +6,7 @@ All notable changes pertinent to the end user of this project will be documented
 
 ### Added
 
+- Button to toolbar to collapse all folders.
 - Icon to toolbar show / hide hidden files.
 - Button to the toolbar to show / hide hidden files.
 - Menu option to adjust the indent of the folder listing.
