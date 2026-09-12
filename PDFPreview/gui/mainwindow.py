@@ -99,6 +99,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Hide toolbar menu action
         self.actionHide_Toolbar.toggled.connect(self.toggle_toolbar)
+
+        self.action_hide_files.setIcon(QIcon(Paths.icon("show_files.png")))
         self.action_hide_files.triggered.connect(self.handle_action_hide_files)
         self.actionAbout.triggered.connect(self._show_about)
 
@@ -183,9 +185,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.action_hide_files.text().casefold() == "hide files":
             self.model.setFilter(file_filters["hide"])
             self.action_hide_files.setText("Show Files")
+            self.action_hide_files.setIcon(QIcon(Paths.icon("show_files.png")))
         else:
             self.model.setFilter(file_filters["show"])
             self.action_hide_files.setText("Hide Files")
+            self.action_hide_files.setIcon(QIcon(Paths.icon("hide_files.png")))
 
     def handle_bookmark_clicked(self, list_item: QListWidgetItem) -> None:
         path = Path(list_item.data(Qt.ItemDataRole.UserRole))
@@ -371,6 +375,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.toolbar.addSeparator()
 
+        # self.action_hide_files.setIcon(QIcon(Paths.icon("show_files.png")))
         self.toolbar.addAction(self.action_hide_files)
 
     def _update_tree_view_indentation(self, value: int) -> None:
