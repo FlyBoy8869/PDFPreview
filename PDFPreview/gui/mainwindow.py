@@ -8,8 +8,7 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import (
     QFileSystemModel,
     QMainWindow,
-    QMessageBox, QStyle, QApplication, QAbstractItemView, QListWidgetItem, QSlider, QToolBar, QLabel, QToolButton,
-    QPushButton
+    QMessageBox, QStyle, QApplication, QAbstractItemView, QListWidgetItem, QSlider, QToolBar, QLabel
 )
 
 import PDFPreview.helpers.sound as sound
