@@ -107,6 +107,10 @@ def open_file_location(path: str) -> None:
         subprocess.Popen(f'explorer.exe /select,"{path.replace("/", "\\")}"')
 
 
+def open_with_ms_edge(path: str) -> None:
+    subprocess.Popen(f'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe "{path}"')
+
+
 def open_with_mspaint(path: str) -> None:
     with suppress(FileNotFoundError):
         subprocess.Popen(["mspaint.exe", str(Path(path))])

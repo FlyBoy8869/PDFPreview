@@ -57,6 +57,10 @@ class ContextMenuActions(QObject):
             QMessageBox.warning(None, "Warning", result.message)
 
     @staticmethod
+    def do_edge_action(path: Path) -> None:
+        fileoperations.open_with_ms_edge(str(path))
+
+    @staticmethod
     def do_explorer_action(path: Path) -> None:
         fileoperations.open_file_location(str(path))
 

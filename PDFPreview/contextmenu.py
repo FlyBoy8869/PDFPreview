@@ -68,6 +68,7 @@ class ContextMenu:
 
         if suffix in ["bmp", "gif", "jpg", "jpeg", "png", "svg", "webp"]:
             self._add_action("MS Paint", "paint", Icons.PALETTE, menu)
+            self._add_action("MS Edge", "edge", Icons.PALETTE, menu)
 
         return menu
 

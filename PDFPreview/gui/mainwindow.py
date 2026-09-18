@@ -33,10 +33,10 @@ from ..eventfilters.viewer_filter import ViewerFilter
 file_filters: dict[str, QDir.Filter] = {
     "hide": QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot,
     "show": QDir.Filter.AllDirs
-           | QDir.Filter.AllEntries
-           | QDir.Filter.Drives
-           | QDir.Filter.Hidden
-           | QDir.Filter.NoDotAndDotDot,
+            | QDir.Filter.AllEntries
+            | QDir.Filter.Drives
+            | QDir.Filter.Hidden
+            | QDir.Filter.NoDotAndDotDot,
 }
 
 
@@ -296,6 +296,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _create_context_menu_dispatch_table(self) -> dict:
         return {
             "acrobat": self._do_acrobat_action,
+            "edge": self._do_edge_action,
             "explorer": self._do_explorer_action,
             "rename": self._do_rename_action,
             "delete": self._do_delete_action,
@@ -326,6 +327,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _do_duplicate_action(self, path: Path) -> None:
         self.context_menu_actions.do_duplicate_action(path)
+
+    def _do_edge_action(self, path: Path) -> None:
+        self.context_menu_actions.do_edge_action(path)
 
     def _do_explorer_action(self, path: Path) -> None:
         self.context_menu_actions.do_explorer_action(path)
