@@ -83,8 +83,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.open_with_default_shortcut = QShortcut(QKeySequence("Space"), self)
         self.open_with_default_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
+
+        def open_default(indexes: list[QModelIndex]) -> None:
+            for index in indexes:
+                fileoperations.open_file(self.model.filePath(index))
+            self.treeView.clearSelection()
+
         self.open_with_default_shortcut.activated.connect(
-            lambda: fileoperations.open_file(self.model.filePath(self.treeView.currentIndex()))
+            lambda: open_default(self.treeView.selectedIndexes())
         )
 
         # ABOUT WINDOW
@@ -237,7 +243,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 index.isValid(),
                 self.treeView.viewport().mapToGlobal(position)
         ):
-            self._dispatch_action(action, index)
+            self._dispatch_action(action, self.treeView.selectedIndexes())
 
     def _add_recent(self, path: Path) -> None:
         self.recents_manager.add(str(path))
@@ -309,9 +315,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "collapse_folder": self._do_collapse_folder_action,
         }
 
-    def _dispatch_action(self, action: str, index: QModelIndex) -> None:
+    def _dispatch_action(self, action: str, indexes: list[QModelIndex]) -> None:
         sound.message_beep(sound.dialog_sound)
-        self.context_menu_actions_dispatch_table[action](Path(self.model.filePath(index)))
+        for index in indexes:
+            self.context_menu_actions_dispatch_table[action](Path(self.model.filePath(index)))
+        self.treeView.clearSelection()
 
     def _do_acrobat_action(self, path: Path) -> None:
         self.context_menu_actions.do_acrobat_action(path)

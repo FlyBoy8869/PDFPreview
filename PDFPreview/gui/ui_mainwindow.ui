@@ -159,6 +159,9 @@
            <property name="alternatingRowColors">
             <bool>true</bool>
            </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
+           </property>
            <property name="autoExpandDelay">
             <number>3000</number>
            </property>
@@ -220,7 +223,7 @@
      <x>0</x>
      <y>0</y>
      <width>1188</width>
-     <height>30</height>
+     <height>33</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
