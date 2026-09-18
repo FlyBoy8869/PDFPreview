@@ -63,6 +63,7 @@ class RecentsManager:
     def rename(self, path: str, old_name: str, new_name: str) -> None:
         if index := self.find_index_by_path(str(Path(path) / old_name)):
             self.widget.setItemText(index, new_name)
+            self.widget.setItemData(index, str(Path(path) / new_name))
             self.widget.setItemData(index, f"{path}/{new_name}", Qt.ItemDataRole.ToolTipRole)
             self._indexes.pop(str(Path(path) / old_name))
             self._indexes[str(Path(path) / new_name)] = True
