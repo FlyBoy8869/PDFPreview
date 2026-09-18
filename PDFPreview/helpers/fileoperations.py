@@ -96,7 +96,7 @@ def open_file(path: str) -> None:
 def open_with_acrobat(path: str) -> None:
     """Open file in Adobe Acrobat. Falls back to system default application if not available."""
     try:
-        subprocess.Popen([ADOBE_ACROBAT_PATH, "/n", path])  # noqa: S603
+        subprocess.Popen(f'{ADOBE_ACROBAT_PATH} "{path}"')
     except FileNotFoundError:
         # fall back to system default application
         open_file(path)
