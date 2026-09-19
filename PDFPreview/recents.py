@@ -62,6 +62,7 @@ class RecentsManager:
     @Slot()
     def rename(self, path: str, old_name: str, new_name: str) -> None:
         if index := self.find_index_by_path(str(Path(path) / old_name)):
+            index = int(index)
             self.widget.setItemText(index, new_name)
             self.widget.setItemData(index, str(Path(path) / new_name), Qt.ItemDataRole.UserRole)
             self.widget.setItemData(index, f"{path}/{new_name}", Qt.ItemDataRole.ToolTipRole)
@@ -70,10 +71,10 @@ class RecentsManager:
             recent_services.delete_recent(str(Path(path) / old_name))
             recent_services.register_recent((Path(path) / new_name).resolve().name, str(Path(path) / new_name))
 
-    def find_index_by_path(self, path: str) -> int | None:
+    def find_index_by_path(self, path: str) -> str | None:
         for index, recent_path in enumerate(self._indexes):
             if recent_path == path:
-                return index
+                return str(index)
         return None
 
     def _load_recents(self) -> None:
