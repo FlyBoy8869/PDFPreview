@@ -13,14 +13,16 @@ class ContextMenuActions(QObject):
     fileDeleted: Signal = Signal(str)
 
     @staticmethod
-    def do_acrobat_action(path: Path) -> None:
-        if path.suffix.lower() == ".pdf":
-            fileoperations.open_with_acrobat(str(path))
+    def do_acrobat_action(paths: list[Path]) -> None:
+        for path in paths:
+            if path.suffix.lower() == ".pdf":
+                fileoperations.open_with_acrobat(str(path))
 
     @staticmethod
-    def do_copy_action(path: Path, clipboard: QClipboard) -> None:
+    def do_copy_action(paths: list[Path], clipboard: QClipboard) -> None:
         mime_data = QMimeData()
-        mime_data.setUrls([QUrl.fromLocalFile(str(path))])
+        urls = [QUrl.fromLocalFile(str(path)) for path in paths]
+        mime_data.setUrls(urls)
         clipboard.setMimeData(mime_data)
 
     def do_collapse_folder_action(self, tree_view: QTreeView, index: QModelIndex) -> None:
@@ -39,38 +41,42 @@ class ContextMenuActions(QObject):
         # Collapse the current folder after its children are collapsed
         tree_view.collapse(index)
 
-    def do_delete_action(self, path: Path, tree_view: QTreeView) -> None:
-        if ask_yes_or_no(None, "Delete",
-                         f"Deleting '{path}'.\n\nThis action can not be undone.\nAre you sure?"):
-            if path.is_dir():
-                result = self._delete_folder(path, tree_view)
+    def do_delete_action(self, paths: list[Path], tree_view: QTreeView) -> None:
+        message = f"Deleting '{paths[0]}'.\n\nThis action can not be undone.\nAre you sure?" if len(paths) == 1 else "Deleting files. This action can not be undone.\nAre you sure?"
+        if ask_yes_or_no(None, "Delete", message):
+            if paths[0].is_dir():
+                result = self._delete_folder(paths[0], tree_view)
                 if not result.success:
                     QMessageBox.warning(None, "Warning", result.message)
             else:
-                if self._delete_file(path):
-                    self.fileDeleted.emit(str(path))
+                for path in paths:
+                    if self._delete_file(path):
+                        self.fileDeleted.emit(str(path))
 
     @staticmethod
-    def do_duplicate_action(path: Path) -> None:
-        result = fileoperations.duplicate_file(Path(path))
-        if not result.success:
-            QMessageBox.warning(None, "Warning", result.message)
+    def do_duplicate_action(paths: list[Path]) -> None:
+        for path in paths:
+            result = fileoperations.duplicate_file(path)
+            if not result.success:
+                QMessageBox.warning(None, "Warning", result.message)
 
     @staticmethod
-    def do_edge_action(path: Path) -> None:
-        fileoperations.open_with_ms_edge(str(path))
+    def do_edge_action(paths: list[Path]) -> None:
+        for path in paths:
+            fileoperations.open_with_ms_edge(str(path))
 
     @staticmethod
     def do_explorer_action(path: Path) -> None:
         fileoperations.open_file_location(str(path))
 
     @staticmethod
-    def do_move_action(path: Path) -> None:
+    def do_move_action(paths: list[Path]) -> None:
         if folder := QFileDialog.getExistingDirectory():
-            source_path = path
-            result = fileoperations.move_file(source_path, Path(folder) / source_path.name)
-            if not result.success:
-                QMessageBox.warning(None, "Warning", result.message)
+            for path in paths:
+                source_path = path
+                result = fileoperations.move_file(source_path, Path(folder) / source_path.name)
+                if not result.success:
+                    QMessageBox.warning(None, "Warning", result.message)
 
     @staticmethod
     def do_new_folder_action(path: Path) -> None:
@@ -93,7 +99,8 @@ class ContextMenuActions(QObject):
         fileoperations.open_with_mspaint(str(path))
 
     @staticmethod
-    def do_rename_action(path: Path, model: QFileSystemModel) -> None:
+    def do_rename_action(paths: list[Path], model: QFileSystemModel) -> None:
+        path = paths[0]
         # TODO: Look into filing a bug report about the return value of this method.
         if new_name := QInputDialog.getText(
                 None,

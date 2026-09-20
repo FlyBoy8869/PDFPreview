@@ -15,6 +15,7 @@ All notable changes pertinent to the end user of this project will be documented
 
 ### Fixed
 
+- Behavior of multi-selection handling.
 - Issue where renaming item 0 of the recents list failed.
 - The number of tracked recents exceeding the configured amount.
 

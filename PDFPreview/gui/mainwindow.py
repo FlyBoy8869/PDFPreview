@@ -317,53 +317,55 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _dispatch_action(self, action: str, indexes: list[QModelIndex]) -> None:
         sound.message_beep(sound.dialog_sound)
-        for index in indexes:
-            self.context_menu_actions_dispatch_table[action](Path(self.model.filePath(index)))
+        self.context_menu_actions_dispatch_table[action]([Path(self.model.filePath(index)) for index in indexes])
         self.treeView.clearSelection()
 
-    def _do_acrobat_action(self, path: Path) -> None:
-        self.context_menu_actions.do_acrobat_action(path)
+    def _do_acrobat_action(self, paths: list[Path]) -> None:
+        for path in paths:
+            self.context_menu_actions.do_acrobat_action(path)
 
-    def _do_copy_action(self, path: Path) -> None:
-        self.context_menu_actions.do_copy_action(path, QApplication.clipboard())
+    def _do_copy_action(self, paths: list[Path]) -> None:
+        self.context_menu_actions.do_copy_action(paths, QApplication.clipboard())
 
-    def _do_collapse_folder_action(self, _: Path) -> None:
+    def _do_collapse_folder_action(self, _) -> None:
         self.context_menu_actions.do_collapse_folder_action(self.treeView, self.treeView.currentIndex())
 
-    def _do_delete_action(self, path: Path) -> None:
-        self.context_menu_actions.do_delete_action(path, self.treeView)
+    def _do_delete_action(self, paths: list[Path]) -> None:
+        self.context_menu_actions.do_delete_action(paths, self.treeView)
 
-    def _do_duplicate_action(self, path: Path) -> None:
-        self.context_menu_actions.do_duplicate_action(path)
+    def _do_duplicate_action(self, paths: list[Path]) -> None:
+        self.context_menu_actions.do_duplicate_action(paths)
 
-    def _do_edge_action(self, path: Path) -> None:
-        self.context_menu_actions.do_edge_action(path)
+    def _do_edge_action(self, paths: list[Path]) -> None:
+        self.context_menu_actions.do_edge_action(paths)
 
-    def _do_explorer_action(self, path: Path) -> None:
-        self.context_menu_actions.do_explorer_action(path)
+    def _do_explorer_action(self, paths: list[Path]) -> None:
+        self.context_menu_actions.do_explorer_action(paths[0])
 
-    def _do_move_action(self, path: Path) -> None:
-        self.context_menu_actions.do_move_action(path)
+    def _do_move_action(self, paths: list[Path]) -> None:
+        self.context_menu_actions.do_move_action(paths)
 
-    def _do_new_folder_action(self, path: Path) -> None:
+    def _do_new_folder_action(self, paths: list[Path]) -> None:
+        path = paths[0]
         # Did the right-click occur in the "un-populated" area of the QTreeView?
         if not self.model.index(str(path)).isValid():
             path = Path(self.model.filePath(self.treeView.currentIndex()))
         path = path.parent if not path.is_dir() else path
         self.context_menu_actions.do_new_folder_action(path)
 
-    def _do_new_text_file_action(self, path: Path) -> None:
+    def _do_new_text_file_action(self, paths: list[Path]) -> None:
+        path = paths[0]
         # Did the right-click occur in the "un-populated" area of the QTreeView?
         if not self.model.index(str(path)).isValid():
             path = Path(self.model.filePath(self.treeView.currentIndex()))
         path = path if path.is_dir() else path.parent
         self.context_menu_actions.do_new_text_file_action(path, NEW_TEXT_FILE_TEXT)
 
-    def _do_paint_action(self, path: Path) -> None:
-        self.context_menu_actions.do_paint_action(path)
+    def _do_paint_action(self, paths: list[Path]) -> None:
+        self.context_menu_actions.do_paint_action(paths[0])
 
-    def _do_rename_action(self, path: Path) -> None:
-        self.context_menu_actions.do_rename_action(path, self.model)
+    def _do_rename_action(self, paths: list[Path]) -> None:
+        self.context_menu_actions.do_rename_action(paths[0], self.model)
 
     def _setup_toolbar(self) -> None:
         label = QLabel("  Indent:", self)
