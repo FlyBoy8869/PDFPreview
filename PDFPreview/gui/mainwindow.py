@@ -178,8 +178,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self._show_splash()
 
-        self.previous_path: str = self.model.filePath(self.treeView.currentIndex())
-
     def close(self) -> bool:
         return super().close()
 
