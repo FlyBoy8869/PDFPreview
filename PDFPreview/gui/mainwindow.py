@@ -164,7 +164,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.cb_recents,
             config["general"]["recents_limit"]
         )
-        # self.fileDeleted.connect(self.recents_manager.remove)
         self.model.fileRenamed.connect(self.recents_manager.rename)
         self.actionClear_Recents.triggered.connect(self.recents_manager.clear_recents)
 
@@ -183,7 +182,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_action_hide_files(self, _: bool) -> None:  # noqa: FBT001
         if self.action_hide_files.text().casefold() == "hide files":
-            # self.model.setFilter(file_filters["hide"])
             self.model.setFilter(file_filters[constants.FileViewMode.HIDE])
             self.action_hide_files.setText("Show Files")
             self.action_hide_files.setIcon(QIcon(Paths.icon(constants.Icons.SHOW_FILES)))
