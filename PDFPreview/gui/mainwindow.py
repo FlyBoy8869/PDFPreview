@@ -317,12 +317,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _dispatch_action(self, action: str, indexes: list[QModelIndex]) -> None:
         sound.message_beep(sound.dialog_sound)
-        self.context_menu_actions_dispatch_table[action]([Path(self.model.filePath(index)) for index in indexes])
-        self.treeView.clearSelection()
+        if indexes:
+            self.context_menu_actions_dispatch_table[action]([Path(self.model.filePath(index)) for index in indexes])
+            self.treeView.clearSelection()
 
     def _do_acrobat_action(self, paths: list[Path]) -> None:
-        for path in paths:
-            self.context_menu_actions.do_acrobat_action(path)
+        self.context_menu_actions.do_acrobat_action(paths)
 
     def _do_copy_action(self, paths: list[Path]) -> None:
         self.context_menu_actions.do_copy_action(paths, QApplication.clipboard())

@@ -99,8 +99,7 @@ class ContextMenuActions(QObject):
         fileoperations.open_with_mspaint(str(path))
 
     @staticmethod
-    def do_rename_action(paths: list[Path], model: QFileSystemModel) -> None:
-        path = paths[0]
+    def do_rename_action(path: Path, model: QFileSystemModel) -> None:
         # TODO: Look into filing a bug report about the return value of this method.
         if new_name := QInputDialog.getText(
                 None,
