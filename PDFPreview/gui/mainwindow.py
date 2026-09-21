@@ -78,7 +78,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.delete_shortcut = QShortcut(QKeySequence("Delete"), self)
         self.delete_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
         self.delete_shortcut.activated.connect(
-            lambda: self._do_delete_action(Path(self.model.filePath(self.treeView.currentIndex())))
+            lambda: self._dispatch_action("delete", self.treeView.selectedIndexes())
         )
 
         self.open_with_default_shortcut = QShortcut(QKeySequence("Space"), self)
